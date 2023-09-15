@@ -1,0 +1,22 @@
+[
+    {
+       "value":"Pickup laundry services",
+       "label":"Pickup laundry services"
+    },
+    {
+       "value":"Commercial laundry services",
+       "label":"Commercial laundry services"
+    },
+    {
+       "value":"Dry cleaning services",
+       "label":"Dry cleaning services"
+    },
+    {
+       "value":"Fluff and fold laundry services",
+       "label":"Fluff and fold laundry services"
+    },
+    {
+       "value":"Laundromat self-service",
+       "label":"Laundromat self-service"
+    }
+ ]
