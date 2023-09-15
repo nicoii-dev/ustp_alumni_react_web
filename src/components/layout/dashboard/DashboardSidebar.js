@@ -40,7 +40,7 @@ const AccountStyle = styled("div")(({ theme }) => ({
   alignItems: "center",
   padding: theme.spacing(2, 2.5),
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: theme.palette.grey[500_12],
+  backgroundColor: '#0080FF',
 }));
 
 // ----------------------------------------------------------------------
@@ -115,15 +115,15 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
               alt="photoURL"
             />
             <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: "text.primary" }}>
-                {userData.first_name.charAt(0).toUpperCase() +
-                  userData.first_name.slice(1) +
+              <Typography variant="subtitle2" sx={{ color: "white" }}>
+                {userData?.first_name?.charAt(0)?.toUpperCase() +
+                  userData?.first_name?.slice(1) +
                   " " +
-                  userData.last_name.charAt(0).toUpperCase() +
-                  userData.last_name.slice(1)}
+                  userData?.last_name?.charAt(0).toUpperCase() +
+                  userData?.last_name?.slice(1)}
               </Typography>
-              <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                {userData.role.charAt(0).toUpperCase() + userData.role.slice(1)}
+              <Typography variant="body2" sx={{ color: "white" }}>
+                Role - {userData?.role?.charAt(0)?.toUpperCase() + userData?.role?.slice(1)}
               </Typography>
             </Box>
           </AccountStyle>

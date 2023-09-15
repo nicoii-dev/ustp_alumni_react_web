@@ -22,7 +22,7 @@ const TABLE_HEAD = [
   { id: "" },
 ];
 
-function UsersPage() {
+function EventsPage() {
   const queryClient = useQueryClient();
   const { getUser, activateUser, deactivateUser } = userApi;
   const [usersList, setUsersList] = useState([]);
@@ -168,7 +168,7 @@ function UsersPage() {
       <Container maxWidth="xl">
         <Box sx={{ backgroundColor: "#CCE5FF", padding: 2, borderRadius: 2 }}>
           <Typography variant="h4" >
-            Users Page
+            Events
           </Typography>
         </Box>
 
@@ -183,4 +183,4 @@ function UsersPage() {
   );
 }
 
-export default UsersPage;
+export default EventsPage;

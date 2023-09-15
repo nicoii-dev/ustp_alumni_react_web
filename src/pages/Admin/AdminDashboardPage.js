@@ -30,23 +30,23 @@ function AdminDashboardPage() {
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi,{" "}
-          {userData.first_name.charAt(0).toUpperCase() +
-            userData.first_name.slice(1)}
+          {userData?.first_name?.charAt(0)?.toUpperCase() +
+            userData?.first_name?.slice(1)}
         </Typography>
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetAdmin
-              title="Number of Shops"
-              total={dashboardData?.data.shops?.length}
+              title="Number of Alumni"
+              total={0}
               icon={"mdi:shop"}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetAdmin
-              title="Number of Users"
-              total={dashboardData?.data.users?.length}
+              title="Number of Courses"
+              total={0}
               color="info"
               icon={"ph:users-three-bold"}
             />
@@ -54,8 +54,8 @@ function AdminDashboardPage() {
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetAdmin
-              title="Overall Services"
-              total={dashboardData?.data.services?.length}
+              title="Active Users"
+              total={0}
               color="warning"
               icon={"material-symbols:local-laundry-service-outline"}
             />
@@ -64,16 +64,14 @@ function AdminDashboardPage() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetAdmin
               title="Deactivated Users"
-              total={dashboardData?.data.deactivatedUser?.length}
+              total={0}
               color="error"
               icon={"fa6-solid:users-slash"}
             />
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <Box sx={{ height: 300 }}>
-              {dashboardStatus === 'success' ?(
-                <AdminChart lineGraphData={dashboardData.data.usersGraph} />
-              ) : null}
+              <AdminChart lineGraphData={[]} />
             </Box>
           </Grid>
         </Grid>

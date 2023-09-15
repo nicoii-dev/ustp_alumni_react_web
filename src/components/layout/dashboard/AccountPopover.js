@@ -107,14 +107,14 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {userData.first_name.charAt(0).toUpperCase() +
-              userData.first_name.slice(1) +
+            {userData?.first_name?.charAt(0)?.toUpperCase() +
+              userData?.first_name?.slice(1) +
               " " +
-              userData.last_name.charAt(0).toUpperCase() +
-              userData.last_name.slice(1)}
+              userData?.last_name?.charAt(0)?.toUpperCase() +
+              userData?.last_name?.slice(1)}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {userData.email}
+            {userData?.email}
           </Typography>
         </Box>
 
@@ -130,6 +130,14 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: "dashed" }} />
 
+        <MenuItem
+          onClick={() => {
+            logOut();
+          }}
+          sx={{ m: 1 }}
+        >
+          Profile
+        </MenuItem>
         <MenuItem
           onClick={() => {
             logOut();

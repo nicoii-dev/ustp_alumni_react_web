@@ -22,7 +22,7 @@ const TABLE_HEAD = [
   { id: "" },
 ];
 
-function UsersPage() {
+function AnnouncementsPage() {
   const queryClient = useQueryClient();
   const { getUser, activateUser, deactivateUser } = userApi;
   const [usersList, setUsersList] = useState([]);
@@ -167,8 +167,8 @@ function UsersPage() {
     <Page title="Shops">
       <Container maxWidth="xl">
         <Box sx={{ backgroundColor: "#CCE5FF", padding: 2, borderRadius: 2 }}>
-          <Typography variant="h4" >
-            Users Page
+          <Typography variant="h4">
+            Announcements
           </Typography>
         </Box>
 
@@ -183,4 +183,4 @@ function UsersPage() {
   );
 }
 
-export default UsersPage;
+export default AnnouncementsPage;

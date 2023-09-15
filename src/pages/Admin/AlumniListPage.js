@@ -22,7 +22,7 @@ const TABLE_HEAD = [
   { id: "" },
 ];
 
-function UsersPage() {
+function AlumniListPage() {
   const queryClient = useQueryClient();
   const { getUser, activateUser, deactivateUser } = userApi;
   const [usersList, setUsersList] = useState([]);
@@ -168,12 +168,11 @@ function UsersPage() {
       <Container maxWidth="xl">
         <Box sx={{ backgroundColor: "#CCE5FF", padding: 2, borderRadius: 2 }}>
           <Typography variant="h4" >
-            Users Page
+            Alumni List
           </Typography>
         </Box>
 
         <AppTable
-          // tableTitle={"Citation Records"}
           buttonTitle={"New User"}
           TABLE_HEAD={TABLE_HEAD}
           TABLE_DATA={usersList}
@@ -183,4 +182,4 @@ function UsersPage() {
   );
 }
 
-export default UsersPage;
+export default AlumniListPage;

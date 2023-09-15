@@ -29,6 +29,7 @@ export default function RegisterForm(_props) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const defaultValues = {
+    idNumber: "",
     firstName: "",
     lastName: "",
     gender: "male",
@@ -65,11 +66,11 @@ export default function RegisterForm(_props) {
 
   const onSubmit = async (data) => {
     const payload = {
+      idNumber: data.idNumber,
       first_name: data.firstName,
       last_name: data.lastName,
       gender: data.gender,
       phone_number: data.phoneNumber,
-      role: _props.accountType,
       email: data.email,
       password: data.password,
       password_confirmation: data.confirmPassword
@@ -80,20 +81,8 @@ export default function RegisterForm(_props) {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          <RHFTextField
-            name="type"
-            label="Account type"
-            value={_props.accountLabel}
-            disabled
-          />
-          <Button
-            onClick={() => {
-              _props.openDialog();
-            }}
-          >
-            Update
-          </Button>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+          <RHFTextField name="idNumber" label="ID Number" />
         </Stack>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
           <RHFTextField name="firstName" label="First name" />

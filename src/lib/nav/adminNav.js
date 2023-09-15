@@ -11,15 +11,44 @@ const adminNav = [
     icon: getIcon('eva:pie-chart-2-fill'),
   },
   {
-    title: 'Users',
-    path: '/users',
-    icon: getIcon('ph:users-three-bold'),
+    title: 'Freedom Wall',
+    path: '/freedom-wall',
+    icon: getIcon('ic:outline-message'),
   },
   {
-    title: 'Browse',
-    path: '/home',
-    icon: getIcon('material-symbols:home-pin'),
+    title: 'Announcements',
+    path: '/announcements',
+    icon: getIcon('grommet-icons:announce'),
   },
+  {
+    title: 'Events',
+    path: '/events',
+    icon: getIcon('ic:outline-emoji-events'),
+  },
+  {
+    title: 'Alumni List',
+    path: '/alumni-list',
+    icon: getIcon('fa-solid:user-graduate'),
+  },
+  {
+    title: 'Job Posting',
+    path: '/job-posting',
+    icon: getIcon('cib:when-i-work'),
+  },
+  {
+    title: 'System Settings',
+    icon: getIcon('ep:tools'),
+    children: [
+      {
+        title: 'Users List',
+        path: '#'
+      },
+      {
+        title: 'Reports',
+        path: '#'
+      },
+    ]
+  }
 ];
 
 export default adminNav;
