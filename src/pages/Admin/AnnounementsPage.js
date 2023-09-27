@@ -166,15 +166,15 @@ function AnnouncementsPage() {
   return (
     <Page title="Shops">
       <Container maxWidth="xl">
-        <Box sx={{ backgroundColor: "#CCE5FF", padding: 2, borderRadius: 2 }}>
+        {/* <Box sx={{ backgroundColor: "#CCE5FF", padding: 2, borderRadius: 2 }}>
           <Typography variant="h4">
             Announcements
           </Typography>
-        </Box>
+        </Box> */}
 
         <AppTable
-          // tableTitle={"Citation Records"}
-          buttonTitle={"New User"}
+          tableTitle={"Announcements"}
+          buttonTitle={"New Announcement"}
           TABLE_HEAD={TABLE_HEAD}
           TABLE_DATA={usersList}
         />

@@ -121,13 +121,13 @@ export default function AppTable({ TABLE_HEAD, TABLE_DATA, tableTitle, buttonTit
         <Typography variant="h4" gutterBottom>
           {tableTitle}
         </Typography>
-        {/* <Button variant="contained" to="#" startIcon={<Iconify icon="eva:plus-fill" />} onClick={buttonFunction}>
+        <Button variant="contained" to="#" startIcon={<Iconify icon="eva:plus-fill" />} onClick={buttonFunction}>
           {buttonTitle}
-        </Button> */}
+        </Button>
       </Stack>
 
       <Card>
-        {/* <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
+        <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800 }}>
@@ -179,7 +179,7 @@ export default function AppTable({ TABLE_HEAD, TABLE_DATA, tableTitle, buttonTit
               {isUserNotFound && (
                 <TableBody>
                   <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                    <TableCell align="center" colSpan={12} sx={{ py: 3 }}>
                       <SearchNotFound searchQuery={filterName} />
                     </TableCell>
                   </TableRow>
