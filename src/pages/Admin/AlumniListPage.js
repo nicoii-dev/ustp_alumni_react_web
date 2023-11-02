@@ -1,183 +1,225 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import Swal from "sweetalert2";
+import Papa from "papaparse";
 // mui
-import { Container, Typography, Box } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  Button,
+  Stack,
+  capitalize,
+} from "@mui/material";
 import { toast } from "react-toastify";
 // components
 import Page from "../../components/Page";
 import AppTable from "../../components/AppTable";
-import userApi from "../../lib/services/userApi";
+import DialogModal, { useDialog } from "../../components/DialogModal";
+
+// api
+import alumniApi from "../../lib/services/alumniApi";
 import { LoadingButton } from "@mui/lab";
 
 const TABLE_HEAD = [
-  { id: "firstName", label: "First Name", alignRight: false },
-  { id: "lastName", label: "Last Name", alignRight: false },
-  { id: "gender", label: "Gender", alignRight: false },
-  { id: "phoneNumber", label: "Phone Number", alignRight: false },
-  { id: "email", label: "Email", alignRight: false },
-  { id: "role", label: "Role", alignRight: false },
-  { id: "isVerified", label: "Is Verified", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
-  { id: "" },
+  { id: "firstName", label: "First Name" },
+  { id: "middleName", label: "Middle Name" },
+  { id: "lastName", label: "Last Name" },
+  { id: "course", label: "Course", align: "center" },
+  { id: "yearGraduated", label: "Year Graduated", align: "center" },
 ];
 
 function AlumniListPage() {
+  const { importCsv, getAllAlumni } = alumniApi;
   const queryClient = useQueryClient();
-  const { getUser, activateUser, deactivateUser } = userApi;
-  const [usersList, setUsersList] = useState([]);
+  const [alumniList, setAlumniList] = useState([]);
+  const [open, openDialog, dialogProps, setOpen, handleClose] = useDialog();
 
-  const {
-    data: usersData,
-    status: usersStatus,
-    isFetching: usersIsFetching,
-  } = useQuery(["get-users"], () => getUser(), {
-    retry: 3, // Will retry failed requests 10 times before displaying an error
+  const [csvFile, setCsvFile] = useState({
+    csv: undefined,
+    data: [],
+    initialize: false,
+    invalidDataset: false,
   });
 
-  const { mutate: activate, isLoading: activateUserLoading } = useMutation(
-    (id) => activateUser(id),
+  const { data: alumniData, status: alumniStatus } = useQuery(
+    ["get-all-alumni"],
+    () => getAllAlumni(),
     {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries(["get-users"]);
-        toast.success("User activated successfully");
-      },
-      onError: (error) => {
-        toast.error(error.response.data.message);
-      },
+      retry: 3, // Will retry failed requests 10 times before displaying an error
     }
   );
 
-  const { mutate: deactivate, isLoading: deactivateUserLoading } = useMutation(
-    (id) => deactivateUser(id),
-    {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries(["get-users"]);
-        toast.success("User deactivated successfully");
-      },
-      onError: (error) => {
-        toast.error(error.response.data.message);
-      },
-    }
-  );
-
+  console.log(alumniData);
   useEffect(() => {
-    if (usersStatus === "success") {
-      setUsersList(
-        usersData?.data?.map((data) => ({
-          id: <span>{`#${data.id}`}</span>,
-          firstName:
-            data.first_name.charAt(0).toUpperCase() + data.first_name.slice(1),
-          lastName:
-            data.last_name.charAt(0).toUpperCase() + data.last_name.slice(1),
-          gender: data.gender.charAt(0).toUpperCase() + data.gender.slice(1),
-          phoneNumber: data.phone_number,
-          email: data.email,
-          role: data.role.charAt(0).toUpperCase() + data.role.slice(1),
-          isVerified: (
-            <>
-              {data.is_verified === "1" ? (
-                <Typography sx={{ color: "green" }}>Verified</Typography>
-              ) : (
-                <Typography sx={{ color: "red" }}>Not verified</Typography>
-              )}
-            </>
-          ),
-          status: (
-            <>
-              {data.status === "1" ? (
-                <LoadingButton
-                  sx={{ backgroundColor: "green" }}
-                  onClick={() => {
-                    onActivateHandler(data.id);
-                  }}
-                  loading={activateUserLoading}
-                >
-                  <Typography
-                    sx={{ color: "white", fontSize: 14, padding: 0.5 }}
-                  >
-                    Activated
-                  </Typography>
-                </LoadingButton>
-              ) : (
-                <LoadingButton
-                  sx={{ backgroundColor: "red" }}
-                  onClick={() => {
-                    onDeactivateHandler(data.id);
-                  }}
-                  loading={deactivateUserLoading}
-                >
-                  <Typography
-                    sx={{ color: "white", fontSize: 14, padding: 0.5 }}
-                  >
-                    Deactivated
-                  </Typography>
-                </LoadingButton>
-              )}
-            </>
-          ),
+    if (alumniStatus === "success") {
+      setAlumniList(
+        alumniData?.data?.map((data) => ({
+          tobeSearch: data?.last_name,
+          firstName: capitalize(data?.first_name),
+          middleName: capitalize(data?.middle_name),
+          lastName: capitalize(data?.last_name),
+          course: data?.course,
+          yearGraduated: data?.year_graduated,
         }))
       );
     }
-  }, [usersData?.data, usersStatus, usersIsFetching]);
+  }, [alumniStatus, alumniData?.data]);
 
-  const onActivateHandler = (id) => {
-    Swal.fire({
-      // title: "Are you sure you want to Activate this user?",
-      text: "Are you sure you want to Deactivate this user?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, deactivate it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deactivate(id);
-        // Swal.fire(
-        //   'Deleted!',
-        //   'Your file has been deleted.',
-        //   'success'
-        // )
-      }
+  const { mutate: importCsvFile, isLoading: uploadLoading } = useMutation(
+    (payload) => importCsv(payload),
+    {
+      onSuccess: (data) => {
+        toast.success("Uploaded Successfully");
+        queryClient.invalidateQueries(["get-all-alumni"]);
+        handleClose();
+      },
+      onError: (data) => {
+        toast.error("Something went wrong");
+      },
+    }
+  );
+
+  const convertCSV = (csv) => {
+    console.log(csv);
+    Papa.parse(csv, {
+      download: true,
+      header: false,
+      skipEmptyLines: true,
+      worker: true,
+      complete: (results) => {
+        const firstName = results.data[0].indexOf("First Name");
+        const middleName = results.data[0].indexOf("Middle Name");
+        const lastName = results.data[0].indexOf("Last Name");
+        const course = results.data[0].indexOf("Course");
+        const yearGraduated = results.data[0].indexOf("Year Graduated");
+
+        if (
+          firstName !== -1 &&
+          middleName !== -1 &&
+          lastName !== -1 &&
+          course !== -1 &&
+          yearGraduated !== -1
+        ) {
+          const temp = [];
+          results.data.map((key, index) => {
+            // eslint-disable-next-line no-plusplus
+            if (index > 0) {
+              temp.push({
+                first_name: key[firstName] || "",
+                middle_name: key[middleName] || "",
+                last_name: key[lastName] || "",
+                course: key[course] || "",
+                year_graduated: key[yearGraduated] || "",
+              });
+            } else {
+              setCsvFile({
+                ...csvFile,
+                csv,
+                initialize: true,
+                invalidDataset: true,
+              });
+            }
+          });
+          setCsvFile({
+            ...csvFile,
+            csv,
+            data: temp,
+            initialize: true,
+            invalidDataset: false,
+          });
+        } else {
+          toast.error("Invalid CSV File.");
+          setCsvFile({
+            ...csvFile,
+            csv,
+            initialize: true,
+            invalidDataset: true,
+          });
+        }
+      },
     });
   };
 
-  const onDeactivateHandler = (id) => {
-    Swal.fire({
-      // title: "Are you sure you want to Deactivate this user?",
-      text: "Are you sure you want to Activate this user?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, activate it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        activate(id);
-        // Swal.fire(
-        //   'Deleted!',
-        //   'Your file has been deleted.',
-        //   'success'
-        // )
-      }
-    });
+  const onUpload = () => {
+    const formData = new FormData();
+    formData.append("csv_data", JSON.stringify(csvFile.data));
+    importCsvFile(formData);
   };
+
+  console.log(csvFile);
 
   return (
     <Page title="Shops">
       <Container maxWidth="xl">
-        <Box sx={{ backgroundColor: "#CCE5FF", padding: 2, borderRadius: 2 }}>
-          <Typography variant="h4" >
-            Alumni List
-          </Typography>
+        <Box
+          sx={{
+            backgroundColor: "#CCE5FF",
+            padding: 2,
+            borderRadius: 2,
+            marginBottom: 2,
+          }}
+        >
+          <Typography variant="h4">Alumni List</Typography>
         </Box>
-
         <AppTable
-          buttonTitle={"New User"}
+          buttonTitle={"Import CSV"}
+          buttonFunction={() => openDialog()}
           TABLE_HEAD={TABLE_HEAD}
-          TABLE_DATA={usersList}
+          TABLE_DATA={alumniList}
         />
       </Container>
+
+      <DialogModal
+        {...dialogProps}
+        title={"Uploading Alumni CSV File"}
+        styles={{
+          div: { textAlign: "center" },
+          title: { fontSize: 25, position: "relatie" },
+          subtitle: { fontSize: 24, fontWeight: "bold" },
+        }}
+        width="sm"
+      >
+        {csvFile.csv !== undefined ? (
+          <Typography sx={{ marginTop: 2, fontSize: 24, fontWeight: "bold" }}>
+            {csvFile.csv.name}
+          </Typography>
+        ) : null}
+
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height={100}
+        >
+          <Button
+            size="large"
+            component="label"
+            variant="text"
+            disableElevation
+          >
+            <Stack direction="row" alignItems="center">
+              <Typography variant="h4">Select file upload</Typography>
+            </Stack>
+            <input
+              type="file"
+              hidden
+              accept=".csv"
+              onChange={(e) => {
+                convertCSV(e.target.files[0]);
+              }}
+            />
+          </Button>
+        </Box>
+        <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
+          <LoadingButton
+            loading={uploadLoading}
+            onClick={onUpload}
+            sx={{ fontSize: 20 }}
+          >
+            Upload
+          </LoadingButton>
+        </Box>
+      </DialogModal>
     </Page>
   );
 }

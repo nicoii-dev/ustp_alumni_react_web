@@ -1,7 +1,5 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { removeAddress } from "../store/slice/AddressSlice";
-import { removeService } from "../store/slice/ServiceSlice";
 // material
 import {
   Button,
@@ -23,8 +21,6 @@ export const useDialog = () => {
   };
   const handleClose = () => {
     setOpen(false);
-    dispatch(removeAddress());
-    dispatch(removeService());
   };
   const props = {
     open,

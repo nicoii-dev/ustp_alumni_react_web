@@ -13,13 +13,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
 
 // redux
-import { setPostTitle, setPostImages } from "../../../store/slice/PostSlice";
+import { setJobTitle, setJobDescription, setJobPostImages } from "../../../store/slice/JobSlice";
 
-export default function CreatePost({ onSubmit }) {
+export default function CreateJobPost({ onSubmit }) {
   const dispatch = useDispatch();
   const userData = getLocalStorageItem("userData");
-  const { title, images } = useSelector((store) => store.post);
-  
+  const { title, description, images } = useSelector((store) => store.job);
+
   return (
     <Box sx={{ maxWidth: "90vh" }}>
       <CardHeader
@@ -46,22 +46,28 @@ export default function CreatePost({ onSubmit }) {
         }}
       />
       <TextField
-        label="What's on your mind, User?"
+        label="Title"
         multiline={99}
         sx={{ width: "95%" }}
-        onChange={(e) => dispatch(setPostTitle(e.target.value))}
+        onChange={(e) => dispatch(setJobTitle(e.target.value))}
+      />
+      <TextField
+        label="Description?"
+        multiline={99}
+        sx={{ width: "95%", marginTop: 1 }}
+        onChange={(e) => dispatch(setJobDescription(e.target.value))}
       />
       <CardContent>
-        <MyDropzone images={images} setImages={setPostImages}/>
+        <MyDropzone images={images} setImages={setJobPostImages}/>
       </CardContent>
 
-        <Button
-          sx={{ backgroundColor: "#0080FF", width: "95%", color: "white" }}
-          onClick={onSubmit}
-          disabled={_.isEmpty(title) && _.isEmpty(images)}
-        >
-          Post
-        </Button>
+      <Button
+        sx={{ backgroundColor: "#0080FF", width: "95%", color: "white" }}
+        onClick={onSubmit}
+        disabled={(_.isEmpty(title) || _.isEmpty(description)) && _.isEmpty(images)}
+      >
+        Post
+      </Button>
     </Box>
   );
 }

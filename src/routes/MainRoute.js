@@ -16,11 +16,11 @@ import Register from "../pages/Auth/Register";
 import Page404 from "../pages/Page404";
 // admin
 import AdminDashboardPage from "../pages/Admin/AdminDashboardPage";
-import FreedomWallPage from "../pages/Admin/FreedomWallPage";
+import FreedomWallPage from "../pages/Admin/FreedomWall/FreedomWallPage";
 import AnnouncementsPage from "../pages/Admin/AnnounementsPage";
 import EventsPage from "../pages/Admin/EventsPage";
 import AlumniListPage from "../pages/Admin/AlumniListPage";
-import JobPostingPage from "../pages/Admin/JobPostingPage";
+import JobPostingPage from "../pages/Admin/JobPosting/JobPostingPage";
 
 import EmailVerification from "../pages/Auth/EmailVerification";
 
@@ -38,9 +38,28 @@ export default function MainRoute() {
           <Route path="dashboard" element={<AdminDashboardPage />} />
           <Route path="freedom-wall" element={<FreedomWallPage />} />
           <Route path="announcements" element={<AnnouncementsPage />} />
-          <Route path="events" element={<EventsPage />} />
+          {/* <Route path="events" element={<EventsPage />} /> */}
           <Route path="alumni-list" element={<AlumniListPage />} />
           <Route path="job-posting" element={<JobPostingPage />} />
+          <Route
+            path="*"
+            element={<Navigate to="404" state={{ from: location }} replace />}
+          />
+        </Route>
+        <Route path="404" element={<Page404 />} />
+      </Routes>
+    );
+  }
+
+  if (userData?.role === "user") {
+    return (
+      <Routes>
+        <Route path="/" element={<DashboardLayout />}>
+          <Route path="/" element={<FreedomWallPage />} />
+          <Route path="freedom-wall" element={<FreedomWallPage />} />
+          <Route path="announcements" element={<AnnouncementsPage />} />
+          <Route path="job-posting" element={<JobPostingPage />} />
+          <Route path="profile" element={<JobPostingPage />} />
           <Route
             path="*"
             element={<Navigate to="404" state={{ from: location }} replace />}
@@ -57,7 +76,7 @@ export default function MainRoute() {
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="verify">
-        <Route path=":email/:token" element={<EmailVerification />} />
+        <Route path="d" element={<EmailVerification />} />
       </Route>
       <Route path="404" element={<Page404 />} />
       <Route path="*" element={<Navigate to="/404" state={{ from: location }} replace />} />

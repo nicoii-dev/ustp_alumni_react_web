@@ -1,17 +1,18 @@
 import React, { useCallback } from "react";
-import { useDropzone, FileError, FileRejection } from "react-dropzone";
-import { Box, CardMedia } from "@mui/material";
-
-import { FileHeader } from "./Fileheader";
-
-import { useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { Box, CardMedia, IconButton } from "@mui/material";
+import { useDispatch } from "react-redux";
 import Iconify from "../Iconify";
 
-const MyDropzone = () => {
-  const [imageFiles, setImageFiles] = useState([]);
+// redux
+
+const MyDropzone = ({images, setImages}) => {
+  const dispatch = useDispatch();
+  // const [imageFiles, setImageFiles] = useState([]);
+  // const { images } = useSelector((store) => store.post);
 
   const onDrop = useCallback(
-    (accFiles, rejFiles) => {
+    async (accFiles, rejFiles) => {
       const mappedAcc = accFiles.map((file) => ({
         fileId: 0,
         file,
@@ -19,18 +20,20 @@ const MyDropzone = () => {
       }));
       const mappedRej = rejFiles.map((r) => ({ ...r }));
       //@ts-ignore
-      setImageFiles([...imageFiles, ...mappedAcc, ...mappedRej]);
+      // setImageFiles([...imageFiles, ...mappedAcc, ...mappedRej]);
+      await dispatch(setImages([...images, ...mappedAcc, ...mappedRej]))
     },
-    [imageFiles, setImageFiles]
+    [dispatch, images, setImages]
   );
 
   const onDelete = (file) => {
-    setImageFiles(imageFiles.filter((fw) => fw.file !== file));
+    console.log(file)
+    dispatch(setImages(images.filter((fw) => fw.file !== file)));
   };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: [".png", ".jpeg", ".pdf"],
+    accept: {'image/*': ['.jpeg', '.jpg', '.png']},
     maxSize: 5000 * 1024, //5mb
   });
 
@@ -51,7 +54,7 @@ const MyDropzone = () => {
                   border: `2px solid #202020`,
                   padding: 10,
                   borderRadius: 10,
-                  borderStyle: 'dashed',
+                  borderStyle: "dashed",
                 }}
               >
                 <svg
@@ -89,7 +92,8 @@ const MyDropzone = () => {
           </div>
         </div>
 
-        {imageFiles.map((fileWrapper, index) => {
+        {images.map((fileWrapper, index) => {
+          console.log(fileWrapper.imageUrl)
           return (
             <div key={index}>
               <div
@@ -107,7 +111,7 @@ const MyDropzone = () => {
                 <CardMedia
                   component="img"
                   height="250"
-                  image={fileWrapper.imageUrl}
+                  image={"http://localhost:8000/storage/"+fileWrapper.imageUrl}
                   alt="Paella dish"
                   sx={{
                     objectFit: "contain",
@@ -126,12 +130,14 @@ const MyDropzone = () => {
                     display: "flex",
                   }}
                 >
-                  <Iconify
-                    icon="carbon:close-filled"
-                    sx={{ color: "#A0A0A0" }}
-                    width={30}
-                    height={30}
-                  />
+                  <IconButton onClick={() => onDelete(fileWrapper.file)}>
+                    <Iconify
+                      icon="carbon:close-filled"
+                      sx={{ color: "#A0A0A0" }}
+                      width={30}
+                      height={30}
+                    />
+                  </IconButton>
                 </div>
                 {/* <div>
                   <FileHeader fileData={fileWrapper} onDelete={onDelete} />
