@@ -20,11 +20,6 @@ const adminNav = [
     path: '/announcements',
     icon: getIcon('grommet-icons:announce'),
   },
-  // {
-  //   title: 'Events',
-  //   path: '/events',
-  //   icon: getIcon('ic:outline-emoji-events'),
-  // },
   {
     title: 'Alumni List',
     path: '/alumni-list',

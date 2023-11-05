@@ -15,20 +15,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
 import MyDropzone from "../../dropzone/Dropzone";
 // redux
-import {
-  setJobTitle,
-  setJobDescription,
-  setJobPostImages,
-} from "../../../store/slice/JobSlice";
+import { setAnnouncementImages } from "../../../store/slice/AnnouncementSlice";
 import { LoadingButton } from "@mui/lab";
-import { JobPostSchema } from "../../../lib/yup-schema/JobPostSchema";
+import { AnnouncementSchema } from "../../../lib/yup-schema/AnnouncementSchema";
 import { RHFTextField, FormProvider } from "../../hook-form";
 
-export default function CreateJobPost({ handleClose }) {
+export default function CreateAnnouncement({ handleClose }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const userData = getLocalStorageItem("userData");
-  const { images } = useSelector((store) => store.job);
+  const { images } = useSelector((store) => store.announcement);
   const [createIsLoading, setCreateIsLoading] = useState(false);
   const authToken = getLocalStorageItem("userToken");
 
@@ -38,32 +34,25 @@ export default function CreateJobPost({ handleClose }) {
   };
 
   const methods = useForm({
-    resolver: yupResolver(JobPostSchema),
+    resolver: yupResolver(AnnouncementSchema),
     defaultValues,
   });
 
   const {
     handleSubmit,
-    control,
-    watch,
-    setValue,
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = async (data) => {
-    if(_.isEmpty(images) && _.isEmpty(data.description)) {
-      toast.error('Please add description if you dont have images.');
-      return;
-    }
     setCreateIsLoading(true);
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("description", data.description);
+    formData.append("announcement", data.announcement);
     images.forEach((image_file) => {
       formData.append("images[]", image_file.file);
     });
     await axios
-      .post(`http://localhost:8000/api/job-posting/create`, formData, {
+      .post(`http://localhost:8000/api/announcement/create`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",
@@ -71,11 +60,9 @@ export default function CreateJobPost({ handleClose }) {
         },
       })
       .then((e) => {
-        queryClient.invalidateQueries(["get-all-jobs"]);
+        queryClient.invalidateQueries(["get-all-announcements"]);
         toast.success(e.data.message);
-        dispatch(setJobTitle(""));
-        dispatch(setJobDescription(""));
-        dispatch(setJobPostImages([]));
+        dispatch(setAnnouncementImages([]));
         setCreateIsLoading(false);
         handleClose();
       })
@@ -113,11 +100,11 @@ export default function CreateJobPost({ handleClose }) {
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={1}>
           <RHFTextField name="title" label="Title(required)" />
-          <RHFTextField name="description" label="Description" multiline={99} />
+          <RHFTextField name="announcement" label="Announcement" multiline={99} />
         </Stack>
 
       <CardContent>
-        <MyDropzone images={images} setImages={setJobPostImages} />
+        <MyDropzone images={images} setImages={setAnnouncementImages} />
       </CardContent>
 
       <LoadingButton

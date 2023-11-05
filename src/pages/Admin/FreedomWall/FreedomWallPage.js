@@ -1,31 +1,40 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
-import { useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 // mui
 import { Container, Typography, Box, Avatar, Button } from "@mui/material";
 import { toast } from "react-toastify";
 // components
 import Page from "../../../components/Page";
 import FreedomWallItem from "../../../components/pages/freedom-wall/item";
-import DialogModal, { useDialog } from "../../../components/DialogModal";
+import DialogModal from "../../../components/DialogModal";
 import CreatePost from "../../../components/pages/freedom-wall/create-post";
 
 // api
 import postApi from "../../../lib/services/postApi";
 
 // redux
-import { setPostImages, setPostTitle} from "../../../store/slice/PostSlice";
+import { setPostImages, setPostData } from "../../../store/slice/PostSlice";
+import UpdatePost from "../../../components/pages/freedom-wall/update-post";
 
 function FreedomWallPage() {
-  const [open, openDialog, dialogProps, setOpen, handleClose] = useDialog();
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { getAllPost, createPost, likePost, unlikePost } = postApi;
+  const [open, setOpen] = useState(false);
   const [postList, setPostList] = useState([]);
   const { title, images } = useSelector((store) => store.post);
-  console.log(title);
-  console.log(images);
+  const [action, setAction] = useState("");
+
+  const openDialog = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    dispatch(setPostData(""));
+    dispatch(setPostImages([]));
+  };
 
   const {
     data: postData,
@@ -41,32 +50,6 @@ function FreedomWallPage() {
     }
   }, [postData, postStatus]);
 
-  const { mutate: Create, isLoading: isCreateLoading } = useMutation(
-    (payload) => createPost(payload),
-    {
-      onSuccess: (data) => {
-        queryClient.invalidateQueries(["get-all-posts"]);
-        toast.success("Created successfully");
-        dispatch(setPostImages([]));
-        dispatch(setPostTitle(''));
-        handleClose();
-      },
-      onError: (data) => {
-        console.log(data);
-        toast.error(data.response.data.message);
-      },
-    }
-  );
-
-  const onSubmit = async () => {
-    const formData = new FormData();
-    formData.append("title", title);
-    images.forEach((image_file) => {
-      formData.append("images[]", image_file.file);
-    });
-    await Create(formData);
-  };
-
   const { mutate: Like, isLoading: isLikeLoading } = useMutation(
     (payload) => likePost(payload),
     {
@@ -80,7 +63,6 @@ function FreedomWallPage() {
     }
   );
 
-    console.log(postList)
   return (
     <Page title="Alumnus">
       <Container maxWidth="xl">
@@ -121,20 +103,24 @@ function FreedomWallPage() {
             <Button
               variant="outlined"
               sx={{ width: "85%", justifyContent: "flex-start" }}
-              onClick={() => openDialog()}
+              onClick={() => {
+                openDialog();
+                setAction("create");
+              }}
             >
               What's on your mind, User?
             </Button>
           </Box>
           {postList?.map((post) => {
-            return <FreedomWallItem post={post} Like={Like} />;
+            return <FreedomWallItem post={post} Like={Like} openDialog={openDialog} setAction={setAction} />;
           })}
         </Box>
       </Container>
 
       <DialogModal
-        {...dialogProps}
-        title={"Creating Post"}
+        open={open}
+        handleClose={handleClose}
+        title={action === "create" ? "Creating Post" : "Updating Post"}
         styles={{
           div: { textAlign: "center" },
           title: { fontSize: 25, position: "relatie" },
@@ -142,7 +128,11 @@ function FreedomWallPage() {
         }}
         width="sm"
       >
-        <CreatePost onSubmit={onSubmit} />
+        {action === "create" ? (
+          <CreatePost handleClose={handleClose} />
+        ) : (
+          <UpdatePost handleClose={handleClose} />
+        )}
       </DialogModal>
     </Page>
   );

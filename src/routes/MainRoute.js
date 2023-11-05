@@ -17,8 +17,7 @@ import Page404 from "../pages/Page404";
 // admin
 import AdminDashboardPage from "../pages/Admin/AdminDashboardPage";
 import FreedomWallPage from "../pages/Admin/FreedomWall/FreedomWallPage";
-import AnnouncementsPage from "../pages/Admin/AnnounementsPage";
-import EventsPage from "../pages/Admin/EventsPage";
+import AnnouncementsPage from "../pages/Admin/Announcements/AnnouncementsPage";
 import AlumniListPage from "../pages/Admin/AlumniListPage";
 import JobPostingPage from "../pages/Admin/JobPosting/JobPostingPage";
 
@@ -76,7 +75,7 @@ export default function MainRoute() {
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
       <Route path="verify">
-        <Route path="d" element={<EmailVerification />} />
+        <Route path=":email/:token" element={<EmailVerification />} />
       </Route>
       <Route path="404" element={<Page404 />} />
       <Route path="*" element={<Navigate to="/404" state={{ from: location }} replace />} />

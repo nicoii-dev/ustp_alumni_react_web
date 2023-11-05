@@ -6,8 +6,6 @@ import { styled } from '@mui/material/styles';
 //
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
-import { getLocalStorageItem } from '../../../lib/util/getLocalStorage';
-import { setInclude } from '../../../store/slice/LabanderoSlice';
 
 // ----------------------------------------------------------------------
 
@@ -38,10 +36,6 @@ const MainStyle = styled('div')(({ theme }) => ({
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-  
-  useEffect(() => {
-    dispatch(setInclude(false))
-  })
  
   return (
     <RootStyle>

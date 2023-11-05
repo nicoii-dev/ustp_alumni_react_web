@@ -1,25 +1,59 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
+import React from "react";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import { red } from "@mui/material/colors";
 import moment from "moment/moment";
-import MyDropzone from "../../dropzone/Dropzone";
-import { TextField, capitalize, Button, Box } from "@mui/material";
+import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "react-query";
+import { TextField, capitalize, Box } from "@mui/material";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
-
+import MyDropzone from "../../dropzone/Dropzone";
 // redux
-import { setPostTitle, setPostImages } from "../../../store/slice/PostSlice";
+import {
+  setPostData,
+  setPostImages,
+  setPostTitle,
+} from "../../../store/slice/PostSlice";
 
-export default function CreatePost({ onSubmit }) {
+// api
+import postApi from "../../../lib/services/postApi";
+import { LoadingButton } from "@mui/lab";
+
+export default function CreatePost({ handleClose }) {
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const userData = getLocalStorageItem("userData");
-  const { title, images } = useSelector((store) => store.post);
-  
+  const { post, images } = useSelector((store) => store.post);
+  const { createPost } = postApi;
+  const { mutate: Create, isLoading: isCreateLoading } = useMutation(
+    (payload) => createPost(payload),
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(["get-all-posts"]);
+        toast.success("Created successfully");
+        dispatch(setPostImages([]));
+        dispatch(setPostData({}));
+        handleClose();
+      },
+      onError: (data) => {
+        console.log(data);
+        toast.error(data.response.data.message);
+      },
+    }
+  );
+
+  const onSubmit = async () => {
+    const formData = new FormData();
+    formData.append("title", post.title);
+    images.forEach((image_file) => {
+      formData.append("images[]", image_file.file);
+    });
+    await Create(formData);
+  };
+
   return (
     <Box sx={{ maxWidth: "90vh" }}>
       <CardHeader
@@ -52,16 +86,18 @@ export default function CreatePost({ onSubmit }) {
         onChange={(e) => dispatch(setPostTitle(e.target.value))}
       />
       <CardContent>
-        <MyDropzone images={images} setImages={setPostImages}/>
+        <MyDropzone images={images} setImages={setPostImages} />
       </CardContent>
 
-        <Button
-          sx={{ backgroundColor: "#0080FF", width: "95%", color: "white" }}
-          onClick={onSubmit}
-          disabled={_.isEmpty(title) && _.isEmpty(images)}
-        >
-          Post
-        </Button>
+      <LoadingButton
+        loading={isCreateLoading}
+        variant="contained"
+        sx={{ width: "50%" }}
+        onClick={onSubmit}
+        disabled={_.isEmpty(post.title) && _.isEmpty(images)}
+      >
+        Post
+      </LoadingButton>
     </Box>
   );
 }

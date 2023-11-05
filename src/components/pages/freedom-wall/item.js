@@ -1,11 +1,8 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -18,18 +15,21 @@ import moment from "moment";
 import { useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
+import { useDispatch } from "react-redux";
+import { setPostImages, setPostData } from "../../../store/slice/PostSlice";
 
 import postApi from "../../../lib/services/postApi";
 
-export default function FreedomWallItem({ post, Like }) {
+export default function FreedomWallItem({ post, Like, openDialog, setAction }) {
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const userData = getLocalStorageItem("userData");
-  const {unlikePost} = postApi;
+  const { unlikePost } = postApi;
 
   const { mutate: Unlike, isLoading: isUnlikeLoading } = useMutation(
-    (id) => unlikePost(id, {'post_id': post.id}),
+    (id) => unlikePost(id, { post_id: post.id }),
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries(["get-all-posts"]);
@@ -75,8 +75,18 @@ export default function FreedomWallItem({ post, Like }) {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem onClick={handleClose}>Update</MenuItem>
-              <MenuItem onClick={handleClose}>Delete</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setAction('update')
+                  dispatch(setPostImages(post.post_images))
+                  dispatch(setPostData(post))
+                  handleClose();
+                  openDialog();
+                }}
+              >
+                Update
+              </MenuItem>
+              <MenuItem onClick={handleClose}>Remove</MenuItem>
               {/* <MenuItem onClick={handleClose}>Logout</MenuItem> */}
             </Menu>
           </div>
@@ -145,7 +155,9 @@ export default function FreedomWallItem({ post, Like }) {
           sx={{ width: "45%", gap: 1 }}
           onClick={() => {
             if (post.post_likes.some((el) => el.user_id === userData.id)) {
-              const likeData = post.post_likes.find(ele => ele.post_id === post.id)
+              const likeData = post.post_likes.find(
+                (ele) => ele.post_id === post.id
+              );
               Unlike(likeData.id, { post_id: post.id });
               return;
             }

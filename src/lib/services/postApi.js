@@ -11,8 +11,8 @@ export default {
       },
     });
   },
-  updatePost: (payload) => {
-    apiService.post(`/post/create`, payload, {
+  updatePost: (id, payload) => {
+    apiService.post(`/post/update/${id}`, payload, {
       headers: {
         'Content-Type': 'multipart/form-data',
         // Authorization: `Bearer ${token}`,

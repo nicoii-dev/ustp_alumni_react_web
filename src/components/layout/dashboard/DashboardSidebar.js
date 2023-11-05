@@ -21,8 +21,6 @@ import Scrollbar from "../../Scrollbar";
 import NavSection from "../../NavSection";
 // side navigation
 import adminNav from "../../../lib/nav/adminNav";
-import shopNav from "../../../lib/nav/shopNav";
-import labanderoNav from "../../../lib/nav/labanderoNav";
 import userNav from "../../../lib/nav/userNav";
 // ----------------------------------------------------------------------
 
@@ -63,16 +61,10 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       case "user":
         setNavConfig(userNav);
         break;
-      case "labandero":
-        setNavConfig(labanderoNav);
-        break;
-      case "shop":
-        setNavConfig(shopNav);
-        break;
       default:
         break;
     }
-  }, []);
+  }, [userData?.role]);
 
   useEffect(() => {
     if (isOpenSidebar) {

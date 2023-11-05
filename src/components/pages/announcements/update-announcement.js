@@ -14,34 +14,29 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useQueryClient } from "react-query";
 import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
-import { JobPostSchema } from "../../../lib/yup-schema/JobPostSchema";
 import { RHFTextField, FormProvider } from "../../hook-form";
 // redux
-import {
-  setJobTitle,
-  setJobDescription,
-  setJobPostImages,
-  setImagesToDelete,
-} from "../../../store/slice/JobSlice";
+import { setAnnouncement, setAnnouncementImages, setImagesToDelete } from "../../../store/slice/AnnouncementSlice";
 import { LoadingButton } from "@mui/lab";
+import { AnnouncementSchema } from "../../../lib/yup-schema/AnnouncementSchema";
 
-export default function UpdateJobPost({ jobImages, handleClose }) {
+export default function UpdateAnnouncement({ announcementImages, handleClose }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const userData = getLocalStorageItem("userData");
-  const { title, description, images, imagesToDelete, job } = useSelector(
-    (store) => store.job
+  const { announcement, images, imagesToDelete } = useSelector(
+    (store) => store.announcement
   );
   const [updateIsLoading, setUpdateIsLoading] = useState(false);
   const authToken = getLocalStorageItem("userToken");
 
   const defaultValues = {
     title: "",
-    description: "",
+    announcement: "",
   };
 
   const methods = useForm({
-    resolver: yupResolver(JobPostSchema),
+    resolver: yupResolver(AnnouncementSchema),
     defaultValues,
   });
 
@@ -50,18 +45,18 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
     reset,
     formState: { isSubmitting },
   } = methods;
-
+  console.log(announcement)
   useEffect(() => {
     reset({
-      title: title,
-      description: description
+      title: announcement.title,
+      announcement: announcement.announcement
     })
-  }, [title, description, reset])
+  }, [reset, announcement])
 
   const ImageUrlToBlob = React.useCallback(async () => {
     const mappedImages = [];
     await Promise.all(
-      jobImages.map(async (data) => {
+      announcementImages.map(async (data) => {
         const response = await fetch(
           "http://localhost:8000/storage/" + data?.url,
           {
@@ -91,22 +86,18 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
         });
       })
     );
-    await dispatch(setJobPostImages([...mappedImages]));
-  }, [dispatch, jobImages]);
+    await dispatch(setAnnouncementImages([...mappedImages]));
+  }, [dispatch, announcementImages]);
 
   React.useEffect(() => {
     ImageUrlToBlob();
   }, [ImageUrlToBlob]);
 
   const onUpdate = async (data) => {
-    if(_.isEmpty(images) && _.isEmpty(data.description)) {
-      toast.error('Please add description if you dont have images.');
-      return;
-    }
     setUpdateIsLoading(true);
     const formData = new FormData();
     formData.append("title", data.title);
-    formData.append("description", data.description);
+    formData.append("announcement", data.announcement);
     if (imagesToDelete.length > 0) {
       formData.append("imagesToDelete[]", imagesToDelete);
     }
@@ -116,7 +107,7 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
     });
     await axios
       .post(
-        `http://localhost:8000/api/job-posting/update/${job.id}`,
+        `http://localhost:8000/api/announcement/update/${announcement.id}`,
         formData,
         {
           headers: {
@@ -127,11 +118,10 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
         }
       )
       .then((e) => {
-        queryClient.invalidateQueries(["get-all-jobs"]);
+        queryClient.invalidateQueries(["get-all-announcements"]);
         toast.success(e.data.message);
-        dispatch(setJobTitle(""));
-        dispatch(setJobDescription(""));
-        dispatch(setJobPostImages([]));
+        dispatch(setAnnouncement(""));
+        dispatch(setAnnouncementImages([]));
         setUpdateIsLoading(false);
         handleClose();
       })
@@ -167,30 +157,16 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
           marginTop: -0.5,
         }}
       />
-      {/* <TextField
-        label="Title"
-        multiline={99}
-        sx={{ width: "95%" }}
-        value={title}
-        onChange={(e) => dispatch(setJobTitle(e.target.value))}
-      />
-      <TextField
-        label="Description?"
-        multiline={99}
-        sx={{ width: "95%", marginTop: 1 }}
-        value={description}
-        onChange={(e) => dispatch(setJobDescription(e.target.value))}
-      /> */}
       <FormProvider methods={methods} onSubmit={handleSubmit(onUpdate)}>
         <Stack spacing={1}>
           <RHFTextField name="title" label="Title(required)" />
-          <RHFTextField name="description" label="Description" multiline={99} />
+          <RHFTextField name="announcement" label="Announcement" multiline={99} />
         </Stack>
 
         <CardContent>
           <MyDropzone
             images={images}
-            setImages={setJobPostImages}
+            setImages={setAnnouncementImages}
             imagesToDelete={imagesToDelete}
             setImagesToDelete={setImagesToDelete}
           />

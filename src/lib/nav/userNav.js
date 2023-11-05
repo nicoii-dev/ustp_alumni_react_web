@@ -9,17 +9,17 @@ const userNav = [
   {
     title: 'Freedom Wall',
     path: '/freedom-wall',
-    icon: getIcon('majesticons:home'),
+    icon: getIcon('ic:outline-message'),
   },
   {
     title: 'Announcements',
     path: '/announcements',
-    icon: getIcon('mingcute:announcement-fill'),
+    icon: getIcon('grommet-icons:announce'),
   },
   {
     title: 'Job Posting',
     path: '/job-posting',
-    icon: getIcon('mdi:work'),
+    icon: getIcon('cib:when-i-work'),
   },
 ];
 

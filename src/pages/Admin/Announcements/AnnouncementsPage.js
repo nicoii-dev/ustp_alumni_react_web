@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
-import { useParams } from "react-router-dom";
-import axios from "axios";
 import _ from "lodash";
 // mui
 import { Container, Typography, Box, Tooltip, IconButton } from "@mui/material";
@@ -12,55 +10,57 @@ import Page from "../../../components/Page";
 import AppTable from "../../../components/AppTable";
 import DialogModal from "../../../components/DialogModal";
 import Iconify from "../../../components/Iconify";
-import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
+import { useDispatch } from "react-redux";
+import CreateAnnouncement from "../../../components/pages/announcements/create-announcement";
+import UpdateAnnouncement from "../../../components/pages/announcements/update-announcement";
 
 // api
-import jobPostingApi from "../../../lib/services/jobPostingApi";
-import { useDispatch, useSelector } from "react-redux";
-import CreateJobPost from "../../../components/pages/job-posting/create-job";
+import announcementApi from "../../../lib/services/announcementApi";
 
 // redux
 import {
-  setJobTitle,
-  setJobDescription,
-  setJobPostImages,
-  setJob,
-} from "../../../store/slice/JobSlice";
-import UpdateJobPost from "../../../components/pages/job-posting/update-job";
+  setAnnouncement,
+  setAnnouncementImages,
+} from "../../../store/slice/AnnouncementSlice";
 
-function JobPostingPage() {
+function AnnouncementsPage() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const authToken = getLocalStorageItem("userToken");
   const queryClient = useQueryClient();
-  const { getAllJob, deleteJob } = jobPostingApi;
+  const { getAllAnnouncement, deleteAnnouncement } = announcementApi;
   const [jobPostList, setJobPostList] = useState([]);
   const [action, setAction] = useState("");
-  const [jobImages, setJobImages] = useState([]);
+  const [images, setImages] = useState([]);
 
   const openDialog = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
-    dispatch(setJobPostImages([]));
-    dispatch(setJobTitle(""));
-    dispatch(setJobDescription(""));
+    dispatch(setAnnouncementImages([]));
+    dispatch(
+      setAnnouncement({
+        id: "",
+        title: "",
+        announcement: "",
+        images: [],
+      })
+    );
   };
 
   const {
-    data: jobsData,
-    status: jobsStatus,
-    isFetching: jobsIsFetching,
-  } = useQuery(["get-all-jobs"], () => getAllJob(), {
+    data: announcementData,
+    status: announcementStatus,
+    isFetching: announcementIsFetching,
+  } = useQuery(["get-all-announcements"], () => getAllAnnouncement(), {
     retry: 3, // Will retry failed requests 10 times before displaying an error
   });
 
   const { mutate: Delete, isLoading: isDeleteLoading } = useMutation(
-    (id) => deleteJob(id),
+    (id) => deleteAnnouncement(id),
     {
       onSuccess: (data) => {
-        queryClient.invalidateQueries(["get-all-jobs"]);
+        queryClient.invalidateQueries(["get-all-announcements"]);
       },
       onError: (data) => {
         console.log(data);
@@ -70,18 +70,19 @@ function JobPostingPage() {
   );
 
   useEffect(() => {
-    if (jobsStatus === "success") {
+    if (announcementStatus === "success") {
       setJobPostList(
-        jobsData?.data?.map((data) => ({
+        announcementData?.data?.map((data) => ({
           tobeSearch: data?.title,
           id: <span>{`#${data.id}`}</span>,
           title: data.title ? data.title : "N/A",
-          description: data.description ? data.description : "N/A",
+          announcement: data.announcement ? data.announcement : "N/A",
           images: (
             <img
               src={
-                !_.isUndefined(data?.job_images[0]?.url)
-                  ? "http://localhost:8000/storage/" + data?.job_images[0]?.url
+                !_.isUndefined(data?.announcement_images[0]?.url)
+                  ? "http://localhost:8000/storage/" +
+                    data?.announcement_images[0]?.url
                   : "static/no-image.jpg"
               }
               alt={data?.title}
@@ -101,10 +102,8 @@ function JobPostingPage() {
               <Tooltip title="Update Post">
                 <IconButton
                   onClick={() => {
-                    dispatch(setJob(data));
-                    dispatch(setJobTitle(data.title));
-                    dispatch(setJobDescription(data.description));
-                    setJobImages(data.job_images);
+                    dispatch(setAnnouncement(data));
+                    setImages(data.announcement_images);
                     openDialog();
                     setAction("update");
                   }}
@@ -144,10 +143,10 @@ function JobPostingPage() {
         }))
       );
     }
-  }, [Delete, dispatch, jobsData?.data, jobsStatus]);
+  }, [Delete, announcementData?.data, announcementStatus, dispatch]);
 
   return (
-    <Page title="Job-Posting">
+    <Page title="Announcements">
       <Container maxWidth="xl">
         <Box
           sx={{
@@ -157,12 +156,12 @@ function JobPostingPage() {
             marginBottom: 2,
           }}
         >
-          <Typography variant="h4">Job Posting</Typography>
+          <Typography variant="h4">Announcements</Typography>
         </Box>
 
         <AppTable
           // tableTitle={"Citation Records"}
-          buttonTitle={"New Job Post"}
+          buttonTitle={"New Announcement"}
           buttonFunction={() => {
             openDialog();
             setAction("create");
@@ -170,7 +169,7 @@ function JobPostingPage() {
           TABLE_HEAD={[
             // { id: "id", label: "ID", align: "center" },
             { id: "title", label: "Title", align: "center" },
-            { id: "description", label: "Description", align: "center" },
+            { id: "announcement", label: "Announcement", align: "center" },
             { id: "images", label: "Images", align: "center" },
             { id: "action", label: "Action", align: "center" },
           ]}
@@ -181,7 +180,11 @@ function JobPostingPage() {
       <DialogModal
         open={open}
         handleClose={handleClose}
-        title={action === "create" ? "Creating Job Post" : "Updating Job Post"}
+        title={
+          action === "create"
+            ? "Creating Announcement"
+            : "Updating Announcement"
+        }
         styles={{
           div: { textAlign: "center" },
           title: { fontSize: 25, position: "relatie" },
@@ -190,13 +193,16 @@ function JobPostingPage() {
         width="sm"
       >
         {action === "create" ? (
-          <CreateJobPost handleClose={handleClose} />
+          <CreateAnnouncement handleClose={handleClose} />
         ) : (
-          <UpdateJobPost jobImages={jobImages} handleClose={handleClose} />
+          <UpdateAnnouncement
+            announcementImages={images}
+            handleClose={handleClose}
+          />
         )}
       </DialogModal>
     </Page>
   );
 }
 
-export default JobPostingPage;
+export default AnnouncementsPage;

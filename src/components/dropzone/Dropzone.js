@@ -6,7 +6,7 @@ import Iconify from "../Iconify";
 
 // redux
 
-const MyDropzone = ({images, setImages}) => {
+const MyDropzone = ({images, setImages, imagesToDelete, setImagesToDelete}) => {
   const dispatch = useDispatch();
   // const [imageFiles, setImageFiles] = useState([]);
   // const { images } = useSelector((store) => store.post);
@@ -26,9 +26,11 @@ const MyDropzone = ({images, setImages}) => {
     [dispatch, images, setImages]
   );
 
-  const onDelete = (file) => {
-    console.log(file)
-    dispatch(setImages(images.filter((fw) => fw.file !== file)));
+  const onDelete = (fileWrapper) => {
+    if(fileWrapper.fileId !== 0) {
+      dispatch(setImagesToDelete([...imagesToDelete, fileWrapper.fileId]))
+    }
+    dispatch(setImages(images.filter((fw) => fw.file !== fileWrapper.file)));
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -93,7 +95,6 @@ const MyDropzone = ({images, setImages}) => {
         </div>
 
         {images.map((fileWrapper, index) => {
-          console.log(fileWrapper.imageUrl)
           return (
             <div key={index}>
               <div
@@ -111,7 +112,7 @@ const MyDropzone = ({images, setImages}) => {
                 <CardMedia
                   component="img"
                   height="250"
-                  image={"http://localhost:8000/storage/"+fileWrapper.imageUrl}
+                  image={fileWrapper.imageUrl}
                   alt="Paella dish"
                   sx={{
                     objectFit: "contain",
@@ -130,7 +131,7 @@ const MyDropzone = ({images, setImages}) => {
                     display: "flex",
                   }}
                 >
-                  <IconButton onClick={() => onDelete(fileWrapper.file)}>
+                  <IconButton onClick={() => onDelete(fileWrapper)}>
                     <Iconify
                       icon="carbon:close-filled"
                       sx={{ color: "#A0A0A0" }}

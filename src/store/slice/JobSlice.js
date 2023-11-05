@@ -4,6 +4,13 @@ const initialState = {
   title: '',
   description: '',
   images: [],
+  job: {
+    id: '',
+    title: '', 
+    description: '',
+    images: []
+  },
+  imagesToDelete: [],
 };
 
 const JobPostSlice = createSlice({
@@ -22,7 +29,15 @@ const JobPostSlice = createSlice({
       ...state,
       images: action.payload,
     }),
+    setJob: (state, action) => ({
+      ...state,
+      job: action.payload,
+    }),
+    setImagesToDelete: (state, action) => ({
+      ...state,
+      imagesToDelete: action.payload,
+    }),
   },
 });
-export const { setJobTitle, setJobDescription, setJobPostImages } = JobPostSlice.actions;
+export const { setJobTitle, setJobDescription, setJobPostImages, setJob, setImagesToDelete } = JobPostSlice.actions;
 export default JobPostSlice.reducer;

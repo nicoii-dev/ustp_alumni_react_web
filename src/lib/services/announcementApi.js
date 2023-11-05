@@ -2,9 +2,9 @@
 import apiService from "./axios";
 
 export default {
-  getAllJob: () => apiService.get(`/job-posting`),
-  createJob: (token, payload) => {
-    apiService.post(`job-posting/create`, payload, {
+  getAllAnnouncement: () => apiService.get(`/announcement`),
+  createAnnouncement: (token, payload) => {
+    apiService.post(`announcement/create`, payload, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Accept: "application/json",
@@ -12,13 +12,13 @@ export default {
       },
     });
   },
-  updateJob: (id, payload) => {
-    apiService.post(`/job-posting/update/${id}`, payload, {
+  updateAnnouncement: (id, payload) => {
+    apiService.post(`/announcement/update/${id}`, payload, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Accept: "application/json",
       },
     });
   },
-  deleteJob: (id) => apiService.delete(`/job-posting/delete/${id}`),
+  deleteAnnouncement: (id) => apiService.delete(`/announcement/delete/${id}`),
 };

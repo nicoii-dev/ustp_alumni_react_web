@@ -146,8 +146,6 @@ function AlumniListPage() {
     importCsvFile(formData);
   };
 
-  console.log(csvFile);
-
   return (
     <Page title="Shops">
       <Container maxWidth="xl">
