@@ -22,6 +22,9 @@ import AlumniListPage from "../pages/Admin/AlumniListPage";
 import JobPostingPage from "../pages/Admin/JobPosting/JobPostingPage";
 
 import EmailVerification from "../pages/Auth/EmailVerification";
+import UserAnnouncements from "../pages/User/Announcements/UserAnnouncements";
+import UserJobPosting from "../pages/User/JobPosting/UserJobPosting";
+import UserFreedomWall from "../pages/User/FreedomWall/UserFreedomWall";
 
 // ----------------------------------------------------------------------
 
@@ -55,9 +58,9 @@ export default function MainRoute() {
       <Routes>
         <Route path="/" element={<DashboardLayout />}>
           <Route path="/" element={<FreedomWallPage />} />
-          <Route path="freedom-wall" element={<FreedomWallPage />} />
-          <Route path="announcements" element={<AnnouncementsPage />} />
-          <Route path="job-posting" element={<JobPostingPage />} />
+          <Route path="freedom-wall" element={<UserFreedomWall />} />
+          <Route path="announcements" element={<UserAnnouncements />} />
+          <Route path="job-posting" element={<UserJobPosting />} />
           <Route path="profile" element={<JobPostingPage />} />
           <Route
             path="*"

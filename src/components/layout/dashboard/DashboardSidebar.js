@@ -30,7 +30,7 @@ const RootStyle = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("lg")]: {
     flexShrink: 0,
     width: DRAWER_WIDTH,
-  },
+  }
 }));
 
 const AccountStyle = styled("div")(({ theme }) => ({
@@ -38,7 +38,7 @@ const AccountStyle = styled("div")(({ theme }) => ({
   alignItems: "center",
   padding: theme.spacing(2, 2.5),
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: '#0080FF',
+  backgroundColor: '#004C99',
 }));
 
 // ----------------------------------------------------------------------
@@ -82,7 +82,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           display: "flex",
           flexDirection: "column",
         },
-        backgroundColor: "white",
+        backgroundColor: "#0080FF",
       }}
     >
       <Box sx={{ px: 2.5, py: 3, justifyContent: 'center', alignItems: 'center'}}>
