@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 //
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
+import SetupProfile from '../../pages/profile/SetupProfile';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,7 @@ export default function DashboardLayout() {
     <RootStyle>
       <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
       <DashboardSidebar isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
+      <SetupProfile />
       <MainStyle>
         <Outlet />
       </MainStyle>

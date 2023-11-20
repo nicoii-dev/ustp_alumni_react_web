@@ -19,7 +19,7 @@ export default {
       },
     });
   },
-  deletePost: (id) => apiService.post(`/post/delete/${id}`),
+  deletePost: (id) => apiService.delete(`/post/delete/${id}`),
   likePost: (payload) => apiService.post(`/likes/like-post`, payload),
   unlikePost: (id, payload) => apiService.post(`/likes/unlike-post/${id}`, payload),
 };

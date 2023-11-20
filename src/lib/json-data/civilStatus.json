@@ -1,0 +1,26 @@
+[
+    {
+       "value":"single",
+       "label":"Single"
+    },
+    {
+       "value":"married",
+       "label":"Married"
+    },
+    {
+       "value":"divorced",
+       "label":"Divorced"
+    },
+    {
+       "value":"separated",
+       "label":"Separated"
+    },
+    {
+       "value":"widowed",
+       "label":"Widowed"
+    },
+    {
+        "value":"single-parent",
+        "label":"Single Parent"
+    }
+ ]
