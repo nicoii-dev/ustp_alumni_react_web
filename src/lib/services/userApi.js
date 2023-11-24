@@ -1,11 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import apiService from "./axios";
 
-const headersApplicationJSON = {
-  Accept: "application/json",
-  "Content-Type": "application/json",
-};
-
 export default {
   register: (payload) => apiService.post(`/auth/register`, payload),
   login: (payload) => apiService.post(`/auth/login`, payload),
@@ -25,4 +20,6 @@ export default {
 
   activateUser: (id) => apiService.post(`/users/activate/${id}`),
   deactivateUser: (id) => apiService.post(`/users/deactivate/${id}`),
+
+  addProfileAddress: (payload) => apiService.post(`/profile/add`, payload),
 };

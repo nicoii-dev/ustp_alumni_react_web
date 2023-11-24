@@ -49,14 +49,14 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data) => {
-    // loginUser(data)
-    setLocalStorageItem('userData', {
-      "role": 'admin',
-      "first_name": 'Admin',
-      "last_name": 'Admin',
-      "email": 'admin@gmail.com'
-    }, 9999);
-    navigate('/dashboard')
+    loginUser(data)
+    // setLocalStorageItem('userData', {
+    //   "role": 'admin',
+    //   "first_name": 'Admin',
+    //   "last_name": 'Admin',
+    //   "email": 'admin@gmail.com'
+    // }, 9999);
+    // navigate('/dashboard')
   };
 
   return (

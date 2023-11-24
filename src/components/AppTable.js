@@ -1,6 +1,6 @@
-import { filter } from 'lodash';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { filter } from "lodash";
+import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 // material
 import {
   Card,
@@ -16,12 +16,16 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-} from '@mui/material';
+} from "@mui/material";
 // components
-import Scrollbar from './Scrollbar';
-import Iconify from './Iconify';
-import SearchNotFound from './SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from './sections/@dashboard/user';
+import Scrollbar from "./Scrollbar";
+import Iconify from "./Iconify";
+import SearchNotFound from "./SearchNotFound";
+import {
+  UserListHead,
+  UserListToolbar,
+  UserMoreMenu,
+} from "./sections/@dashboard/user";
 // mock
 
 function descendingComparator(a, b, orderBy) {
@@ -35,7 +39,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -48,27 +52,39 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(
+      array,
+      (_user) =>
+        _user?.tobeSearch?.toLowerCase().indexOf(query?.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function AppTable({ TABLE_HEAD, TABLE_DATA, tableTitle, buttonTitle, buttonFunction }) {
+export default function AppTable({
+  TABLE_HEAD,
+  TABLE_DATA,
+  tableTitle,
+  buttonTitle,
+  buttonFunction,
+  hasButton = true,
+  hasSearch = true,
+}) {
   const [page, setPage] = useState(0);
 
-  const [order, setOrder] = useState('asc');
+  const [order, setOrder] = useState("asc");
 
   const [selected, setSelected] = useState([]);
 
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState("name");
 
-  const [filterName, setFilterName] = useState('');
+  const [filterName, setFilterName] = useState("");
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -91,7 +107,10 @@ export default function AppTable({ TABLE_HEAD, TABLE_DATA, tableTitle, buttonTit
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
     }
     setSelected(newSelected);
   };
@@ -109,26 +128,48 @@ export default function AppTable({ TABLE_HEAD, TABLE_DATA, tableTitle, buttonTit
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - TABLE_DATA.length) : 0;
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - TABLE_DATA.length) : 0;
 
-  const filteredUsers = applySortFilter(TABLE_DATA, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(
+    TABLE_DATA,
+    getComparator(order, orderBy),
+    filterName
+  );
 
   const isUserNotFound = filteredUsers.length === 0;
 
   return (
     <>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        mb={5}
+      >
         <Typography variant="h4" gutterBottom>
           {tableTitle}
         </Typography>
-        {/* <Button variant="contained" to="#" startIcon={<Iconify icon="eva:plus-fill" />} onClick={buttonFunction}>
-          {buttonTitle}
-        </Button> */}
+        {hasButton && (
+          <Button
+            variant="contained"
+            to="#"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            onClick={buttonFunction}
+          >
+            {buttonTitle}
+          </Button>
+        )}
       </Stack>
 
       <Card>
-        {/* <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
-
+        {hasSearch ? (
+          <UserListToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+          />
+        ) : null}
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800 }}>
             <Table>
@@ -142,33 +183,56 @@ export default function AppTable({ TABLE_HEAD, TABLE_DATA, tableTitle, buttonTit
                 onSelectAllClick={handleSelectAllClick}
               />
               <TableBody>
-                {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                  // const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                  const isItemSelected = selected.indexOf(row.id) !== -1;
+                {filteredUsers
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    // const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const isItemSelected = selected.indexOf(row.id) !== -1;
 
-                  return (
-                    <TableRow
-                      hover
-                      key={index}
-                      tabIndex={-1}
-                      role="checkbox"
-                      selected={isItemSelected}
-                      aria-checked={isItemSelected}
-                    >
-                      {TABLE_HEAD.map((head, i) => (
-                        <TableCell key={`${i}-column-${row.id}`} align={head.align || 'left'}>
-                          <Typography variant="body2">
-                            {head?.value ? head.value(row[head.id]) : row[head.id]}
-                          </Typography>
-                        </TableCell>
-                      ))}
+                    return (
+                      <TableRow
+                        hover
+                        key={index}
+                        tabIndex={-1}
+                        role="checkbox"
+                        selected={isItemSelected}
+                        aria-checked={isItemSelected}
+                      >
+                        {TABLE_HEAD.map((head, i) => {
+                          if (head.id === "images") {
+                            return (
+                              <TableCell
+                                key={`${i}-column-${row.id}`}
+                                align={"right"}
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                {row[head.id]}
+                              </TableCell>
+                            );
+                          }
+                          return (
+                            <TableCell
+                              key={`${i}-column-${row.id}`}
+                              align={head.align || "left"}
+                            >
+                              <Typography variant="body2">
+                                {head?.value
+                                  ? head.value(row[head.id])
+                                  : row[head.id]}
+                              </Typography>
+                            </TableCell>
+                          );
+                        })}
 
-                      {/* <TableCell align="right">
+                        {/* <TableCell align="right">
                         <UserMoreMenu />
                       </TableCell> */}
-                    </TableRow>
-                  );
-                })}
+                      </TableRow>
+                    );
+                  })}
                 {emptyRows > 0 && (
                   <TableRow style={{ height: 53 * emptyRows }}>
                     <TableCell colSpan={6} />
@@ -179,7 +243,7 @@ export default function AppTable({ TABLE_HEAD, TABLE_DATA, tableTitle, buttonTit
               {isUserNotFound && (
                 <TableBody>
                   <TableRow>
-                    <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                    <TableCell align="center" colSpan={12} sx={{ py: 3 }}>
                       <SearchNotFound searchQuery={filterName} />
                     </TableCell>
                   </TableRow>

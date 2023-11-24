@@ -7,15 +7,30 @@ const getIcon = (name) => <Iconify icon={name} width={25} height={25} />;
 
 const userNav = [
   {
-    title: 'Home',
-    path: '/home',
-    icon: getIcon('material-symbols:home-pin'),
+    title: 'Freedom Wall',
+    path: '/freedom-wall',
+    icon: getIcon('ic:outline-message'),
   },
-  // {
-  //   title: 'About',
-  //   path: '/about',
-  //   icon: getIcon('mdi:about-circle-outline'),
-  // },
+  {
+    title: 'Announcements',
+    path: '/announcements',
+    icon: getIcon('grommet-icons:announce'),
+  },
+  {
+    title: 'Job Posting',
+    path: '/job-posting',
+    icon: getIcon('cib:when-i-work'),
+  },
+  {
+    title: 'Employment Details',
+    path: '/employment',
+    icon: getIcon('clarity:employee-line'),
+  },
+  {
+    title: 'Trainings',
+    path: '/trainings',
+    icon: getIcon('healthicons:i-training-class'),
+  },
 ];
 
 export default userNav;

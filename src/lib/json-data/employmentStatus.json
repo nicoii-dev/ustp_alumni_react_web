@@ -1,0 +1,22 @@
+[
+    {
+       "value":"regular-permanent",
+       "label":"Regular or Permanent"
+    },
+    {
+       "value":"temporary",
+       "label":"Temporary"
+    },
+    {
+       "value":"casual",
+       "label":"Casual"
+    },
+    {
+       "value":"contractual",
+       "label":"Contractual"
+    },
+    {
+       "value":"self-employed",
+       "label":"Self Employed"
+    }
+ ]

@@ -64,30 +64,18 @@ export default function EmailVerification() {
         <Container maxWidth="sm">
           <Card sx={{ marginTop: 10 }}>
             <ContentStyle>
-              <Box
-                sx={{
+              <img
+                alt="register"
+                src="/static/ustp-logo.jpg"
+                style={{
                   height: 200,
                   width: 200,
-                  borderRadius: 50,
-                  borderWidth: 3,
-                  border: 3,
-                  borderColor: "gray",
+                  marginBottom: 10,
+                  justifySelf: "center",
                   alignSelf: "center",
-                  alignItems: "center",
+                  borderRadius: 150,
                 }}
-              >
-                <img
-                  alt="register"
-                  src="/static/laundry-shop.png"
-                  style={{
-                    height: 200,
-                    width: 200,
-                    marginBottom: 10,
-                    justifySelf: "center",
-                    alignSelf: "center",
-                  }}
-                />
-              </Box>
+              />
 
               <Typography variant="h3" gutterBottom sx={{ mt: 5 }}>
                 Verifying Email...

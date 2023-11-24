@@ -1,31 +1,43 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  address: {
-    street: '',
-    barangay: '',
-    formattedAddress: '',
-    zipcode: '',
-    location: {
-        lat: '',
-        lng: ''
-    },
-  },
+  userRegion: "",
+  userProvince: "",
+  userCity: "",
+  userBarangay: "",
+  userStreet: "",
+  userZipcode: ""
 };
 
 const AddressSlice = createSlice({
-  name: 'address',
+  name: "address",
   initialState,
   reducers: {
-    setAddress: (state, action) => ({
+    setUserRegion: (state, action) => ({
       ...state,
-      address: action.payload,
+      userRegion: action.payload,
     }),
-    removeAddress: (state, action) => ({
+    setUserProvince: (state, action) => ({
       ...state,
-      address: {},
+      userProvince: action.payload,
+    }),
+    setUserCity: (state, action) => ({
+      ...state,
+      userCity: action.payload,
+    }),
+    setUserBarangay: (state, action) => ({
+      ...state,
+      userBarangay: action.payload,
+    }),
+    setUserStreet: (state, action) => ({
+      ...state,
+      userStreet: action.payload,
+    }),
+    setUserZipcode: (state, action) => ({
+      ...state,
+      userZipcode: action.payload,
     }),
   },
 });
-export const { setAddress, removeAddress } = AddressSlice.actions;
+export const { setUserRegion, setUserProvince, setUserCity, setUserBarangay, setUserStreet, setUserZipcode } = AddressSlice.actions;
 export default AddressSlice.reducer;

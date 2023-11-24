@@ -10,7 +10,11 @@ import { Stack, IconButton, InputAdornment, Button } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 // components
 import Iconify from "../../../Iconify";
-import { FormProvider, RHFTextField } from "../../../../components/hook-form";
+import {
+  FormProvider,
+  RHFTextField,
+  RHFDatePicker,
+} from "../../../../components/hook-form";
 import { RegistrationSchema } from "../../../../lib/yup-schema/RegistrationSchema";
 import { setLocalStorageItem } from "../../../../lib/util/setLocalStorage";
 // api
@@ -22,6 +26,14 @@ const genderData = [
   { value: "female", label: "Female" },
 ];
 
+const civilStatusData = [
+  { value: "single", label: "Single" },
+  { value: "married", label: "Married" },
+  { value: "widowed", label: "Widowed" },
+  { value: "divorce", label: "Divorce" },
+  { value: "separated", label: "Separated" },
+];
+
 export default function RegisterForm(_props) {
   const navigate = useNavigate();
   const { register } = userApi;
@@ -29,8 +41,8 @@ export default function RegisterForm(_props) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const defaultValues = {
-    idNumber: "",
     firstName: "",
+    middleName: "",
     lastName: "",
     gender: "male",
     phoneNumber: "",
@@ -56,7 +68,9 @@ export default function RegisterForm(_props) {
         setLocalStorageItem("userToken", data.data.token, 9999);
         setLocalStorageItem("userData", data.data.user, 9999);
         navigate(`/login`);
-        toast.success('Registration is successfull. Please check your email to verify.');
+        toast.success(
+          "Registration is successfull. Please check your email to verify."
+        );
       },
       onError: (error) => {
         toast.error(error.response.data.message);
@@ -66,26 +80,24 @@ export default function RegisterForm(_props) {
 
   const onSubmit = async (data) => {
     const payload = {
-      idNumber: data.idNumber,
       first_name: data.firstName,
+      middle_name: data.middleName,
       last_name: data.lastName,
       gender: data.gender,
       phone_number: data.phoneNumber,
       email: data.email,
       password: data.password,
-      password_confirmation: data.confirmPassword
-    }
+      password_confirmation: data.confirmPassword,
+    };
     registerUser(payload);
   };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
-          <RHFTextField name="idNumber" label="ID Number" />
-        </Stack>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
           <RHFTextField name="firstName" label="First name" />
+          <RHFTextField name="middleName" label="Middle name" />
           <RHFTextField name="lastName" label="Last name" />
         </Stack>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
