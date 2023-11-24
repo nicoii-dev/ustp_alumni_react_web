@@ -6,23 +6,47 @@ import {
   cities,
   barangays,
 } from "select-philippines-address";
-import { Stack } from "@mui/material";
-import AddressDropDown from "../../hook-form/AddressDroDown";
-import { RHFTextField } from "../../hook-form";
+import moment from "moment";
+import { Button, Stack, TextField } from "@mui/material";
 import _ from "lodash";
+import {
+  setUserRegion,
+  setUserProvince,
+  setUserCity,
+  setUserBarangay,
+  setUserStreet,
+  setUserZipcode,
+} from "../../../store/slice/AddressSlice";
+import { useDispatch, useSelector } from "react-redux";
+import userApi from "../../../lib/services/userApi";
+import employmentApi from "../../../lib/services/employmentApi";
+import trainingApi from "../../../lib/services/trainingApi";
+import { toast } from "react-toastify";
 
 // ----------------------------------------------------------------------
 
-export default function UserAddress({ setValue, currentAddressData }) {
+export default function UserAddress({handleClose}) {
+  const dispatch = useDispatch();
+  const {addProfileAddress} = userApi;
+  const {createEmployment} = employmentApi;
+  const {createTraining} = trainingApi
   const [regionData, setRegion] = useState([]);
   const [provinceData, setProvince] = useState([]);
   const [cityData, setCity] = useState([]);
   const [barangayData, setBarangay] = useState([]);
 
-  const [regionAddr, setRegionAddr] = useState("");
-  const [provinceAddr, setProvinceAddr] = useState("");
-  const [cityAddr, setCityAddr] = useState("");
-  const [barangayAddr, setBarangayAddr] = useState("");
+  const {
+    userRegion,
+    userProvince,
+    userCity,
+    userBarangay,
+    userStreet,
+    userZipcode,
+  } = useSelector((store) => store.address);
+  const { trainings } = useSelector((store) => store.training);
+  const { profileSetup } = useSelector((store) => store.profileSetup);
+  const { currentOccupation, currentlyEmployed, type, stateOfReasons, lineOfBusiness } =
+  useSelector((store) => store.employment);
 
   const region = () => {
     regions().then((response) => {
@@ -34,21 +58,13 @@ export default function UserAddress({ setValue, currentAddressData }) {
           label: data.region_name,
         }))
       );
-      setRegion((curr) => [
-        ...curr,
-        {
-          id: 0,
-          code: 0,
-          value: 0,
-          label: "Select Region",
-        },
-      ]);
     });
   };
 
   const province = (e) => {
-    // setRegionAddr(e.target.selectedOptions[0].text);
-    provinces(e).then((response) => {
+    dispatch(setUserRegion(e.target.selectedOptions[0].text));
+    provinces(e.target.value).then((response) => {
+      console.log(response);
       setProvince(
         response.map((data) => ({
           value: data.province_code,
@@ -57,12 +73,14 @@ export default function UserAddress({ setValue, currentAddressData }) {
       );
       setCity([]);
       setBarangay([]);
+      dispatch(setUserCity(""));
+      dispatch(setUserBarangay(""));
     });
   };
 
   const city = (e) => {
-    // setProvinceAddr(e.target.selectedOptions[0].text);
-    cities(e).then((response) => {
+    dispatch(setUserProvince(e.target.selectedOptions[0].text));
+    cities(e.target.value).then((response) => {
       setCity(
         response.map((data) => ({
           value: data.city_code,
@@ -73,8 +91,8 @@ export default function UserAddress({ setValue, currentAddressData }) {
   };
 
   const barangay = (e) => {
-    // setCityAddr(e.target.selectedOptions[0].text);
-    barangays(e).then((response) => {
+    dispatch(setUserCity(e.target.selectedOptions[0].text));
+    barangays(e.target.value).then((response) => {
       setBarangay(
         response.map((data) => ({
           value: data.brgy_code,
@@ -85,67 +103,164 @@ export default function UserAddress({ setValue, currentAddressData }) {
   };
 
   const brgy = (e) => {
-    setBarangayAddr(e);
+    dispatch(setUserBarangay(e.target.selectedOptions[0].text));
   };
 
   useEffect(() => {
     region();
-    if(!_.isEmpty(currentAddressData)) {
-      province(currentAddressData.region)
-      setValue("province", currentAddressData.province, { shouldValidate: true, shouldDirty: true })
-      city(currentAddressData.province)
-      setValue("city", currentAddressData.city_municipality, { shouldValidate: true, shouldDirty: true })
-      barangay(currentAddressData.city_municipality)
-      setValue("barangay", currentAddressData.barangay, { shouldValidate: true, shouldDirty: true })
+  }, []);
+
+  const onSubmit = async () => {
+    let employmentPayload = {}
+    const profilePayload = {
+      civil_status: profileSetup.civil_status,
+      dob: moment(profileSetup.dob).format("YYYY-MM-DD"),
+      street: userStreet,
+      barangay: userBarangay,
+      city: userCity,
+      province: userProvince,
+      region: userRegion,
+      zipcode: userZipcode
     }
-  }, [currentAddressData]);
+    if(currentlyEmployed === "yes") {
+      employmentPayload = {
+        status: currentlyEmployed,
+        type: type,
+        present_occupation: currentOccupation,
+        line_of_business: lineOfBusiness
+      }
+    } else {
+      employmentPayload = {
+        status: currentlyEmployed,
+        state_of_reasons: `[${stateOfReasons}]`,
+      }
+    }
+    const trainingPayload = {
+      data: trainings
+    }
+
+    console.log(employmentPayload)
+    console.log(trainingPayload)
+    console.log(profilePayload)
+    try {
+      await addProfileAddress(profilePayload)
+      await createEmployment(employmentPayload)
+      await createTraining(trainingPayload)
+      toast.success("Information successfully saved.");
+      handleClose()
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
+
+  };
 
   return (
     <>
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={2}
-        sx={{ marginTop: 5 }}
-      >
-        <AddressDropDown
-          name="region"
+      <Stack spacing={2} sx={{ marginTop: 5 }}>
+        <TextField
+          placeholder="Region"
           label="Region"
-          dropDownData={regionData}
-          onChangeFunc={province}
-        />
-        <AddressDropDown
-          name="province"
+          fullWidth
+          select
+          SelectProps={{ native: true }}
+          variant="outlined"
+          value={regionData?.find((str) => str.label === userRegion)?.value}
+          onChange={province}
+        >
+          <option key={0} value={0}>
+            {"Select Region"}
+          </option>
+          {regionData?.map((option, key) => (
+            <option key={key} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </TextField>
+        <TextField
+          placeholder="Province"
           label="Province"
-          dropDownData={provinceData}
-          onChangeFunc={city}
-        />
-      </Stack>
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={2}
-        sx={{ marginTop: 2 }}
-      >
-        <AddressDropDown
-          name="city"
+          fullWidth
+          select
+          SelectProps={{ native: true }}
+          variant="outlined"
+          value={provinceData?.find((str) => str.label === userProvince)?.value}
+          onChange={city}
+        >
+          {provinceData?.map((option, key) => (
+            <option key={key} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </TextField>
+        <TextField
+          placeholder="City"
           label="City"
-          dropDownData={cityData}
-          onChangeFunc={barangay}
-        />
-        <AddressDropDown
-          name="barangay"
+          fullWidth
+          select
+          SelectProps={{ native: true }}
+          variant="outlined"
+          value={cityData?.find((str) => str.label === userCity)?.value}
+          onChange={barangay}
+        >
+          {cityData?.map((option, key) => (
+            <option key={key} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </TextField>
+        <TextField
+          placeholder="Barangay"
           label="Barangay"
-          dropDownData={barangayData}
-          onChangeFunc={brgy}
+          fullWidth
+          select
+          SelectProps={{ native: true }}
+          variant="outlined"
+          value={barangayData?.find((str) => str.label === userBarangay)?.value}
+          onChange={brgy}
+        >
+          {barangayData?.map((option, key) => (
+            <option key={key} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </TextField>
+        <TextField
+          placeholder="Street"
+          name="street"
+          value={userStreet}
+          onChange={(e) => dispatch(setUserStreet(e.target.value))}
+        />
+        <TextField
+          placeholder="Zipcode"
+          name="zipcode"
+          value={userZipcode}
+          onChange={(e) => dispatch(setUserZipcode(e.target.value))}
         />
       </Stack>
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={2}
-        sx={{ marginTop: 2 }}
+      <Button
+        onClick={onSubmit}
+        fullWidth
+        size="large"
+        type="submit"
+        variant="contained"
+        sx={{
+          alignSelf: "center",
+          width: 200,
+          position: "absolute",
+          bottom: 20,
+          right: 30,
+        }}
+        disabled={
+          _.isEmpty(userRegion) ||
+          _.isEmpty(userProvince) ||
+          _.isEmpty(userCity) ||
+          _.isEmpty(userBarangay) ||
+          _.isEmpty(userStreet) ||
+          _.isEmpty(userZipcode)
+        }
       >
-        <RHFTextField name="street" label="Street" />
-        <RHFTextField name="zipcode" label="Zip Code" />
-      </Stack>
+        Save
+      </Button>
     </>
   );
 }

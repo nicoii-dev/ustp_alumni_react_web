@@ -52,7 +52,7 @@ export default function CreateAnnouncement({ handleClose }) {
       formData.append("images[]", image_file.file);
     });
     await axios
-      .post(`http://localhost:8000/api/announcement/create`, formData, {
+      .post(`${process.env.REACT_APP_API_LOCAL_URL}/announcement/create`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",

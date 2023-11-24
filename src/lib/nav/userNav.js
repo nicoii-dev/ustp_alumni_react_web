@@ -21,6 +21,16 @@ const userNav = [
     path: '/job-posting',
     icon: getIcon('cib:when-i-work'),
   },
+  {
+    title: 'Employment Details',
+    path: '/employment',
+    icon: getIcon('clarity:employee-line'),
+  },
+  {
+    title: 'Trainings',
+    path: '/trainings',
+    icon: getIcon('healthicons:i-training-class'),
+  },
 ];
 
 export default userNav;

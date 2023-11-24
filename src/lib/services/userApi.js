@@ -20,4 +20,6 @@ export default {
 
   activateUser: (id) => apiService.post(`/users/activate/${id}`),
   deactivateUser: (id) => apiService.post(`/users/deactivate/${id}`),
+
+  addProfileAddress: (payload) => apiService.post(`/profile/add`, payload),
 };

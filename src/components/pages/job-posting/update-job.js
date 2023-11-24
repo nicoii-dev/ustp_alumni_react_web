@@ -116,7 +116,7 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
     });
     await axios
       .post(
-        `http://localhost:8000/api/job-posting/update/${job.id}`,
+        `${process.env.REACT_APP_API_LOCAL_URL}/job-posting/update/${job.id}`,
         formData,
         {
           headers: {

@@ -24,17 +24,14 @@ import {
   setReasons,
   setOccupation,
   setStatus,
+  setLineOfBusiness
 } from "../../../store/slice/EmploymentStatusSlice";
 
 const EmploymentStatus = ({ activeStep, setActiveStep }) => {
-  const { currentOccupation, currentlyEmployed, type, stateOfReasons } =
+  const { currentOccupation, currentlyEmployed, type, stateOfReasons, lineOfBusiness } =
     useSelector((store) => store.employment);
   const dispatch = useDispatch();
-  // const [employmentStatus, setEmploymentStatus] = useState(currentlyEmployed);
-  // const [employmentType, setEmploymentType] = useState(type)
-  // const [occupation, setUserOccupation] = useState(currentOccupation);
-  // const [stateReasonsList, setStateReasonsList] = useState(stateOfReasons);
-  console.log(stateOfReasons);
+
   const onEmploymentChanged = (event) => {
     dispatch(setStatus(event.target.value));
     dispatch(setOccupation(""));
@@ -63,7 +60,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
     }
     dispatch(setReasons(reasonsArray));
   };
-  console.log(stateOfReasons);
+
   const error = stateOfReasons.length < 1;
 
   const onNextHandler = () => {
@@ -149,6 +146,15 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
               helperText={"Occupation is required"}
               placeholder="Present Occupation"
               name="presentOccupation"
+            />
+            <TextField
+              value={lineOfBusiness}
+              onChange={(e) => dispatch(setLineOfBusiness(e.target.value))}
+              fullWidth
+              error={currentOccupation.length < 1}
+              helperText={"Line of Business is required"}
+              placeholder="Line of Business"
+              name="lineOfBusiness"
             />
           </Stack>
         ) : (

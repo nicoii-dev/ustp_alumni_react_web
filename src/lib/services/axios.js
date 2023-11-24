@@ -18,6 +18,6 @@ const withToken = (config) => {
 
 apiService.interceptors.request.use(withToken);
 // eslint-disable-next-line no-undef
-apiService.defaults.baseURL = `http://localhost:8000/api`;
+apiService.defaults.baseURL = process.env.REACT_APP_API_LOCAL_URL;
 // eslint-disable-next-line no-undef
 export default apiService;

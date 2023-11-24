@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import * as yup from "yup";
 import DialogModal, { useDialog } from "../../DialogModal";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient, useQuery } from "react-query";
@@ -23,13 +24,14 @@ import {
 import Swal from "sweetalert2";
 import { LoadingButton } from "@mui/lab";
 import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
-import { FormProvider, RHFTextField } from "../../hook-form";
+import { FormProvider, RHFTextField, RHFDatePicker } from "../../hook-form";
 import UserAddress from "./UserAddress";
 import Iconify from "../../Iconify";
 import userApi from "../../../lib/services/userApi";
 import EmploymentStatus from "./EmploymentStatus";
 import employmentApi from "../../../lib/services/employmentApi";
 import Trainings from "./Tranings";
+import { setProfileSetup } from "../../../store/slice/SetupProfileSlice";
 
 // ----------------------------------------------------------------------
 
@@ -44,26 +46,28 @@ export default function SetupProfile(_props) {
   const [isLoading, setIsLoading] = useState(false);
   const steps = ["Personal Info", "Employment Status", "Trainings", "Address"];
   const [activeStep, setActiveStep] = useState(0);
+  const { trainings } = useSelector((store) => store.training);
 
   const defaultValues = {
-    houseNumber: "",
-    street: "",
-    barangay: "",
-    formattedAddress: "",
-    zipcode: "",
-    lat: "",
-    lng: "",
+    civil_status: "",
+    dob: "",
   };
 
+  const profileSchema = yup
+    .object({
+      civil_status: yup.string().required("Civil Status is Required"),
+      dob: yup.string().required("Date of Birth is Required"),
+    })
+    .required();
+
   const methods = useForm({
-    resolver: yupResolver(),
+    resolver: yupResolver(profileSchema),
     defaultValues,
   });
 
   const {
     handleSubmit,
     formState: { isSubmitting },
-    setValue,
   } = methods;
 
   const {
@@ -78,7 +82,7 @@ export default function SetupProfile(_props) {
     if (employmentStatus === "success") {
       if (_.isEmpty(employmentData?.data)) openDialog(true);
     }
-  }, [employmentData, employmentStatus, openDialog]);
+  }, [employmentData, employmentStatus]);
 
   const { mutate: logOut, isLoading: logOutLoading } = useMutation(
     () => logout(),
@@ -106,19 +110,9 @@ export default function SetupProfile(_props) {
   //   );
 
   const onUpdate = async (data) => {
-    // setIsLoading(true)
-    // const payload = {
-    //   house_number: data.houseNumber,
-    //   street: data.street,
-    //   barangay: data.barangay,
-    //   zipcode: data.zipcode,
-    //   formatted_address: address.formattedAddress,
-    //   location: JSON.stringify({
-    //     lat: address.location.lat,
-    //     lng: address.location.lng,
-    //   }),
-    // };
-    // update(payload);
+    console.log(data)
+    dispatch(setProfileSetup(data))
+    setActiveStep(activeStep + 1);
   };
 
   return (
@@ -145,7 +139,7 @@ export default function SetupProfile(_props) {
         "To continue using the app. Please provide the neccessary information."
       }
       styles={{
-        div: { textAlign: "center", height: "70vh" },
+        div: { textAlign: "center", height: "90vh" },
         title: { fontSize: 32 },
         subtitle: { fontSize: 16 },
       }}
@@ -187,7 +181,7 @@ export default function SetupProfile(_props) {
                   }}
                 >
                   <RHFTextField name="civil_status" label="Civil Status" />
-                  <RHFTextField name="dob" label="Date of Birth" />
+                  <RHFDatePicker name="dob" label="Date of Birth" type="date" />
                 </Stack>
                 <IconButton
                   style={{
@@ -195,9 +189,7 @@ export default function SetupProfile(_props) {
                     right: 30,
                     top: "50%",
                   }}
-                  onClick={() => {
-                    setActiveStep(activeStep + 1);
-                  }}
+                  type="submit"
                 >
                   <Iconify
                     icon={"ic:round-arrow-forward-ios"}
@@ -212,16 +204,16 @@ export default function SetupProfile(_props) {
               </>
             )}
           </Box>
-
-          {activeStep === 1 && (
-            <>
-              <EmploymentStatus
-                activeStep={activeStep}
-                setActiveStep={setActiveStep}
-              />
-            </>
-          )}
         </FormProvider>
+        {activeStep === 1 && (
+          <>
+            <EmploymentStatus
+              activeStep={activeStep}
+              setActiveStep={setActiveStep}
+            />
+          </>
+        )}
+
         {activeStep === 2 && (
           <>
             <IconButton
@@ -257,6 +249,10 @@ export default function SetupProfile(_props) {
                 top: "50%",
               }}
               onClick={() => {
+                if (trainings.length < 1) {
+                  toast.error("Please submit at least 1 training");
+                  return;
+                }
                 setActiveStep(activeStep + 1);
               }}
             >
@@ -297,24 +293,8 @@ export default function SetupProfile(_props) {
               />
             </IconButton>
             <Stack sx={{ gap: 1, paddingRight: 15, paddingLeft: 15 }}>
-              <UserAddress />
+              <UserAddress handleClose={handleClose} />
             </Stack>
-            <LoadingButton
-              fullWidth
-              size="large"
-              type="submit"
-              variant="contained"
-              loading={isLoading}
-              sx={{
-                alignSelf: "center",
-                width: 200,
-                position: "absolute",
-                bottom: 20,
-                right: 30,
-              }}
-            >
-              Update
-            </LoadingButton>
           </>
         )}
       </Stack>

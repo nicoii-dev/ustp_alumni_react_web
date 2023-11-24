@@ -63,7 +63,7 @@ export default function CreateJobPost({ handleClose }) {
       formData.append("images[]", image_file.file);
     });
     await axios
-      .post(`http://localhost:8000/api/job-posting/create`, formData, {
+      .post(`${process.env.REACT_APP_API_LOCAL_URL}/job-posting/create`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "application/json",

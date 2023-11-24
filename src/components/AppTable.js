@@ -52,7 +52,11 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user?.tobeSearch?.toLowerCase().indexOf(query?.toLowerCase()) !== -1);
+    return filter(
+      array,
+      (_user) =>
+        _user?.tobeSearch?.toLowerCase().indexOf(query?.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -64,6 +68,7 @@ export default function AppTable({
   buttonTitle,
   buttonFunction,
   hasButton = true,
+  hasSearch = true,
 }) {
   const [page, setPage] = useState(0);
 
@@ -158,12 +163,13 @@ export default function AppTable({
       </Stack>
 
       <Card>
-        <UserListToolbar
-          numSelected={selected.length}
-          filterName={filterName}
-          onFilterName={handleFilterByName}
-        />
-
+        {hasSearch ? (
+          <UserListToolbar
+            numSelected={selected.length}
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+          />
+        ) : null}
         <Scrollbar>
           <TableContainer sx={{ minWidth: 800 }}>
             <Table>
@@ -198,9 +204,12 @@ export default function AppTable({
                               <TableCell
                                 key={`${i}-column-${row.id}`}
                                 align={"right"}
-                                sx={{ display: 'flex', justifyContent: 'center', }}
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "center",
+                                }}
                               >
-                              {row[head.id]}
+                                {row[head.id]}
                               </TableCell>
                             );
                           }
