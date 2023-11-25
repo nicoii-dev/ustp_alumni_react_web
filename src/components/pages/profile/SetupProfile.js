@@ -79,7 +79,7 @@ export default function SetupProfile(_props) {
   });
 
   useEffect(() => {
-    if (employmentStatus === "success") {
+    if (employmentStatus === "success" && userData.role === 'user') {
       if (_.isEmpty(employmentData?.data)) openDialog(true);
     }
   }, [employmentData, employmentStatus]);

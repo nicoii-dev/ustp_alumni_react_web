@@ -45,8 +45,8 @@ export default function UserAnnouncementItem({ announcement }) {
                 <CardMedia
                   component="img"
                   height="400vh"
-                  image={"http://localhost:8000/storage/" + data.url}
-                  alt={"http://localhost:8000/storage/" + data.url}
+                  image={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data.url}
+                  alt={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data.url}
                   sx={{
                     objectFit: "cover",
                   }}
@@ -60,11 +60,11 @@ export default function UserAnnouncementItem({ announcement }) {
           component="img"
           height="700"
           image={
-            "http://localhost:8000/storage/" +
+            `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
             announcement?.announcement_images[0]?.url
           }
           alt={
-            "http://localhost:8000/storage/" +
+            `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
             announcement?.announcement_images[0]?.url
           }
           sx={{
