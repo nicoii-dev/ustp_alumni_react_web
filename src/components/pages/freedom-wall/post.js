@@ -180,8 +180,8 @@ export default function PostComponent({ post, Like, openDialog, setAction }) {
                   <CardMedia
                     component="img"
                     height="400vh"
-                    image={"http://localhost:8000/storage/" + data.url}
-                    alt={"http://localhost:8000/storage/" + data.url}
+                    image={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data.url}
+                    alt={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data.url}
                     sx={{
                       objectFit: "cover",
                     }}
@@ -194,8 +194,8 @@ export default function PostComponent({ post, Like, openDialog, setAction }) {
           <CardMedia
             component="img"
             height="700"
-            image={"http://localhost:8000/storage/" + post.post_images[0]?.url}
-            alt={"http://localhost:8000/storage/" + post.post_images[0]?.url}
+            image={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + post.post_images[0]?.url}
+            alt={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + post.post_images[0]?.url}
             sx={{
               objectFit: "contain",
               marginBottom: 1,

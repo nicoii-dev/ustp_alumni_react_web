@@ -58,7 +58,7 @@ export default function UpdateAnnouncement({ announcementImages, handleClose }) 
     await Promise.all(
       announcementImages.map(async (data) => {
         const response = await fetch(
-          "http://localhost:8000/storage/" + data?.url,
+          `${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data?.url,
           {
             method: "GET",
             mode: "no-cors",
@@ -73,7 +73,7 @@ export default function UpdateAnnouncement({ announcementImages, handleClose }) 
         const blob = await response.blob();
         const file = new File(
           [blob],
-          "http://localhost:8000/storage/" + data?.url,
+          `${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data?.url,
           {
             type: blob.type,
           }
@@ -81,7 +81,7 @@ export default function UpdateAnnouncement({ announcementImages, handleClose }) 
         mappedImages.push({
           fileId: data.id,
           file,
-          imageUrl: "http://localhost:8000/storage/" + data?.url,
+          imageUrl: `${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data?.url,
           //   imageUrl: URL.createObjectURL(file),
         });
       })

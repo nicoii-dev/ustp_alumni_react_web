@@ -81,7 +81,7 @@ function AnnouncementsPage() {
             <img
               src={
                 !_.isUndefined(data?.announcement_images[0]?.url)
-                  ? "http://localhost:8000/storage/" +
+                  ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
                     data?.announcement_images[0]?.url
                   : "static/no-image.jpg"
               }

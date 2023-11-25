@@ -81,7 +81,7 @@ function EmploymentPage() {
             <img
               src={
                 !_.isUndefined(data?.job_images[0]?.url)
-                  ? "http://localhost:8000/storage/" + data?.job_images[0]?.url
+                  ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data?.job_images[0]?.url
                   : "static/no-image.jpg"
               }
               alt={data?.title}
