@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
@@ -7,6 +7,7 @@ import moment from "moment/moment";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "react-query";
 import { TextField, capitalize, Box } from "@mui/material";
+import axios from "axios";
 import _ from "lodash";
 import { useDispatch, useSelector } from "react-redux";
 import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
@@ -26,6 +27,8 @@ export default function CreatePost({ handleClose }) {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const userData = getLocalStorageItem("userData");
+  const authToken = getLocalStorageItem("userToken");
+  const [updateLoading, setUpdateLoading] = useState(false);
   const { post, images } = useSelector((store) => store.post);
   const { createPost } = postApi;
   const { mutate: Create, isLoading: isCreateLoading } = useMutation(
@@ -51,7 +54,31 @@ export default function CreatePost({ handleClose }) {
     images.forEach((image_file) => {
       formData.append("images[]", image_file.file);
     });
-    await Create(formData);
+    await axios
+      .post(
+        `${process.env.REACT_APP_API_LOCAL_URL}/api/post/create`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      )
+      .then((e) => {
+        setUpdateLoading(false)
+        queryClient.invalidateQueries(["get-all-posts"]);
+        toast.success("Created successfully");
+        dispatch(setPostImages([]));
+        dispatch(setPostData({}));
+        handleClose();
+      })
+      .catch((e) => {
+        console.log(e);
+        setUpdateLoading(false)
+        toast.error(e.response.data.message);
+      });
   };
 
   return (
