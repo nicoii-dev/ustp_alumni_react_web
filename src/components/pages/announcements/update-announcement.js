@@ -107,7 +107,7 @@ export default function UpdateAnnouncement({ announcementImages, handleClose }) 
     });
     await axios
       .post(
-        `${process.env.REACT_APP_API_LOCAL_URL}/announcement/update/${announcement.id}`,
+        `${process.env.REACT_APP_API_LOCAL_URL}/api/announcement/update/${announcement.id}`,
         formData,
         {
           headers: {
