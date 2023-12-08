@@ -22,6 +22,11 @@ const userNav = [
     icon: getIcon('cib:when-i-work'),
   },
   {
+    title: 'Educational Background',
+    path: '/education',
+    icon: getIcon('carbon:education'),
+  },
+  {
     title: 'Employment Details',
     path: '/employment',
     icon: getIcon('clarity:employee-line'),

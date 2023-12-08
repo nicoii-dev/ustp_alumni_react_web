@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    trainings: [],
-    training: {
-      id: "",
-      title: "",
-      duration: "",
-      institution: ""
-    }
+  trainings: [],
+  training: {
+    id: "",
+    topic: "",
+    title: "",
+    date: "",
+    duration: "",
+    institution: "",
+  },
 };
 
 const TrainingSlice = createSlice({
@@ -15,23 +17,35 @@ const TrainingSlice = createSlice({
   initialState,
   reducers: {
     setTrainingsSetup: (state, action) => {
-      if(state.trainings.length > 0) {
-        const test = state.trainings.filter(item => item.id !== action.payload.id)
-        return ({
+      if (state.trainings.length > 0) {
+        const trainingsData = state.trainings.filter(
+          (item) => item.id !== action.payload.id
+        );
+        return {
           ...state,
-          trainings: [...test, action.payload],
-        })
+          trainings: [...trainingsData, action.payload],
+        };
       }
-      return ({
+      return {
         ...state,
         trainings: [...state.trainings, action.payload],
-      })
+      };
     },
     setTraining: (state, action) => ({
       ...state,
       training: action.payload,
     }),
+    removeTraining: (state, action) => {
+      const trainingsData = state.trainings.filter(
+        (item) => item.id !== action.payload
+      );
+      return {
+        ...state,
+        trainings: trainingsData,
+      };
+    },
   },
 });
-export const { setTrainingsSetup, setTraining } = TrainingSlice.actions;
+export const { setTrainingsSetup, setTraining, removeTraining } =
+  TrainingSlice.actions;
 export default TrainingSlice.reducer;

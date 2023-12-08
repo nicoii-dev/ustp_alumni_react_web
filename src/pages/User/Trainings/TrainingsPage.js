@@ -20,6 +20,7 @@ import CreateTraining from "../../../components/pages/trainings/CreateTraining";
 // redux
 import { setTraining } from "../../../store/slice/TrainingSlice";
 import UpdateTrainingComponent from "../../../components/pages/trainings/UpdateTraining";
+import moment from "moment";
 
 
 function TrainingsPage() {
@@ -65,6 +66,8 @@ function TrainingsPage() {
         trainingData?.data?.map((data) => ({
           tobeSearch: data?.title,
           title: data?.title,
+          topic: data?.topic,
+          date: moment(data.date).format("LL"),
           duration: data.duration ? data.duration : "N/A",
           institution: data.institution ? data.institution : "N/A",
           action: (
@@ -138,6 +141,8 @@ function TrainingsPage() {
           TABLE_HEAD={[
             // { id: "id", label: "ID", align: "center" },
             { id: "title", label: "Title", align: "center" },
+            { id: "topic", label: "Topic", align: "center" },
+            { id: "date", label: "Date", align: "center" },
             { id: "duration", label: "Duration(hours)", align: "center" },
             { id: "institution", label: "Institution", align: "center" },
             { id: "action", label: "Action", align: "center" },

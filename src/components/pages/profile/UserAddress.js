@@ -21,15 +21,19 @@ import { useDispatch, useSelector } from "react-redux";
 import userApi from "../../../lib/services/userApi";
 import employmentApi from "../../../lib/services/employmentApi";
 import trainingApi from "../../../lib/services/trainingApi";
+import educationApi from "../../../lib/services/educationApi";
 import { toast } from "react-toastify";
+import { LoadingButton } from "@mui/lab";
 
 // ----------------------------------------------------------------------
 
-export default function UserAddress({handleClose}) {
+export default function UserAddress({ handleClose }) {
   const dispatch = useDispatch();
-  const {addProfileAddress} = userApi;
-  const {createEmployment} = employmentApi;
-  const {createTraining} = trainingApi
+  const [isLoading, setIsLoading] = useState();
+  const { addProfileAddress } = userApi;
+  const { createEmployment } = employmentApi;
+  const { createTraining } = trainingApi;
+  const { createEducation } = educationApi;
   const [regionData, setRegion] = useState([]);
   const [provinceData, setProvince] = useState([]);
   const [cityData, setCity] = useState([]);
@@ -44,9 +48,15 @@ export default function UserAddress({handleClose}) {
     userZipcode,
   } = useSelector((store) => store.address);
   const { trainings } = useSelector((store) => store.training);
+  const { education } = useSelector((store) => store.education);
   const { profileSetup } = useSelector((store) => store.profileSetup);
-  const { currentOccupation, currentlyEmployed, type, stateOfReasons, lineOfBusiness } =
-  useSelector((store) => store.employment);
+  const {
+    currentOccupation,
+    currentlyEmployed,
+    type,
+    stateOfReasons,
+    lineOfBusiness,
+  } = useSelector((store) => store.employment);
 
   const region = () => {
     regions().then((response) => {
@@ -111,7 +121,8 @@ export default function UserAddress({handleClose}) {
   }, []);
 
   const onSubmit = async () => {
-    let employmentPayload = {}
+    setIsLoading(true)
+    let employmentPayload = {};
     const profilePayload = {
       civil_status: profileSetup.civil_status,
       dob: moment(profileSetup.dob).format("YYYY-MM-DD"),
@@ -120,38 +131,50 @@ export default function UserAddress({handleClose}) {
       city: userCity,
       province: userProvince,
       region: userRegion,
-      zipcode: userZipcode
-    }
-    if(currentlyEmployed === "yes") {
+      zipcode: userZipcode,
+    };
+    if (currentlyEmployed === "yes") {
       employmentPayload = {
         status: currentlyEmployed,
         type: type,
         present_occupation: currentOccupation,
-        line_of_business: lineOfBusiness
-      }
+        line_of_business: lineOfBusiness,
+      };
     } else {
       employmentPayload = {
         status: currentlyEmployed,
         state_of_reasons: `[${stateOfReasons}]`,
-      }
+      };
     }
     const trainingPayload = {
-      data: trainings
-    }
+      data: trainings,
+    };
 
-    console.log(employmentPayload)
-    console.log(trainingPayload)
-    console.log(profilePayload)
+    const educationPayload = {
+      college: education.collegeSchool,
+      college_address: education.collegeAddress,
+      course: education.course,
+      college_sy: `[${moment(education.collegeSyStart).format('YYYY')}, ${moment(education.collegeSyEnd).format('YYYY')}]`,
+      high_school: education.highSchool,
+      high_address: education.highAddress,
+      high_sy: `[${moment(education.highSyStart).format('YYYY')}, ${moment(education.highSyEnd).format('YYYY')}]`,
+      elem_school: education.elemSchool,
+      elem_address: education.elemAddress,
+      elem_sy: `[${moment(education.elemSyStart).format('YYYY')}, ${moment(education.elemSyEnd).format('YYYY')}]`,
+    };
+
     try {
-      await addProfileAddress(profilePayload)
-      await createEmployment(employmentPayload)
-      await createTraining(trainingPayload)
+      await createEducation(educationPayload);
+      await addProfileAddress(profilePayload);
+      await createEmployment(employmentPayload);
+      await createTraining(trainingPayload);
       toast.success("Information successfully saved.");
-      handleClose()
+      setIsLoading(false)
+      handleClose();
     } catch (error) {
       toast.error("Something went wrong");
+      setIsLoading(false)
     }
-
   };
 
   return (
@@ -237,7 +260,7 @@ export default function UserAddress({handleClose}) {
           onChange={(e) => dispatch(setUserZipcode(e.target.value))}
         />
       </Stack>
-      <Button
+      <LoadingButton
         onClick={onSubmit}
         fullWidth
         size="large"
@@ -250,6 +273,7 @@ export default function UserAddress({handleClose}) {
           bottom: 20,
           right: 30,
         }}
+        loading={isLoading}
         disabled={
           _.isEmpty(userRegion) ||
           _.isEmpty(userProvince) ||
@@ -260,7 +284,7 @@ export default function UserAddress({handleClose}) {
         }
       >
         Save
-      </Button>
+      </LoadingButton>
     </>
   );
 }

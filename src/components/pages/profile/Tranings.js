@@ -7,14 +7,15 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
+import moment from "moment";
 import { LoadingButton } from "@mui/lab";
 import { useDispatch, useSelector } from "react-redux";
-import { RHFTextField, FormProvider } from "../../hook-form";
+import { RHFTextField, FormProvider, RHFDatePicker } from "../../hook-form";
 import Iconify from "../../Iconify";
 import { useForm, useFieldArray, Controller, Form } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TrainingSchema } from "../../../lib/yup-schema/TrainingSchema";
-import { setTrainingsSetup } from "../../../store/slice/TrainingSlice";
+import { removeTraining, setTrainingsSetup } from "../../../store/slice/TrainingSlice";
 import AppTable from "../../AppTable";
 
 const Trainings = () => {
@@ -23,7 +24,9 @@ const Trainings = () => {
   const { trainings } = useSelector((store) => store.training);
 
   const defaultValues = {
+    topic: "",
     title: "",
+    date: "",
     duration: "",
     institution: "",
   };
@@ -45,11 +48,13 @@ const Trainings = () => {
     console.log(data);
     const newData = {
       id: data.id ? data.id : trainings.length + 1,
-      ...data
-    }
+      ...data,
+    };
     dispatch(setTrainingsSetup(newData));
     reset({
+      topic: "",
       title: "",
+      date: "",
       duration: "",
       institution: "",
     });
@@ -59,6 +64,8 @@ const Trainings = () => {
     setTrainingData(
       trainings.map((data) => ({
         title: data.title,
+        topic: data.topic,
+        date: moment(data.date).format("LL"),
         duration: data.duration,
         institution: data.institution,
         action: (
@@ -68,6 +75,8 @@ const Trainings = () => {
                 reset({
                   id: data.id,
                   title: data.title,
+                  topic: data.topic,
+                  date: data.date,
                   duration: data.duration,
                   institution: data.institution,
                 });
@@ -78,7 +87,7 @@ const Trainings = () => {
 
             <IconButton
               onClick={() => {
-                // onDeactivateHandler(data.id);
+                dispatch(removeTraining(data.id))
               }}
             >
               <Iconify icon={"material-symbols:delete-outline"} />
@@ -94,60 +103,11 @@ const Trainings = () => {
         <Stack>
           <Box sx={{ display: "flex", width: "100%" }}>
             <Stack sx={{ gap: 1, width: "100%" }}>
-              <Controller
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => (
-                  <TextField
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    fullWidth
-                    error={!!error}
-                    helperText={error?.message}
-                    placeholder="Title"
-                  />
-                )}
-                name={`title`}
-                control={control}
-              />
-              <Controller
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => (
-                  <TextField
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    fullWidth
-                    error={!!error}
-                    helperText={error?.message}
-                    placeholder="Duration"
-                  />
-                )}
-                name={`duration`}
-                control={control}
-              />
-              <Controller
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => (
-                  <TextField
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    fullWidth
-                    error={!!error}
-                    helperText={error?.message}
-                    placeholder="Institution"
-                  />
-                )}
-                name={`institution`}
-                control={control}
-              />
+              <RHFTextField name="title" label="Title" />
+              <RHFTextField name="topic" label="Topic" />
+              <RHFDatePicker name="date" label="Date" type="date" />
+              <RHFTextField name="duration" label="Duration" />
+              <RHFTextField name="institution" label="Institution" />
             </Stack>
           </Box>
         </Stack>
@@ -172,8 +132,9 @@ const Trainings = () => {
           hasButton={false}
           hasSearch={false}
           TABLE_HEAD={[
-            // { id: "id", label: "ID", align: "center" },
             { id: "title", label: "Title", align: "center" },
+            { id: "topic", label: "Topic", align: "center" },
+            { id: "date", label: "Date", align: "center" },
             { id: "duration", label: "Duration(hours)", align: "center" },
             { id: "institution", label: "Institution", align: "center" },
             { id: "action", label: "Action", align: "center" },

@@ -27,6 +27,7 @@ import UserJobPosting from "../pages/User/JobPosting/UserJobPosting";
 import UserFreedomWall from "../pages/User/FreedomWall/UserFreedomWall";
 import EmploymentPage from "../pages/User/Employment/EmploymentPage";
 import TrainingsPage from "../pages/User/Trainings/TrainingsPage";
+import EducationPage from "../pages/User/Education/EducationPage";
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +65,7 @@ export default function MainRoute() {
           <Route path="announcements" element={<UserAnnouncements />} />
           <Route path="job-posting" element={<UserJobPosting />} />
           <Route path="profile" element={<JobPostingPage />} />
+          <Route path="education" element={<EducationPage />} />
           <Route path="employment" element={<EmploymentPage />} />
           <Route path="trainings" element={<TrainingsPage />} />
           <Route

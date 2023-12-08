@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import {useMutation, useQueryClient } from "react-query";
 import { LoadingButton } from "@mui/lab";
 import { useDispatch, useSelector } from "react-redux";
-import { RHFTextField, FormProvider } from "../../hook-form";
+import { RHFTextField, FormProvider, RHFDatePicker } from "../../hook-form";
 import { useForm} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TrainingSchema } from "../../../lib/yup-schema/TrainingSchema";
@@ -20,7 +20,9 @@ const CreateTrainingComponent = ({handleClose}) => {
   const { trainings } = useSelector((store) => store.training);
 
   const defaultValues = {
+    topic: "",
     title: "",
+    date: "",
     duration: "",
     institution: "",
   };
@@ -65,17 +67,11 @@ const CreateTrainingComponent = ({handleClose}) => {
         <Stack>
           <Box sx={{ display: "flex", width: "100%" }}>
             <Stack sx={{ marginTop: 1, width: "100%", gap: 1 }}>
-              <RHFTextField name={"title"} placeholder="Title" label="Title" />
-              <RHFTextField
-                name={"duration"}
-                placeholder="Duration(hours)"
-                label="Duration(hours)"
-              />
-              <RHFTextField
-                name={"institution"}
-                placeholder="Institution"
-                label="Institution"
-              />
+              <RHFTextField name="title" label="Title" />
+              <RHFTextField name="topic" label="Topic" />
+              <RHFDatePicker name="date" label="Date" type="date" />
+              <RHFTextField name="duration" label="Duration" />
+              <RHFTextField name="institution" label="Institution" />
             </Stack>
           </Box>
         </Stack>

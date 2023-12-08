@@ -32,6 +32,8 @@ import EmploymentStatus from "./EmploymentStatus";
 import employmentApi from "../../../lib/services/employmentApi";
 import Trainings from "./Tranings";
 import { setProfileSetup } from "../../../store/slice/SetupProfileSlice";
+import civilStatusList from "../../../lib/json-data/civilStatus.json";
+import EducationalBackground from "./EducationalBackground";
 
 // ----------------------------------------------------------------------
 
@@ -47,6 +49,7 @@ export default function SetupProfile(_props) {
   const steps = ["Personal Info", "Employment Status", "Trainings", "Address"];
   const [activeStep, setActiveStep] = useState(0);
   const { trainings } = useSelector((store) => store.training);
+  const { education } = useSelector((store) => store.education);
 
   const defaultValues = {
     civil_status: "",
@@ -110,8 +113,8 @@ export default function SetupProfile(_props) {
   //   );
 
   const onUpdate = async (data) => {
-    console.log(data)
-    dispatch(setProfileSetup(data))
+    console.log(data);
+    dispatch(setProfileSetup(data));
     setActiveStep(activeStep + 1);
   };
 
@@ -168,10 +171,10 @@ export default function SetupProfile(_props) {
         })}
       </Stepper>
       <Stack spacing={0}>
-        <FormProvider methods={methods} onSubmit={handleSubmit(onUpdate)}>
-          <Box marginTop={5}>
-            {activeStep === 0 && (
-              <>
+        <Box marginTop={5}>
+          {activeStep === 0 && (
+            <>
+              <FormProvider methods={methods} onSubmit={handleSubmit(onUpdate)}>
                 <Stack
                   sx={{
                     marginTop: 5,
@@ -180,7 +183,12 @@ export default function SetupProfile(_props) {
                     paddingLeft: 15,
                   }}
                 >
-                  <RHFTextField name="civil_status" label="Civil Status" />
+                  <RHFTextField
+                    name="civil_status"
+                    label="Civil Status"
+                    inputType="dropDown"
+                    dropDownData={civilStatusList}
+                  />
                   <RHFDatePicker name="dob" label="Date of Birth" type="date" />
                 </Stack>
                 <IconButton
@@ -190,6 +198,7 @@ export default function SetupProfile(_props) {
                     top: "50%",
                   }}
                   type="submit"
+                  disabled={_.isEmpty(education)}
                 >
                   <Iconify
                     icon={"ic:round-arrow-forward-ios"}
@@ -201,10 +210,20 @@ export default function SetupProfile(_props) {
                     }}
                   />
                 </IconButton>
-              </>
-            )}
-          </Box>
-        </FormProvider>
+              </FormProvider>
+              <Stack
+                sx={{
+                  marginTop: 5,
+                  gap: 1,
+                  paddingRight: 15,
+                  paddingLeft: 15,
+                }}
+              >
+                <EducationalBackground />
+              </Stack>
+            </>
+          )}
+        </Box>
         {activeStep === 1 && (
           <>
             <EmploymentStatus

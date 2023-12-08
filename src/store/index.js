@@ -8,6 +8,7 @@ import personalInfoSlice from './slice/personalInfoSlice';
 import TrainingSlice from './slice/TrainingSlice';
 import AddressSlice from './slice/AddressSlice';
 import SetupProfileSlice from './slice/SetupProfileSlice';
+import EducationalBackgroundSlice from './slice/EducationalBackgroundSlice';
 
 const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ const store = configureStore({
     personalInfo: personalInfoSlice,
     training: TrainingSlice,
     address: AddressSlice,
-    profileSetup: SetupProfileSlice
+    profileSetup: SetupProfileSlice,
+    education: EducationalBackgroundSlice
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false})
 })
