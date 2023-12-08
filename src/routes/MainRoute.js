@@ -28,6 +28,8 @@ import UserFreedomWall from "../pages/User/FreedomWall/UserFreedomWall";
 import EmploymentPage from "../pages/User/Employment/EmploymentPage";
 import TrainingsPage from "../pages/User/Trainings/TrainingsPage";
 import EducationPage from "../pages/User/Education/EducationPage";
+import ViewUserPage from "../pages/Admin/ViewUserPage";
+import UsersPage from "../pages/Admin/UsersPage";
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +48,8 @@ export default function MainRoute() {
           {/* <Route path="events" element={<EventsPage />} /> */}
           <Route path="alumni-list" element={<AlumniListPage />} />
           <Route path="job-posting" element={<JobPostingPage />} />
+          <Route path="users" element={<UsersPage />} />
+          <Route path="users/view-user/:userId" element={<ViewUserPage />} />
           <Route
             path="*"
             element={<Navigate to="404" state={{ from: location }} replace />}

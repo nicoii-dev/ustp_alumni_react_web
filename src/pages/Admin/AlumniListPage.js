@@ -9,8 +9,13 @@ import {
   Button,
   Stack,
   capitalize,
+  Tooltip,
+  IconButton,
+  Link,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import Iconify from "../../components/Iconify";
 // components
 import Page from "../../components/Page";
 import AppTable from "../../components/AppTable";
@@ -19,14 +24,6 @@ import DialogModal, { useDialog } from "../../components/DialogModal";
 // api
 import alumniApi from "../../lib/services/alumniApi";
 import { LoadingButton } from "@mui/lab";
-
-const TABLE_HEAD = [
-  { id: "firstName", label: "First Name" },
-  { id: "middleName", label: "Middle Name" },
-  { id: "lastName", label: "Last Name" },
-  { id: "course", label: "Course", align: "center" },
-  { id: "yearGraduated", label: "Year Graduated", align: "center" },
-];
 
 function AlumniListPage() {
   const { importCsv, getAllAlumni } = alumniApi;
@@ -60,6 +57,37 @@ function AlumniListPage() {
           lastName: capitalize(data?.last_name),
           course: data?.course,
           yearGraduated: data?.year_graduated,
+          action: (
+            <>
+              <Tooltip title="Delete Alumni">
+                <IconButton
+                  onClick={() => {
+                    // Swal.fire({
+                    //   title: "Are you sure?",
+                    //   text: "You won't be able to revert this!",
+                    //   icon: "warning",
+                    //   showCancelButton: true,
+                    //   confirmButtonColor: "#3085d6",
+                    //   cancelButtonColor: "#d33",
+                    //   confirmButtonText: "Yes, delete it!",
+                    // }).then((result) => {
+                    //   if (result.isConfirmed) {
+                    //     // Delete(data.id);
+                    //     Swal.fire(
+                    //       "Deleted!",
+                    //       "Your file has been deleted.",
+                    //       "success"
+                    //     );
+                    //   }
+                    // });
+                    toast.success("Coming soon!");
+                  }}
+                >
+                  <Iconify icon="material-symbols:delete-outline" />
+                </IconButton>
+              </Tooltip>
+            </>
+          ),
         }))
       );
     }
@@ -162,7 +190,14 @@ function AlumniListPage() {
         <AppTable
           buttonTitle={"Import CSV"}
           buttonFunction={() => openDialog()}
-          TABLE_HEAD={TABLE_HEAD}
+          TABLE_HEAD={[
+            { id: "firstName", label: "First Name" },
+            { id: "middleName", label: "Middle Name" },
+            { id: "lastName", label: "Last Name" },
+            { id: "course", label: "Course", align: "center" },
+            { id: "yearGraduated", label: "Year Graduated", align: "center" },
+            { id: "action", label: "Action", align: "center" },
+          ]}
           TABLE_DATA={alumniList}
         />
       </Container>

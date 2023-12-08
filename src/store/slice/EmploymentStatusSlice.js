@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  employmentId: "",
   currentlyEmployed: "yes",
   type: "regular-permanent",
   currentOccupation: "",
@@ -12,6 +13,10 @@ const EmploymentStatusSlice = createSlice({
   name: "employmentStatus",
   initialState,
   reducers: {
+    setEmploymentId: (state, action) => ({
+      ...state,
+      employmentId: action.payload,
+    }),
     setStatus: (state, action) => ({
       ...state,
       currentlyEmployed: action.payload,
@@ -34,5 +39,12 @@ const EmploymentStatusSlice = createSlice({
     }),
   },
 });
-export const { setStatus, setType, setOccupation, setReasons, setLineOfBusiness } = EmploymentStatusSlice.actions;
+export const {
+  setEmploymentId,
+  setStatus,
+  setType,
+  setOccupation,
+  setReasons,
+  setLineOfBusiness,
+} = EmploymentStatusSlice.actions;
 export default EmploymentStatusSlice.reducer;

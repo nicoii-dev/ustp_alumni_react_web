@@ -45,7 +45,6 @@ export default function SetupProfile(_props) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false);
   const steps = ["Personal Info", "Employment Status", "Trainings", "Address"];
   const [activeStep, setActiveStep] = useState(0);
   const { trainings } = useSelector((store) => store.training);

@@ -13,8 +13,12 @@ import {
   FormHelperText,
   IconButton,
   TextField,
+  Button,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { useMutation, useQueryClient } from "react-query";
+import { LoadingButton } from "@mui/lab";
+import { toast } from "react-toastify";
 
 import Iconify from "../../Iconify";
 import { RHFTextField } from "../../hook-form";
@@ -24,13 +28,23 @@ import {
   setReasons,
   setOccupation,
   setStatus,
-  setLineOfBusiness
+  setLineOfBusiness,
 } from "../../../store/slice/EmploymentStatusSlice";
+import employmentApi from "../../../lib/services/employmentApi";
 
-const EmploymentStatus = ({ activeStep, setActiveStep }) => {
-  const { currentOccupation, currentlyEmployed, type, stateOfReasons, lineOfBusiness } =
-    useSelector((store) => store.employment);
+const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
+  const {
+    currentOccupation,
+    currentlyEmployed,
+    type,
+    stateOfReasons,
+    lineOfBusiness,
+    employmentId,
+  } = useSelector((store) => store.employment);
   const dispatch = useDispatch();
+  const [updateTrigger, setUpdateTrigger] = useState(false);
+  const queryClient = useQueryClient();
+  const { updateEmployment } = employmentApi;
 
   const onEmploymentChanged = (event) => {
     dispatch(setStatus(event.target.value));
@@ -73,29 +87,94 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
     setActiveStep(activeStep + 1);
   };
 
+  const { mutate: Update, isLoading: updateIsLoading } = useMutation(
+    (payload) => updateEmployment(employmentId, payload),
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(["get-all-employment"]);
+        toast.success(data.data.message);
+        setUpdateTrigger(false);
+      },
+      onError: (data) => {
+        console.log(data);
+        toast.error(data.response.data.message);
+      },
+    }
+  );
+
+  const updateEmploymentHandler = async () => {
+    let employmentPayload = {};
+    console.log(currentlyEmployed);
+    if (currentlyEmployed === "yes") {
+      employmentPayload = {
+        status: currentlyEmployed,
+        type: type,
+        present_occupation: currentOccupation,
+        line_of_business: lineOfBusiness,
+      };
+    } else {
+      employmentPayload = {
+        status: currentlyEmployed,
+        state_of_reasons: `[${stateOfReasons}]`,
+      };
+    }
+    await Update(employmentPayload);
+  };
+
   return (
     <>
-      <IconButton
-        style={{
-          position: "absolute",
-          left: 30,
-          top: "50%",
-          zIndex: 999,
-        }}
-        onClick={() => {
-          setActiveStep(activeStep - 1);
-        }}
-      >
-        <Iconify
-          icon={"ic:round-arrow-back-ios"}
-          sx={{
-            width: 70,
-            height: 70,
-            color: "#2065d1",
-            cursor: "pointer",
+      {activeStep !== undefined ? (
+        <IconButton
+          style={{
+            position: "absolute",
+            left: 30,
+            top: "50%",
+            zIndex: 999,
           }}
-        />
-      </IconButton>
+          onClick={() => {
+            setActiveStep(activeStep - 1);
+          }}
+        >
+          <Iconify
+            icon={"ic:round-arrow-back-ios"}
+            sx={{
+              width: 70,
+              height: 70,
+              color: "#2065d1",
+              cursor: "pointer",
+            }}
+          />
+        </IconButton>
+      ) : admin ? (
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          {updateTrigger ? (
+            <LoadingButton
+              variant="contained"
+              sx={{
+                width: "20%",
+                marginTop: 0,
+              }}
+              type="button"
+              onClick={updateEmploymentHandler}
+              loading={updateIsLoading}
+            >
+              Save
+            </LoadingButton>
+          ) : (
+            <Button
+              variant="contained"
+              sx={{
+                width: "20%",
+                marginTop: 0,
+              }}
+              type="button"
+              onClick={() => setUpdateTrigger(true)}
+            >
+              Update
+            </Button>
+          )}
+        </Box>
+      ) : null}
       <Stack sx={{ marginTop: 5, gap: 1, paddingRight: 15, paddingLeft: 15 }}>
         <FormControl>
           <FormLabel
@@ -112,12 +191,23 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
             onChange={onEmploymentChanged}
           >
             <Box sx={{ display: "flex" }}>
-              <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-              <FormControlLabel value="no" control={<Radio />} label="No" />
+              <FormControlLabel
+                value="yes"
+                control={<Radio />}
+                label="Yes"
+                disabled={!updateTrigger && activeStep === undefined}
+              />
+              <FormControlLabel
+                value="no"
+                control={<Radio />}
+                label="No"
+                disabled={!updateTrigger && activeStep === undefined}
+              />
               <FormControlLabel
                 value="never"
                 control={<Radio />}
                 label="Never been Employed"
+                disabled={!updateTrigger && activeStep === undefined}
               />
             </Box>
           </RadioGroup>
@@ -131,6 +221,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
               variant="outlined"
               value={type}
               onChange={onEmploymentTypeChange}
+              disabled={!updateTrigger && activeStep === undefined}
             >
               {employmentStatusList?.map((option, key) => (
                 <option key={key} value={option.value}>
@@ -146,6 +237,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
               helperText={"Occupation is required"}
               placeholder="Present Occupation"
               name="presentOccupation"
+              disabled={!updateTrigger && activeStep === undefined}
             />
             <TextField
               value={lineOfBusiness}
@@ -155,6 +247,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
               helperText={"Line of Business is required"}
               placeholder="Line of Business"
               name="lineOfBusiness"
+              disabled={!updateTrigger && activeStep === undefined}
             />
           </Stack>
         ) : (
@@ -186,6 +279,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
                       checked={stateOfReasons.includes(
                         "Advance or further study"
                       )}
+                      disabled={!updateTrigger && activeStep === undefined}
                     />
                   }
                   label="Advance or further study"
@@ -199,6 +293,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
                       checked={stateOfReasons.includes(
                         "Family concern and decided not to find a job"
                       )}
+                      disabled={!updateTrigger && activeStep === undefined}
                     />
                   }
                   label="Family concern and decided not to find a job"
@@ -212,6 +307,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
                       checked={stateOfReasons.includes(
                         "Health-related reason(s)"
                       )}
+                      disabled={!updateTrigger && activeStep === undefined}
                     />
                   }
                   label="Health-related reason(s)"
@@ -225,6 +321,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
                       checked={stateOfReasons.includes(
                         "Lack of work experience"
                       )}
+                      disabled={!updateTrigger && activeStep === undefined}
                     />
                   }
                   label="Lack of work experience"
@@ -236,6 +333,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
                       onChange={stateReasonsHandler}
                       value="No job opportunity"
                       checked={stateOfReasons.includes("No job opportunity")}
+                      disabled={!updateTrigger && activeStep === undefined}
                     />
                   }
                   label="No job opportunity"
@@ -249,6 +347,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
                       checked={stateOfReasons.includes(
                         "Did not look for a job"
                       )}
+                      disabled={!updateTrigger && activeStep === undefined}
                     />
                   }
                   label="Did not look for a job"
@@ -270,25 +369,27 @@ const EmploymentStatus = ({ activeStep, setActiveStep }) => {
           </FormControl>
         )}
       </Stack>
-      <IconButton
-        style={{
-          position: "absolute",
-          right: 30,
-          top: "50%",
-        }}
-        disabled={currentOccupation.length < 1 && stateOfReasons.length < 1}
-        onClick={onNextHandler}
-      >
-        <Iconify
-          icon={"ic:round-arrow-forward-ios"}
-          sx={{
-            width: 70,
-            height: 70,
-            color: "#2065d1",
-            cursor: "pointer",
+      {activeStep !== undefined ? (
+        <IconButton
+          style={{
+            position: "absolute",
+            right: 30,
+            top: "50%",
           }}
-        />
-      </IconButton>
+          disabled={currentOccupation.length < 1 && stateOfReasons.length < 1}
+          onClick={onNextHandler}
+        >
+          <Iconify
+            icon={"ic:round-arrow-forward-ios"}
+            sx={{
+              width: 70,
+              height: 70,
+              color: "#2065d1",
+              cursor: "pointer",
+            }}
+          />
+        </IconButton>
+      ) : null}
     </>
   );
 };

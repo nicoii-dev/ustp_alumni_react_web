@@ -1,0 +1,14 @@
+[
+    {
+       "value":"Currently Employed",
+       "label":"Currently Employed"
+    },
+    {
+       "value":"Resigned",
+       "label":"Resigned"
+    },
+    {
+       "value":"End of Contract",
+       "label":"End of Contract"
+    }
+ ]

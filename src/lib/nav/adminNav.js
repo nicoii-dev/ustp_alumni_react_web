@@ -36,7 +36,7 @@ const adminNav = [
     children: [
       {
         title: 'Users List',
-        path: '#'
+        path: '/users'
       },
       {
         title: 'Reports',

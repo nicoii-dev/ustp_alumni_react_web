@@ -132,7 +132,7 @@ function EducationPage() {
       onSuccess: (data) => {
         queryClient.invalidateQueries(["get-all-user-education"]);
         toast.success(data.data.message);
-        setUpdateTrigger(false)
+        setUpdateTrigger(false);
       },
       onError: (data) => {
         console.log(data);
@@ -160,7 +160,7 @@ function EducationPage() {
         data.elemSyEnd
       ).format("YYYY")}]`,
     };
-    await Update(educationPayload)
+    await Update(educationPayload);
   };
 
   return (
@@ -177,6 +177,33 @@ function EducationPage() {
       </Box>
       <Container maxWidth="md" sx={{ justifyContent: "center" }}>
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <Box sx={{display: 'flex', justifyContent: 'flex-end'}}>
+            {updateTrigger ? (
+              <LoadingButton
+                variant="contained"
+                sx={{
+                  width: "20%",
+                  marginTop: 0,
+                }}
+                type="submit"
+                loading={updateIsLoading}
+              >
+                Save
+              </LoadingButton>
+            ) : (
+              <Button
+                variant="contained"
+                sx={{
+                  width: "20%",
+                  marginTop: 0,
+                }}
+                type="button"
+                onClick={() => setUpdateTrigger(true)}
+              >
+                Update
+              </Button>
+            )}
+          </Box>
           <>
             <Stack>
               <Box
@@ -287,37 +314,6 @@ function EducationPage() {
               </Box>
             </Stack>
           </>
-          {updateTrigger ? (
-            <LoadingButton
-              variant="contained"
-              sx={{
-                display: "flex",
-                width: "20%",
-                position: "absolute",
-                marginTop: 5,
-                placeSelf: "flex-end",
-              }}
-              type="submit"
-              loading={updateIsLoading}
-            >
-              Save
-            </LoadingButton>
-          ) : (
-            <Button
-              variant="contained"
-              sx={{
-                display: "flex",
-                width: "20%",
-                position: "absolute",
-                marginTop: 5,
-                placeSelf: "flex-end",
-              }}
-              type="button"
-              onClick={() => setUpdateTrigger(true)}
-            >
-              Update
-            </Button>
-          )}
         </FormProvider>
       </Container>
     </Page>

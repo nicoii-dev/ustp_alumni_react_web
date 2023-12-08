@@ -18,6 +18,7 @@ import MenuPopover from "../../MenuPopover";
 import account from "../../_mock/account";
 import userApi from "../../../lib/services/userApi";
 import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
+import { toast } from "react-toastify";
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -132,7 +133,8 @@ export default function AccountPopover() {
 
         <MenuItem
           onClick={() => {
-            logOut();
+            // logOut();
+            toast.success("Coming soon!")
           }}
           sx={{ m: 1 }}
         >
