@@ -38,6 +38,10 @@ export default function UserAddress({ handleClose }) {
   const [provinceData, setProvince] = useState([]);
   const [cityData, setCity] = useState([]);
   const [barangayData, setBarangay] = useState([]);
+  const [regionCode, setRegionCode] = useState("");
+  const [provinceCode, setProvinceCode] = useState("");
+  const [cityCode, setCityCode] = useState("");
+  const [barangayCode, setBarangayCode] = useState("");
 
   const {
     userRegion,
@@ -72,6 +76,7 @@ export default function UserAddress({ handleClose }) {
   };
 
   const province = (e) => {
+    setRegionCode(e.target.value);
     dispatch(setUserRegion(e.target.selectedOptions[0].text));
     provinces(e.target.value).then((response) => {
       console.log(response);
@@ -89,6 +94,7 @@ export default function UserAddress({ handleClose }) {
   };
 
   const city = (e) => {
+    setProvinceCode(e.target.value);
     dispatch(setUserProvince(e.target.selectedOptions[0].text));
     cities(e.target.value).then((response) => {
       setCity(
@@ -101,6 +107,7 @@ export default function UserAddress({ handleClose }) {
   };
 
   const barangay = (e) => {
+    setCityCode(e.target.value);
     dispatch(setUserCity(e.target.selectedOptions[0].text));
     barangays(e.target.value).then((response) => {
       setBarangay(
@@ -113,6 +120,7 @@ export default function UserAddress({ handleClose }) {
   };
 
   const brgy = (e) => {
+    setBarangayCode(e.target.value);
     dispatch(setUserBarangay(e.target.selectedOptions[0].text));
   };
 
@@ -121,18 +129,23 @@ export default function UserAddress({ handleClose }) {
   }, []);
 
   const onSubmit = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     let employmentPayload = {};
     const profilePayload = {
       civil_status: profileSetup.civil_status,
       dob: moment(profileSetup.dob).format("YYYY-MM-DD"),
       street: userStreet,
       barangay: userBarangay,
+      barangay_code: barangayCode,
       city: userCity,
+      city_code: cityCode,
       province: userProvince,
+      province_code: provinceCode,
       region: userRegion,
+      region_code: regionCode,
       zipcode: userZipcode,
     };
+    console.log(profilePayload);
     if (currentlyEmployed === "yes") {
       employmentPayload = {
         status: currentlyEmployed,
@@ -154,13 +167,19 @@ export default function UserAddress({ handleClose }) {
       college: education.collegeSchool,
       college_address: education.collegeAddress,
       course: education.course,
-      college_sy: `[${moment(education.collegeSyStart).format('YYYY')}, ${moment(education.collegeSyEnd).format('YYYY')}]`,
+      college_sy: `[${moment(education.collegeSyStart).format(
+        "YYYY"
+      )}, ${moment(education.collegeSyEnd).format("YYYY")}]`,
       high_school: education.highSchool,
       high_address: education.highAddress,
-      high_sy: `[${moment(education.highSyStart).format('YYYY')}, ${moment(education.highSyEnd).format('YYYY')}]`,
+      high_sy: `[${moment(education.highSyStart).format("YYYY")}, ${moment(
+        education.highSyEnd
+      ).format("YYYY")}]`,
       elem_school: education.elemSchool,
       elem_address: education.elemAddress,
-      elem_sy: `[${moment(education.elemSyStart).format('YYYY')}, ${moment(education.elemSyEnd).format('YYYY')}]`,
+      elem_sy: `[${moment(education.elemSyStart).format("YYYY")}, ${moment(
+        education.elemSyEnd
+      ).format("YYYY")}]`,
     };
 
     try {

@@ -46,6 +46,7 @@ function ViewUserPage() {
   const { userId } = useParams();
   const [activeTab, setActiveTab] = useState("Employment");
   const [jobHistoryList, setJobHistoryList] = useState([]);
+  const [trainingsList, setTrainingsList] = useState([]);
 
   const {
     data: userData,
@@ -71,6 +72,16 @@ function ViewUserPage() {
           dateEnded: moment(data.date_ended).format("LL"),
           salary: data.salary,
           status: data.status,
+        }))
+      );
+      setTrainingsList(
+        userData?.data?.trainings?.map((data) => ({
+          tobeSearch: data?.title,
+          title: data?.title,
+          topic: data?.topic,
+          date: moment(data.date).format("LL"),
+          duration: data.duration,
+          institution: data.institution,
         }))
       );
     }
@@ -260,7 +271,7 @@ function ViewUserPage() {
                             Civil Status:
                           </Typography>
                         </Stack>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography variant="h6" gutterBottom sx={{textTransform: 'capitalize'}}>
                           {user?.civil_status}
                         </Typography>
                       </Stack>
@@ -272,7 +283,7 @@ function ViewUserPage() {
                       >
                         <Stack>
                           <Typography variant="subtitle1" gutterBottom>
-                            Civil Status:
+                            Phone Number:
                           </Typography>
                         </Stack>
                         <Typography variant="h6" gutterBottom>
@@ -335,7 +346,7 @@ function ViewUserPage() {
                   { id: "duration", label: "Duration(hours)", align: "center" },
                   { id: "institution", label: "Institution", align: "center" },
                 ]}
-                TABLE_DATA={user?.trainings || []}
+                TABLE_DATA={trainingsList || []}
               />
             </TabPanel>
           </TabContext>

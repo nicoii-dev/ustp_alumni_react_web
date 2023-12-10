@@ -13,6 +13,7 @@ import {
   IconButton,
   Link,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Iconify from "../../components/Iconify";
@@ -26,6 +27,7 @@ import alumniApi from "../../lib/services/alumniApi";
 import { LoadingButton } from "@mui/lab";
 
 function AlumniListPage() {
+  const navigate = useNavigate();
   const { importCsv, getAllAlumni } = alumniApi;
   const queryClient = useQueryClient();
   const [alumniList, setAlumniList] = useState([]);
@@ -46,7 +48,13 @@ function AlumniListPage() {
     }
   );
 
-  console.log(alumniData);
+  const ViewUserProfile = (id) => {
+    if (id === undefined) {
+      toast.error("No User Data");
+      return;
+    }
+    navigate(`/users/view-user/${id}`);
+  };
   useEffect(() => {
     if (alumniStatus === "success") {
       setAlumniList(
@@ -58,35 +66,11 @@ function AlumniListPage() {
           course: data?.course,
           yearGraduated: data?.year_graduated,
           action: (
-            <>
-              <Tooltip title="Delete Alumni">
-                <IconButton
-                  onClick={() => {
-                    // Swal.fire({
-                    //   title: "Are you sure?",
-                    //   text: "You won't be able to revert this!",
-                    //   icon: "warning",
-                    //   showCancelButton: true,
-                    //   confirmButtonColor: "#3085d6",
-                    //   cancelButtonColor: "#d33",
-                    //   confirmButtonText: "Yes, delete it!",
-                    // }).then((result) => {
-                    //   if (result.isConfirmed) {
-                    //     // Delete(data.id);
-                    //     Swal.fire(
-                    //       "Deleted!",
-                    //       "Your file has been deleted.",
-                    //       "success"
-                    //     );
-                    //   }
-                    // });
-                    toast.success("Coming soon!");
-                  }}
-                >
-                  <Iconify icon="material-symbols:delete-outline" />
-                </IconButton>
-              </Tooltip>
-            </>
+            <Tooltip title="View User">
+              <IconButton onClick={() => ViewUserProfile(data?.user?.id)}>
+                <Iconify icon="ic:baseline-remove-red-eye" />
+              </IconButton>
+            </Tooltip>
           ),
         }))
       );
@@ -175,7 +159,7 @@ function AlumniListPage() {
   };
 
   return (
-    <Page title="Shops">
+    <Page title="Alumni List">
       <Container maxWidth="xl">
         <Box
           sx={{

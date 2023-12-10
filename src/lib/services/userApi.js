@@ -20,4 +20,6 @@ export default {
   deactivateUser: (id) => apiService.post(`/users/deactivate/${id}`),
   addProfileAddress: (payload) => apiService.post(`/profile/add`, payload),
   viewUser: (id) => apiService.post(`/users/view/${id}`),
+  getProfile: () => apiService.get(`/profile`),
+  updateProfile: (payload) => apiService.post(`/profile/update`, payload),
 };

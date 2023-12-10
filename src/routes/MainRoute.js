@@ -30,6 +30,7 @@ import TrainingsPage from "../pages/User/Trainings/TrainingsPage";
 import EducationPage from "../pages/User/Education/EducationPage";
 import ViewUserPage from "../pages/Admin/ViewUserPage";
 import UsersPage from "../pages/Admin/UsersPage";
+import ProfilePage from "../pages/ProfilePage";
 
 // ----------------------------------------------------------------------
 
@@ -68,7 +69,7 @@ export default function MainRoute() {
           <Route path="freedom-wall" element={<UserFreedomWall />} />
           <Route path="announcements" element={<UserAnnouncements />} />
           <Route path="job-posting" element={<UserJobPosting />} />
-          <Route path="profile" element={<JobPostingPage />} />
+          <Route path="profile" element={<ProfilePage />} />
           <Route path="education" element={<EducationPage />} />
           <Route path="employment" element={<EmploymentPage />} />
           <Route path="trainings" element={<TrainingsPage />} />
@@ -91,7 +92,10 @@ export default function MainRoute() {
         <Route path=":email/:token" element={<EmailVerification />} />
       </Route>
       <Route path="404" element={<Page404 />} />
-      <Route path="*" element={<Navigate to="/404" state={{ from: location }} replace />} />
+      <Route
+        path="*"
+        element={<Navigate to="/404" state={{ from: location }} replace />}
+      />
     </Routes>
   );
 }

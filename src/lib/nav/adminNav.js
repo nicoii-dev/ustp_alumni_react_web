@@ -31,19 +31,24 @@ const adminNav = [
     icon: getIcon('cib:when-i-work'),
   },
   {
-    title: 'System Settings',
-    icon: getIcon('ep:tools'),
-    children: [
-      {
-        title: 'Users List',
-        path: '/users'
-      },
-      {
-        title: 'Reports',
-        path: '#'
-      },
-    ]
-  }
+    title: 'Users List',
+    path: '/users',
+    icon: getIcon('fa-solid:users'),
+  },
+  // {
+  //   title: 'System Settings',
+  //   icon: getIcon('ep:tools'),
+  //   children: [
+  //     {
+  //       title: 'Users List',
+  //       path: '/users'
+  //     },
+  //     {
+  //       title: 'Reports',
+  //       path: '#'
+  //     },
+  //   ]
+  // }
 ];
 
 export default adminNav;

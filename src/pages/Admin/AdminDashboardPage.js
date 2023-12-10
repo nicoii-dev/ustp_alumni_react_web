@@ -24,9 +24,9 @@ function AdminDashboardPage() {
   } = useQuery(["get-dashboard"], () => getDashboard(), {
     retry: 3, // Will retry failed requests 10 times before displaying an error
   });
-
+  console.log(dashboardData)
   return (
-    <Page title="Shops">
+    <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Hi,{" "}
@@ -38,15 +38,15 @@ function AdminDashboardPage() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetAdmin
               title="Number of Alumni"
-              total={0}
-              icon={"mdi:shop"}
+              total={dashboardData?.data?.alumni}
+              icon={"fa6-solid:user-graduate"}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetAdmin
               title="Number of Courses"
-              total={0}
+              total={dashboardData?.data?.course?.length || 0}
               color="info"
               icon={"ph:users-three-bold"}
             />
@@ -55,18 +55,18 @@ function AdminDashboardPage() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetAdmin
               title="Active Users"
-              total={0}
+              total={dashboardData?.data?.active}
               color="warning"
-              icon={"material-symbols:local-laundry-service-outline"}
+              icon={"ph:users-three-bold"}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
             <AppWidgetAdmin
               title="Deactivated Users"
-              total={0}
+              total={dashboardData?.data?.deactivated}
               color="error"
-              icon={"fa6-solid:users-slash"}
+              icon={"fluent-mdl2:deactivate-orders"}
             />
           </Grid>
           <Grid item xs={12} sm={12} md={12}>

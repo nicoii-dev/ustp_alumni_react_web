@@ -64,7 +64,7 @@ function FreedomWallPage() {
   );
 
   return (
-    <Page title="Alumnus">
+    <Page title="Freedom Wall">
       <Container maxWidth="xl">
         <Box sx={{ backgroundColor: "#CCE5FF", padding: 2, borderRadius: 2 }}>
           <Typography variant="h4">Freedom Wall</Typography>

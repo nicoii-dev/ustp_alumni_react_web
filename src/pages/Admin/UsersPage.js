@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
 // mui
-import { Container, Typography, Box, Tooltip, Link, IconButton } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  Tooltip,
+  Link,
+  IconButton,
+} from "@mui/material";
 import { toast } from "react-toastify";
 // components
 import Iconify from "../../components/Iconify";
@@ -78,39 +85,39 @@ function UsersPage() {
               )}
             </>
           ),
-          // status: (
-          //   <>
-          //     {data.status === 1 ? (
-          //       <LoadingButton
-          //         sx={{ backgroundColor: "green" }}
-          //         onClick={() => {
-          //           onActivateHandler(data.id);
-          //         }}
-          //         loading={activateUserLoading}
-          //       >
-          //         <Typography
-          //           sx={{ color: "white", fontSize: 14, padding: 0.5 }}
-          //         >
-          //           Activated
-          //         </Typography>
-          //       </LoadingButton>
-          //     ) : (
-          //       <LoadingButton
-          //         sx={{ backgroundColor: "red" }}
-          //         onClick={() => {
-          //           onDeactivateHandler(data.id);
-          //         }}
-          //         loading={deactivateUserLoading}
-          //       >
-          //         <Typography
-          //           sx={{ color: "white", fontSize: 14, padding: 0.5 }}
-          //         >
-          //           Deactivated
-          //         </Typography>
-          //       </LoadingButton>
-          //     )}
-          //   </>
-          // ),
+          status: (
+            <>
+              {data.status === 1 ? (
+                <LoadingButton
+                  sx={{ backgroundColor: "green" }}
+                  onClick={() => {
+                    onActivateHandler(data.id);
+                  }}
+                  loading={activateUserLoading}
+                >
+                  <Typography
+                    sx={{ color: "white", fontSize: 14, padding: 0.5 }}
+                  >
+                    Activated
+                  </Typography>
+                </LoadingButton>
+              ) : (
+                <LoadingButton
+                  sx={{ backgroundColor: "red" }}
+                  onClick={() => {
+                    onDeactivateHandler(data.id);
+                  }}
+                  loading={deactivateUserLoading}
+                >
+                  <Typography
+                    sx={{ color: "white", fontSize: 14, padding: 0.5 }}
+                  >
+                    Deactivated
+                  </Typography>
+                </LoadingButton>
+              )}
+            </>
+          ),
           action: (
             <>
               <Tooltip title="View User">
@@ -190,10 +197,7 @@ function UsersPage() {
               { id: "firstName", label: "First Name", alignRight: false },
               { id: "middleName", label: "Middle Name", alignRight: false },
               { id: "lastName", label: "Last Name", alignRight: false },
-              { id: "gender", label: "Gender", alignRight: false },
-              { id: "phoneNumber", label: "Phone Number", alignRight: false },
               { id: "email", label: "Email", alignRight: false },
-              { id: "role", label: "Role", alignRight: false },
               { id: "isVerified", label: "Verification", alignRight: false },
               { id: "status", label: "Status", alignRight: false },
               { id: "action", label: "Action", alignRight: false },

@@ -18,26 +18,6 @@ import MenuPopover from "../../MenuPopover";
 import account from "../../_mock/account";
 import userApi from "../../../lib/services/userApi";
 import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
-import { toast } from "react-toastify";
-// ----------------------------------------------------------------------
-
-const MENU_OPTIONS = [
-  {
-    label: "Home",
-    icon: "eva:home-fill",
-    linkTo: "/",
-  },
-  {
-    label: "Profile",
-    icon: "eva:person-fill",
-    linkTo: "#",
-  },
-  {
-    label: "Settings",
-    icon: "eva:settings-2-fill",
-    linkTo: "#",
-  },
-];
 
 // ----------------------------------------------------------------------
 
@@ -130,16 +110,17 @@ export default function AccountPopover() {
         </Stack> */}
 
         <Divider sx={{ borderStyle: "dashed" }} />
-
-        <MenuItem
-          onClick={() => {
-            // logOut();
-            toast.success("Coming soon!")
-          }}
-          sx={{ m: 1 }}
-        >
-          Profile
-        </MenuItem>
+        {userData.role !== "admin" ? (
+          <MenuItem
+            onClick={() => {
+              // logOut();
+              navigate("/profile");
+            }}
+            sx={{ m: 1 }}
+          >
+            Profile
+          </MenuItem>
+        ) : null}
         <MenuItem
           onClick={() => {
             logOut();
