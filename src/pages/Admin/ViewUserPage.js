@@ -142,7 +142,11 @@ function ViewUserPage() {
                     <Stack direction="column" alignItems="center" spacing={2}>
                       <Avatar
                         sx={{ width: 150, height: 150 }}
-                        src={user?.image}
+                        src={
+                          user?.image
+                            ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/${user?.image}`
+                            : "/static/ustp-logo.jpg"
+                        }
                       />
                       <Typography
                         variant="h5"
@@ -156,7 +160,7 @@ function ViewUserPage() {
                         {user?.email}
                       </Typography>
                       <Typography variant="h6" gutterBottom>
-                        {"BSIT"}
+                        {user?.education?.course}
                       </Typography>
                       <Stack
                         direction="row"

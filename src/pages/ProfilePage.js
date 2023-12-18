@@ -67,7 +67,7 @@ function ProfilePage() {
   const { getProfile, updateProfile } = userApi;
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const queryClient = useQueryClient();
-  const { image } = useSelector((store) => store.profileSetup);
+  const { image, profileImage } = useSelector((store) => store.profileSetup);
 
   const [regionData, setRegion] = useState([]);
   const [provinceData, setProvince] = useState([]);
@@ -272,9 +272,11 @@ function ProfilePage() {
     // };
     // console.log(profilePayload);
     const formData = new FormData();
-    formData.append("civil_status", data.civil_status);
+    formData.append("civil_status", data.civilStatus);
     formData.append("dob", moment(data.dob).format("YYYY-MM-DD"));
-    formData.append("image", image[0].file);
+    if (!_.isEmpty(image)) {
+      formData.append("image", image[0]?.file);
+    }
     formData.append("gender", data.gender);
     formData.append("phone_number", data.phoneNumber);
     formData.append("street", userStreet);
@@ -343,9 +345,12 @@ function ProfilePage() {
             <Stack>
               <Box>
                 {updateTrigger ? (
-                  <Box sx={{width: 200}}>
-
-                  <MyDropzone images={image} setImages={setImage} maxFile={1} />
+                  <Box sx={{ width: 200 }}>
+                    <MyDropzone
+                      images={image}
+                      setImages={setImage}
+                      maxFile={1}
+                    />
                   </Box>
                 ) : (
                   <img
