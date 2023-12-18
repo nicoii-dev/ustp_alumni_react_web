@@ -76,13 +76,13 @@ const EducationalBackground = ({setActiveStep, activeStep}) => {
         <Stack>
           <Box
             sx={{
-              display: "flex",
               width: "80%",
               height: "55vh",
               overflow: "auto",
               justifyContent: 'center',
               alignItems: 'center',
               alignSelf: 'center', 
+              padding: 5
             }}
           >
             <Stack sx={{ gap: 1, width: "100%", marginTop: 2 }}>
