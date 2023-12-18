@@ -27,6 +27,11 @@ const userNav = [
     icon: getIcon('carbon:education'),
   },
   {
+    title: 'Achievements',
+    path: '/achievements',
+    icon: getIcon('game-icons:achievement'),
+  },
+  {
     title: 'Employment Details',
     path: '/employment',
     icon: getIcon('clarity:employee-line'),

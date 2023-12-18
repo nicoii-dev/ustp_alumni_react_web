@@ -18,8 +18,20 @@ export default {
   },
   activateUser: (id) => apiService.post(`/users/activate/${id}`),
   deactivateUser: (id) => apiService.post(`/users/deactivate/${id}`),
-  addProfileAddress: (payload) => apiService.post(`/profile/add`, payload),
+  addProfileAddress: (payload) =>
+    apiService.post(`/profile/add`, payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        // Authorization: `Bearer ${token}`,
+      },
+    }),
   viewUser: (id) => apiService.post(`/users/view/${id}`),
   getProfile: () => apiService.get(`/profile`),
-  updateProfile: (payload) => apiService.post(`/profile/update`, payload),
+  updateProfile: (payload) =>
+    apiService.post(`/profile/update`, payload, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        // Authorization: `Bearer ${token}`,
+      },
+    }),
 };

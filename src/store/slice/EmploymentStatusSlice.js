@@ -7,6 +7,7 @@ const initialState = {
   currentOccupation: "",
   lineOfBusiness: "",
   stateOfReasons: [],
+  profession: ""
 };
 
 const EmploymentStatusSlice = createSlice({
@@ -37,6 +38,10 @@ const EmploymentStatusSlice = createSlice({
       ...state,
       stateOfReasons: action.payload,
     }),
+    setProfession: (state, action) => ({
+      ...state,
+      profession: action.payload,
+    }),
   },
 });
 export const {
@@ -46,5 +51,6 @@ export const {
   setOccupation,
   setReasons,
   setLineOfBusiness,
+  setProfession
 } = EmploymentStatusSlice.actions;
 export default EmploymentStatusSlice.reducer;

@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 // material
 import { styled } from "@mui/material/styles";
 import {
@@ -30,7 +31,7 @@ const RootStyle = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("lg")]: {
     flexShrink: 0,
     width: DRAWER_WIDTH,
-  }
+  },
 }));
 
 const AccountStyle = styled("div")(({ theme }) => ({
@@ -38,7 +39,7 @@ const AccountStyle = styled("div")(({ theme }) => ({
   alignItems: "center",
   padding: theme.spacing(2, 2.5),
   borderRadius: Number(theme.shape.borderRadius) * 1.5,
-  backgroundColor: '#004C99',
+  backgroundColor: "#004C99",
 }));
 
 // ----------------------------------------------------------------------
@@ -53,6 +54,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const isDesktop = useResponsive("up", "lg");
   const userData = getLocalStorageItem("userData");
   const [navConfig, setNavConfig] = useState([]);
+  const { profileImage } = useSelector((store) => store.profileSetup);
   useEffect(() => {
     switch (userData?.role) {
       case "admin":
@@ -85,7 +87,9 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         backgroundColor: "#0080FF",
       }}
     >
-      <Box sx={{ px: 2.5, py: 3, justifyContent: 'center', alignItems: 'center'}}>
+      <Box
+        sx={{ px: 2.5, py: 3, justifyContent: "center", alignItems: "center" }}
+      >
         {/* <img
           alt="register"
           src="/static/laundry-shop.png"
@@ -97,12 +101,37 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         /> */}
       </Box>
 
-      <Box sx={{ mb: 5, mx: 2.5 }}>
+      <Box sx={{ mb: 5, mx: 2.5, mt: -5 }}>
         <Link underline="none" component={RouterLink} to="#">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              alignContent: "center",
+              justifyItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <img
+              alt="register"
+              src={"/static/ustp-logo.jpg"}
+              style={{
+                height: 120,
+                width: 120,
+                marginBottom: 10,
+                justifySelf: "center",
+                alignSelf: "center",
+                borderRadius: 150,
+              }}
+            />
+          </div>
+
           <AccountStyle>
             <Avatar
               src={
-                "https://www.rd.com/wp-content/uploads/2021/09/GettyImages-1181334518-MLedit.jpg"
+                profileImage
+                  ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/${profileImage}`
+                  : "/static/ustp-logo.jpg"
               }
               alt="photoURL"
             />
@@ -114,9 +143,11 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
                   userData?.last_name?.charAt(0).toUpperCase() +
                   userData?.last_name?.slice(1)}
               </Typography>
-              <Typography variant="body2" sx={{ color: "white" }}>
-                Role - {userData?.role?.charAt(0)?.toUpperCase() + userData?.role?.slice(1)}
-              </Typography>
+              {/* <Typography variant="body2" sx={{ color: "white" }}>
+                Role -{" "}
+                {userData?.role?.charAt(0)?.toUpperCase() +
+                  userData?.role?.slice(1)}
+              </Typography> */}
             </Box>
           </AccountStyle>
         </Link>

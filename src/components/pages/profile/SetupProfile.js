@@ -34,6 +34,8 @@ import Trainings from "./Tranings";
 import { setProfileSetup } from "../../../store/slice/SetupProfileSlice";
 import civilStatusList from "../../../lib/json-data/civilStatus.json";
 import EducationalBackground from "./EducationalBackground";
+import MyDropzone from "../../dropzone/Dropzone";
+import { setImage } from "../../../store/slice/SetupProfileSlice";
 
 // ----------------------------------------------------------------------
 
@@ -45,10 +47,17 @@ export default function SetupProfile(_props) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const steps = ["Personal Info", "Employment Status", "Trainings", "Address"];
+  const steps = [
+    "Personal Info",
+    "Employment Details",
+    "Trainings",
+    "Educational Background",
+    "Address",
+  ];
   const [activeStep, setActiveStep] = useState(0);
   const { trainings } = useSelector((store) => store.training);
   const { education } = useSelector((store) => store.education);
+  const { image } = useSelector((store) => store.profileSetup);
 
   const defaultValues = {
     civil_status: "",
@@ -82,7 +91,8 @@ export default function SetupProfile(_props) {
 
   useEffect(() => {
     if (employmentStatus === "success") {
-      if (_.isEmpty(employmentData?.data) && userData.role === 'user') openDialog(true);
+      if (_.isEmpty(employmentData?.data) && userData.role === "user")
+        openDialog(true);
     }
   }, [employmentData, employmentStatus]);
 
@@ -145,7 +155,7 @@ export default function SetupProfile(_props) {
         title: { fontSize: 32 },
         subtitle: { fontSize: 16 },
       }}
-      width={"md"}
+      width={"lg"}
     >
       <Stepper activeStep={activeStep} sx={{ justifyContent: "center" }}>
         {steps.map((label, index) => {
@@ -182,6 +192,8 @@ export default function SetupProfile(_props) {
                     paddingLeft: 15,
                   }}
                 >
+                  <MyDropzone images={image} setImages={setImage} maxFile={1} />
+
                   <RHFTextField
                     name="civil_status"
                     label="Civil Status"
@@ -197,7 +209,7 @@ export default function SetupProfile(_props) {
                     top: "50%",
                   }}
                   type="submit"
-                  disabled={_.isEmpty(education)}
+                  // disabled={_.isEmpty(education)}
                 >
                   <Iconify
                     icon={"ic:round-arrow-forward-ios"}
@@ -209,17 +221,16 @@ export default function SetupProfile(_props) {
                     }}
                   />
                 </IconButton>
+                <LoadingButton
+                  // loading={}
+                  // sx={{ backgroundColor: "#0080FF", width: "95%", color: "white" }}
+                  variant="contained"
+                  sx={{ width: "50%", marginTop: 5 }}
+                  type="submit"
+                >
+                  Submit
+                </LoadingButton>
               </FormProvider>
-              <Stack
-                sx={{
-                  marginTop: 5,
-                  gap: 1,
-                  paddingRight: 15,
-                  paddingLeft: 15,
-                }}
-              >
-                <EducationalBackground />
-              </Stack>
             </>
           )}
         </Box>
@@ -286,8 +297,58 @@ export default function SetupProfile(_props) {
             </IconButton>
           </>
         )}
-
         {activeStep === 3 && (
+          <>
+            {" "}
+            <IconButton
+              style={{
+                position: "absolute",
+                left: 30,
+                top: "50%",
+                zIndex: 999,
+              }}
+              onClick={() => {
+                setActiveStep(activeStep - 1);
+              }}
+            >
+              <Iconify
+                icon={"ic:round-arrow-back-ios"}
+                sx={{
+                  width: 70,
+                  height: 70,
+                  color: "#2065d1",
+                  cursor: "pointer",
+                }}
+              />
+            </IconButton>
+            <EducationalBackground setActiveStep={setActiveStep} activeStep={activeStep} />
+            <IconButton
+              style={{
+                position: "absolute",
+                right: 30,
+                top: "50%",
+              }}
+              onClick={() => {
+                if (trainings.length < 1) {
+                  toast.error("Please submit at least 1 training");
+                  return;
+                }
+                setActiveStep(activeStep + 1);
+              }}
+            >
+              <Iconify
+                icon={"ic:round-arrow-forward-ios"}
+                sx={{
+                  width: 70,
+                  height: 70,
+                  color: "#2065d1",
+                  cursor: "pointer",
+                }}
+              />
+            </IconButton>{" "}
+          </>
+        )}
+        {activeStep === 4 && (
           <>
             <IconButton
               style={{

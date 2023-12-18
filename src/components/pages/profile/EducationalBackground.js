@@ -10,7 +10,7 @@ import { EducationSchema } from "../../../lib/yup-schema/EducationSchema";
 import { useDispatch } from "react-redux";
 import { setEducation } from "../../../store/slice/EducationalBackgroundSlice";
 
-const EducationalBackground = () => {
+const EducationalBackground = ({setActiveStep, activeStep}) => {
   const { education } = useSelector((store) => store.education);
   const dispatch = useDispatch();
   const defaultValues = {
@@ -67,6 +67,7 @@ const EducationalBackground = () => {
   const onSubmit = (data) => {
     dispatch(setEducation(data));
     toast.success("Saved locally.")
+    setActiveStep(activeStep + 1)
   };
 
   return (
@@ -76,9 +77,12 @@ const EducationalBackground = () => {
           <Box
             sx={{
               display: "flex",
-              width: "100%",
-              height: "45vh",
+              width: "80%",
+              height: "55vh",
               overflow: "auto",
+              justifyContent: 'center',
+              alignItems: 'center',
+              alignSelf: 'center', 
             }}
           >
             <Stack sx={{ gap: 1, width: "100%", marginTop: 2 }}>

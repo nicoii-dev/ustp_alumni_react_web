@@ -32,6 +32,7 @@ import moment from "moment";
 import Page from "../components/Page";
 import Iconify from "../components/Iconify";
 import civilStatusList from "../lib/json-data/civilStatus.json";
+import MyDropzone from "../components/dropzone/Dropzone";
 
 import {
   RHFTextField,
@@ -54,6 +55,7 @@ import {
   setUserStreet,
   setUserZipcode,
 } from "../store/slice/AddressSlice";
+import { setImage, setProfileImage } from "../store/slice/SetupProfileSlice";
 
 const genderData = [
   { value: "male", label: "Male" },
@@ -65,6 +67,7 @@ function ProfilePage() {
   const { getProfile, updateProfile } = userApi;
   const [updateTrigger, setUpdateTrigger] = useState(false);
   const queryClient = useQueryClient();
+  const { image } = useSelector((store) => store.profileSetup);
 
   const [regionData, setRegion] = useState([]);
   const [provinceData, setProvince] = useState([]);
@@ -177,9 +180,11 @@ function ProfilePage() {
     reset,
     formState: { isSubmitting },
   } = methods;
+  console.log(profileData);
 
   const educationHandler = useCallback(() => {
     if (profileStatus === "success") {
+      dispatch(setProfileImage(profileData?.data?.image));
       reset({
         civilStatus: profileData?.data?.civil_status,
         dob: profileData?.data?.dob,
@@ -249,24 +254,40 @@ function ProfilePage() {
   );
 
   const onSubmit = async (data) => {
-    const profilePayload = {
-      civil_status: data.civilStatus,
-      dob: moment(data.dob).format("YYYY-MM-DD"),
-      gender: data.gender,
-      phone_number: data.phoneNumber,
-      street: userStreet,
-      barangay: userBarangay,
-      barangay_code: barangayCode,
-      city: userCity,
-      city_code: cityCode,
-      province: userProvince,
-      province_code: provinceCode,
-      region: userRegion,
-      region_code: regionCode,
-      zipcode: userZipcode,
-    };
-    console.log(profilePayload);
-    await Update(profilePayload);
+    // const profilePayload = {
+    //   civil_status: data.civilStatus,
+    //   dob: moment(data.dob).format("YYYY-MM-DD"),
+    //   gender: data.gender,
+    //   phone_number: data.phoneNumber,
+    //   street: userStreet,
+    //   barangay: userBarangay,
+    //   barangay_code: barangayCode,
+    //   city: userCity,
+    //   city_code: cityCode,
+    //   province: userProvince,
+    //   province_code: provinceCode,
+    //   region: userRegion,
+    //   region_code: regionCode,
+    //   zipcode: userZipcode,
+    // };
+    // console.log(profilePayload);
+    const formData = new FormData();
+    formData.append("civil_status", data.civil_status);
+    formData.append("dob", moment(data.dob).format("YYYY-MM-DD"));
+    formData.append("image", image[0].file);
+    formData.append("gender", data.gender);
+    formData.append("phone_number", data.phoneNumber);
+    formData.append("street", userStreet);
+    formData.append("barangay", userBarangay);
+    formData.append("barangay_code", barangayCode);
+    formData.append("city", userCity);
+    formData.append("city_code", cityCode);
+    formData.append("province", userProvince);
+    formData.append("province_code", provinceCode);
+    formData.append("region", userRegion);
+    formData.append("region_code", regionCode);
+    formData.append("zipcode", userZipcode);
+    await Update(formData);
   };
 
   return (
@@ -320,6 +341,32 @@ function ProfilePage() {
           </Box>
           <>
             <Stack>
+              <Box>
+                {updateTrigger ? (
+                  <Box sx={{width: 200}}>
+
+                  <MyDropzone images={image} setImages={setImage} maxFile={1} />
+                  </Box>
+                ) : (
+                  <img
+                    alt="profile"
+                    src={
+                      profileData?.data?.image
+                        ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/${profileData?.data?.image}`
+                        : "/static/ustp-logo.jpg"
+                    }
+                    style={{
+                      height: 120,
+                      width: 120,
+                      marginBottom: 10,
+                      justifyContent: "center",
+                      justifySelf: "center",
+                      alignSelf: "center",
+                      borderRadius: 150,
+                    }}
+                  />
+                )}
+              </Box>
               <Stack spacing={2} sx={{ marginTop: 5 }}>
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                   <RHFTextField

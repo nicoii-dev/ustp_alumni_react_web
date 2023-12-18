@@ -31,6 +31,7 @@ import EducationPage from "../pages/User/Education/EducationPage";
 import ViewUserPage from "../pages/Admin/ViewUserPage";
 import UsersPage from "../pages/Admin/UsersPage";
 import ProfilePage from "../pages/ProfilePage";
+import AchievementsPage from "../components/pages/achievements/Achievements";
 
 // ----------------------------------------------------------------------
 
@@ -71,6 +72,7 @@ export default function MainRoute() {
           <Route path="job-posting" element={<UserJobPosting />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="education" element={<EducationPage />} />
+          <Route path="achievements" element={<AchievementsPage />} />
           <Route path="employment" element={<EmploymentPage />} />
           <Route path="trainings" element={<TrainingsPage />} />
           <Route

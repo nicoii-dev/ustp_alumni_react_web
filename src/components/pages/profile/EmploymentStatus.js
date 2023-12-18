@@ -29,6 +29,7 @@ import {
   setOccupation,
   setStatus,
   setLineOfBusiness,
+  setProfession,
 } from "../../../store/slice/EmploymentStatusSlice";
 import employmentApi from "../../../lib/services/employmentApi";
 
@@ -40,6 +41,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
     stateOfReasons,
     lineOfBusiness,
     employmentId,
+    profession,
   } = useSelector((store) => store.employment);
   const dispatch = useDispatch();
   const [updateTrigger, setUpdateTrigger] = useState(false);
@@ -50,7 +52,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
     dispatch(setStatus(event.target.value));
     dispatch(setOccupation(""));
     dispatch(setReasons([]));
-    dispatch(setType(""));
+    dispatch(setType("regular-permanent"));
   };
 
   const onOccupationChange = (e) => {
@@ -58,6 +60,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
   };
 
   const onEmploymentTypeChange = (e) => {
+    console.log(e.target.value)
     dispatch(setType(e.target.value));
   };
 
@@ -75,7 +78,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
     dispatch(setReasons(reasonsArray));
   };
 
-  const error = stateOfReasons.length < 1;
+  const error = stateOfReasons?.length < 1;
 
   const onNextHandler = () => {
     if (currentlyEmployed === "yes") {
@@ -115,6 +118,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
     } else {
       employmentPayload = {
         status: currentlyEmployed,
+        type: type,
         state_of_reasons: `[${stateOfReasons}]`,
       };
     }
@@ -233,7 +237,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
               value={currentOccupation}
               onChange={onOccupationChange}
               fullWidth
-              error={currentOccupation.length < 1}
+              error={currentOccupation?.length < 1}
               helperText={"Occupation is required"}
               placeholder="Present Occupation"
               name="presentOccupation"
@@ -243,10 +247,20 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
               value={lineOfBusiness}
               onChange={(e) => dispatch(setLineOfBusiness(e.target.value))}
               fullWidth
-              error={currentOccupation.length < 1}
+              error={currentOccupation?.length < 1}
               helperText={"Line of Business is required"}
               placeholder="Line of Business"
               name="lineOfBusiness"
+              disabled={!updateTrigger && activeStep === undefined}
+            />
+            <TextField
+              value={profession}
+              onChange={(e) => dispatch(setProfession(e.target.value))}
+              fullWidth
+              error={currentOccupation?.length < 1}
+              helperText={"Profession is required"}
+              placeholder="Profession"
+              name="profession"
               disabled={!updateTrigger && activeStep === undefined}
             />
           </Stack>
@@ -376,7 +390,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
             right: 30,
             top: "50%",
           }}
-          disabled={currentOccupation.length < 1 && stateOfReasons.length < 1}
+          disabled={currentOccupation?.length < 1 && stateOfReasons?.length < 1}
           onClick={onNextHandler}
         >
           <Iconify

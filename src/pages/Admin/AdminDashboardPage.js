@@ -24,15 +24,14 @@ function AdminDashboardPage() {
   } = useQuery(["get-dashboard"], () => getDashboard(), {
     retry: 3, // Will retry failed requests 10 times before displaying an error
   });
-  console.log(dashboardData)
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        {/* <Typography variant="h4" sx={{ mb: 5 }}>
           Hi,{" "}
           {userData?.first_name?.charAt(0)?.toUpperCase() +
             userData?.first_name?.slice(1)}
-        </Typography>
+        </Typography> */}
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>

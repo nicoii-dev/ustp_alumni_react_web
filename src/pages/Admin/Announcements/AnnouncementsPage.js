@@ -187,7 +187,7 @@ function AnnouncementsPage() {
         }
         styles={{
           div: { textAlign: "center" },
-          title: { fontSize: 25, position: "relatie" },
+          title: { fontSize: 25, position: "relative" },
           subtitle: { fontSize: 24, fontWeight: "bold" },
         }}
         width="sm"

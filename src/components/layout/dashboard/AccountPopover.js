@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
+import { useSelector } from "react-redux";
 // @mui
 import { alpha } from "@mui/material/styles";
 import {
@@ -28,6 +29,7 @@ export default function AccountPopover() {
   const queryClient = useQueryClient();
   const { logout } = userApi;
   const userData = getLocalStorageItem("userData");
+  const { profileImage } = useSelector((store) => store.profileSetup);
 
   const { mutate: logOut, isLoading: logOutLoading } = useMutation(
     () => logout(),
@@ -69,7 +71,14 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar src={"/static/avatar_default.jpg"} alt="photoURL" />
+        <Avatar
+          src={
+            profileImage
+              ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/${profileImage}`
+              : "/static/ustp-logo.jpg"
+          }
+          alt="photoURL"
+        />
       </IconButton>
 
       <MenuPopover

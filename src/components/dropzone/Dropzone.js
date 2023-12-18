@@ -6,7 +6,13 @@ import Iconify from "../Iconify";
 
 // redux
 
-const MyDropzone = ({images, setImages, imagesToDelete, setImagesToDelete}) => {
+const MyDropzone = ({
+  images,
+  setImages,
+  imagesToDelete,
+  setImagesToDelete,
+  maxFile = 0,
+}) => {
   const dispatch = useDispatch();
   // const [imageFiles, setImageFiles] = useState([]);
   // const { images } = useSelector((store) => store.post);
@@ -21,35 +27,42 @@ const MyDropzone = ({images, setImages, imagesToDelete, setImagesToDelete}) => {
       const mappedRej = rejFiles.map((r) => ({ ...r }));
       //@ts-ignore
       // setImageFiles([...imageFiles, ...mappedAcc, ...mappedRej]);
-      await dispatch(setImages([...images, ...mappedAcc, ...mappedRej]))
+      await dispatch(setImages([...images, ...mappedAcc, ...mappedRej]));
     },
     [dispatch, images, setImages]
   );
 
   const onDelete = (fileWrapper) => {
-    if(fileWrapper.fileId !== 0) {
-      dispatch(setImagesToDelete([...imagesToDelete, fileWrapper.fileId]))
+    if (fileWrapper.fileId !== 0) {
+      dispatch(setImagesToDelete([...imagesToDelete, fileWrapper.fileId]));
     }
     dispatch(setImages(images.filter((fw) => fw.file !== fileWrapper.file)));
   };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: {'image/*': ['.jpeg', '.jpg', '.png']},
+    accept: { "image/*": [".jpeg", ".jpg", ".png"] },
     maxSize: 5000 * 1024, //5mb
   });
 
   return (
     <>
       <Box>
-        <div {...getRootProps()}>
+        <div
+          {...getRootProps()}
+          // eslint-disable-next-line eqeqeq
+          style={{ pointerEvents: (images.length >= maxFile && maxFile != 0) ? "none" : "auto" }}
+        >
           <div>
             <label
               onClick={(e) => {
                 e.stopPropagation();
               }}
               htmlFor="dropzone-file"
-              style={{ height: 200, width: 100 }}
+              style={{
+                height: 200,
+                width: 100,
+              }}
             >
               <div
                 style={{
@@ -88,6 +101,7 @@ const MyDropzone = ({images, setImages, imagesToDelete, setImagesToDelete}) => {
                 id="dropzone-file"
                 // type="file"
                 className="hidden"
+                // eslint-disable-next-line eqeqeq
                 {...getInputProps()}
               />
             </label>

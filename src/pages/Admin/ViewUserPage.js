@@ -38,6 +38,7 @@ import {
   setLineOfBusiness,
   setEmploymentId,
 } from "../../store/slice/EmploymentStatusSlice";
+import AchievementsPage from "../../components/pages/achievements/Achievements";
 
 function ViewUserPage() {
   const dispatch = useDispatch();
@@ -105,7 +106,7 @@ function ViewUserPage() {
   const handleChange = (event, newValue) => {
     setActiveTab(newValue);
   };
-
+  console.log(user);
   return (
     <Page title="View User">
       <Container maxWidth="xl">
@@ -271,7 +272,11 @@ function ViewUserPage() {
                             Civil Status:
                           </Typography>
                         </Stack>
-                        <Typography variant="h6" gutterBottom sx={{textTransform: 'capitalize'}}>
+                        <Typography
+                          variant="h6"
+                          gutterBottom
+                          sx={{ textTransform: "capitalize" }}
+                        >
                           {user?.civil_status}
                         </Typography>
                       </Stack>
@@ -316,15 +321,23 @@ function ViewUserPage() {
           <TabContext value={activeTab}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
               <Tab label="Employment Details" value="Employment" />
+              <Tab label="Job History" value="Job History" />
               <Tab label="Trainings" value="Trainings" />
+              <Tab
+                label="Educational Background"
+                value="Educational Background"
+              />
+              <Tab label="Achievements" value="Achievements" />
             </TabList>
             <TabPanel value="Employment">
               <EmploymentStatus admin={false} />
+            </TabPanel>
+            <TabPanel value="Job History">
               <AppTable
                 hasSearch={false}
                 hasButton={false}
                 TABLE_HEAD={[
-                  { id: "company", label: "Title", align: "center" },
+                  { id: "company", label: "Company", align: "center" },
                   { id: "position", label: "Position", align: "center" },
                   { id: "dateStarted", label: "Date Started", align: "center" },
                   { id: "dateEnded", label: "Date Ended", align: "center" },
@@ -347,6 +360,264 @@ function ViewUserPage() {
                   { id: "institution", label: "Institution", align: "center" },
                 ]}
                 TABLE_DATA={trainingsList || []}
+              />
+            </TabPanel>
+            <TabPanel value="Educational Background">
+              <CardContent>
+                <Box
+                  display="flex"
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
+                  padding={5}
+                  height={450}
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={4}>
+                      <Stack
+                        direction="column"
+                        alignItems="flex-start"
+                        justifyContent={"space-evenly"}
+                        spacing={0}
+                      >
+                        <Stack
+                          direction="row"
+                          alignItems="flex-start"
+                          justifyContent="space-evenly"
+                          gap={2}
+                        >
+                          <Stack>
+                            <Typography variant="h6" gutterBottom>
+                              College:
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {user?.education.college}
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="flex-start"
+                          gap={2}
+                        >
+                          <Stack>
+                            <Typography variant="h6" gutterBottom>
+                              Address:
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {user?.education.college_address}
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="flex-start"
+                          gap={2}
+                        >
+                          <Stack>
+                            <Typography variant="h6" gutterBottom>
+                              Course:
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {user?.education.course}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        justifyContent="flex-start"
+                        gap={2}
+                      >
+                        <Stack>
+                          <Typography variant="h6" gutterBottom>
+                            School Year:
+                          </Typography>
+                        </Stack>
+                        <Typography
+                          variant="h6"
+                          gutterBottom
+                          sx={{ textTransform: "capitalize" }}
+                        >
+                          {user?.education?.college_sy
+                            ? `${
+                                JSON.parse(user?.education?.college_sy)[0]
+                              } - ${JSON.parse(user?.education?.college_sy)[1]}`
+                            : null}
+                        </Typography>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Stack
+                        direction="column"
+                        alignItems="flex-start"
+                        justifyContent={"space-evenly"}
+                        spacing={0}
+                      >
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="flex-start"
+                          gap={2}
+                        >
+                          <Stack>
+                            <Typography variant="h6" gutterBottom>
+                              High School:
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {user?.education.high_school}
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="flex-start"
+                          gap={2}
+                        >
+                          <Stack>
+                            <Typography variant="h6" gutterBottom>
+                              High School Address:
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {user?.education?.high_address}
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="flex-start"
+                          gap={2}
+                        >
+                          <Stack>
+                            <Typography variant="h6" gutterBottom>
+                              School Year:
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {user?.education?.high_sy
+                              ? `${JSON.parse(user?.education?.high_sy)[0]} - ${
+                                  JSON.parse(user?.education?.high_sy)[1]
+                                }`
+                              : null}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Stack
+                        direction="column"
+                        alignItems="flex-start"
+                        justifyContent={"space-evenly"}
+                        spacing={0}
+                      >
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="flex-start"
+                          gap={2}
+                        >
+                          <Stack>
+                            <Typography variant="h6" gutterBottom>
+                              Elementary School:
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {user?.education.elem_school}
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="flex-start"
+                          gap={2}
+                        >
+                          <Stack>
+                            <Typography variant="h6" gutterBottom>
+                              Elementary School Address:
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {user?.education?.elem_address}
+                          </Typography>
+                        </Stack>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="flex-start"
+                          gap={2}
+                        >
+                          <Stack>
+                            <Typography variant="h6" gutterBottom>
+                              School Year:
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {user?.education?.elem_sy
+                              ? `${JSON.parse(user?.education?.elem_sy)[0]} - ${
+                                  JSON.parse(user?.education?.elem_sy)[1]
+                                }`
+                              : null}
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </CardContent>
+            </TabPanel>
+            <TabPanel value="Achievements">
+              <AppTable
+                hasButton={false}
+                hasSearch={false}
+                TABLE_HEAD={[
+                  // { id: "id", label: "ID", align: "center" },
+                  { id: "title", label: "Title", align: "center" },
+                  { id: "category", label: "Category", align: "center" },
+                  { id: "date", label: "Date", align: "center" },
+                  { id: "description", label: "Description", align: "center" },
+                  // { id: "institution", label: "Institution", align: "center" },
+                ]}
+                TABLE_DATA={userData?.data?.achievements || []}
               />
             </TabPanel>
           </TabContext>

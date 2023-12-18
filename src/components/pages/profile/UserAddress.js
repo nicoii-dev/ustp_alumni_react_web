@@ -53,13 +53,14 @@ export default function UserAddress({ handleClose }) {
   } = useSelector((store) => store.address);
   const { trainings } = useSelector((store) => store.training);
   const { education } = useSelector((store) => store.education);
-  const { profileSetup } = useSelector((store) => store.profileSetup);
+  const { profileSetup, image } = useSelector((store) => store.profileSetup);
   const {
     currentOccupation,
     currentlyEmployed,
     type,
     stateOfReasons,
     lineOfBusiness,
+    profession
   } = useSelector((store) => store.employment);
 
   const region = () => {
@@ -127,31 +128,32 @@ export default function UserAddress({ handleClose }) {
   useEffect(() => {
     region();
   }, []);
-
+  console.log(profileSetup.dob);
   const onSubmit = async () => {
     setIsLoading(true);
     let employmentPayload = {};
-    const profilePayload = {
-      civil_status: profileSetup.civil_status,
-      dob: moment(profileSetup.dob).format("YYYY-MM-DD"),
-      street: userStreet,
-      barangay: userBarangay,
-      barangay_code: barangayCode,
-      city: userCity,
-      city_code: cityCode,
-      province: userProvince,
-      province_code: provinceCode,
-      region: userRegion,
-      region_code: regionCode,
-      zipcode: userZipcode,
-    };
-    console.log(profilePayload);
+    const formData = new FormData();
+    formData.append("civil_status", profileSetup.civil_status);
+    formData.append("dob", moment(profileSetup.dob).format("YYYY-MM-DD"));
+    formData.append("image", image[0].file);
+    formData.append("street", userStreet);
+    formData.append("barangay", userBarangay);
+    formData.append("barangay_code", barangayCode);
+    formData.append("city", userCity);
+    formData.append("city_code", cityCode);
+    formData.append("province", userProvince);
+    formData.append("province_code", provinceCode);
+    formData.append("region", userRegion);
+    formData.append("region_code", regionCode);
+    formData.append("zipcode", userZipcode);
+
     if (currentlyEmployed === "yes") {
       employmentPayload = {
         status: currentlyEmployed,
         type: type,
         present_occupation: currentOccupation,
         line_of_business: lineOfBusiness,
+        profession: profession,
       };
     } else {
       employmentPayload = {
@@ -184,15 +186,15 @@ export default function UserAddress({ handleClose }) {
 
     try {
       await createEducation(educationPayload);
-      await addProfileAddress(profilePayload);
+      await addProfileAddress(formData);
       await createEmployment(employmentPayload);
       await createTraining(trainingPayload);
       toast.success("Information successfully saved.");
-      setIsLoading(false)
+      setIsLoading(false);
       handleClose();
     } catch (error) {
       toast.error("Something went wrong");
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 

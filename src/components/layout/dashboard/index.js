@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useQuery } from 'react-query';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
@@ -7,6 +8,8 @@ import { styled } from '@mui/material/styles';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
 import SetupProfile from '../../pages/profile/SetupProfile';
+import { setProfileImage } from '../../../store/slice/SetupProfileSlice';
+import userApi from '../../../lib/services/userApi';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +40,22 @@ const MainStyle = styled('div')(({ theme }) => ({
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
- 
+  const { getProfile, updateProfile } = userApi;
+
+  const { data: profileData, status: profileStatus } = useQuery(
+    ["get-user-profile"],
+    () => getProfile(),
+    {
+      retry: 3, // Will retry failed requests 10 times before displaying an error
+    }
+  );
+  useEffect(() => {
+    if(profileStatus === 'success') {
+      dispatch(setProfileImage(profileData?.data?.image));
+    }
+
+  }, [dispatch, profileData?.data?.image, profileStatus])
+
   return (
     <RootStyle>
       <DashboardNavbar onOpenSidebar={() => setOpen(true)} />
