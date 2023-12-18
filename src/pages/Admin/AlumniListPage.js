@@ -59,7 +59,7 @@ function AlumniListPage() {
     if (alumniStatus === "success") {
       setAlumniList(
         alumniData?.data?.map((data) => ({
-          tobeSearch: data?.last_name,
+          tobeSearch: data?.last_name + data?.course + data?.year_graduated,
           firstName: capitalize(data?.first_name),
           middleName: capitalize(data?.middle_name),
           lastName: capitalize(data?.last_name),
