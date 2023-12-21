@@ -35,6 +35,11 @@ const adminNav = [
     path: '/users',
     icon: getIcon('fa-solid:users'),
   },
+  {
+    title: 'Reports',
+    path: '/reports',
+    icon: getIcon('mdi:report-bar'),
+  },
   // {
   //   title: 'System Settings',
   //   icon: getIcon('ep:tools'),

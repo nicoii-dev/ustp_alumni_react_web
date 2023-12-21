@@ -33,24 +33,24 @@ import JobHistory from "../../../components/pages/job-history/JobHistory";
 
 function EmploymentPage() {
   const dispatch = useDispatch();
-  const { getAllEmployment } = employmentApi;
+  const { getEmployment } = employmentApi;
 
   const {
     data: employmentData,
     status: employmentStatus,
     // isFetching: jobsIsFetching,
-  } = useQuery(["get-all-employment"], () => getAllEmployment(), {
+  } = useQuery(["get-user-employment"], () => getEmployment(), {
     retry: 3, // Will retry failed requests 10 times before displaying an error
   });
 
   const employmentHandler = useCallback(() => {
     if(employmentStatus === 'success') {
-      dispatch(setEmploymentId(employmentData.data[0].id));
-      dispatch(setStatus(employmentData.data[0].status));
-      dispatch(setOccupation(employmentData.data[0].present_occupation));
-      dispatch(setReasons(employmentData.data[0].state_of_reasons || []));
-      dispatch(setType(employmentData.data[0].type));
-      dispatch(setLineOfBusiness(employmentData.data[0].line_of_business));
+      dispatch(setEmploymentId(employmentData.data.id));
+      dispatch(setStatus(employmentData.data.status));
+      dispatch(setOccupation(employmentData.data.present_occupation));
+      dispatch(setReasons(employmentData.data.state_of_reasons || []));
+      dispatch(setType(employmentData.data.type));
+      dispatch(setLineOfBusiness(employmentData.data.line_of_business));
     }
 
   }, [dispatch, employmentData, employmentStatus])

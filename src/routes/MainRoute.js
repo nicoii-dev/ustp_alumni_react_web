@@ -32,6 +32,7 @@ import ViewUserPage from "../pages/Admin/ViewUserPage";
 import UsersPage from "../pages/Admin/UsersPage";
 import ProfilePage from "../pages/ProfilePage";
 import AchievementsPage from "../components/pages/achievements/Achievements";
+import ReportsPage from "../pages/Admin/ReportsPage";
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,7 @@ export default function MainRoute() {
           <Route path="job-posting" element={<JobPostingPage />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="users/view-user/:userId" element={<ViewUserPage />} />
+          <Route path="reports" element={<ReportsPage />} />
           <Route
             path="*"
             element={<Navigate to="404" state={{ from: location }} replace />}

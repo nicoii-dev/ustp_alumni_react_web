@@ -89,7 +89,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
     }
     setActiveStep(activeStep + 1);
   };
-
+  console.log(employmentId)
   const { mutate: Update, isLoading: updateIsLoading } = useMutation(
     (payload) => updateEmployment(employmentId, payload),
     {
@@ -114,6 +114,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
         type: type,
         present_occupation: currentOccupation,
         line_of_business: lineOfBusiness,
+        profession: profession
       };
     } else {
       employmentPayload = {
@@ -122,6 +123,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
         state_of_reasons: `[${stateOfReasons}]`,
       };
     }
+    console.log(employmentPayload)
     await Update(employmentPayload);
   };
 

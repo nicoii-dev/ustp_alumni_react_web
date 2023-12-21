@@ -59,7 +59,7 @@ function UsersPage() {
 
   useEffect(() => {
     if (usersStatus === "success") {
-      const newList = usersData.data.filter((item) => item?.role !== "admin");
+      const newList = usersData?.data?.filter((item) => item?.role !== "admin");
       console.log(newList);
       setUsersList(
         newList?.map((data) => ({
