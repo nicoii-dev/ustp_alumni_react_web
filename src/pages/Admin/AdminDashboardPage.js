@@ -10,6 +10,8 @@ import Iconify from "../../components/Iconify";
 import { getLocalStorageItem } from "../../lib/util/getLocalStorage";
 import dashboardApi from "../../lib/services/dashboardApi";
 import AdminChart from "../../components/graph/AdminChart";
+import AdminLineGraph from "../../components/AdminLineGraph";
+import reportsApi from "../../lib/services/reportsApi";
 
 function AdminDashboardPage() {
   const dispatch = useDispatch();
@@ -24,6 +26,56 @@ function AdminDashboardPage() {
   } = useQuery(["get-dashboard"], () => getDashboard(), {
     retry: 3, // Will retry failed requests 10 times before displaying an error
   });
+
+  const { getReports } = reportsApi;
+  const [reportsList, setReportsList] = useState([]);
+  const [unEmployedLabel, setUnemployedLabel] = useState([]);
+  const [employedLabel, setEmployedLabel] = useState([]);
+
+  const {
+    data: reportsData,
+    status: reportsStatus,
+    // isFetching: usersIsFetching,
+  } = useQuery(["get-reports"], () => getReports(), {
+    retry: 3, // Will retry failed requests 10 times before displaying an error
+  });
+  useEffect(() => {
+    if (reportsStatus === "success") {
+      setReportsList(reportsData.data);
+      let unLabel = [];
+      reportsData?.data?.unemployed?.map((data) => {
+        let itemIndex = unLabel.filter(
+          (elem) => elem.course === data.user.alumni.course
+        )[0];
+        if (itemIndex) {
+          itemIndex.quantity++;
+        } else {
+          unLabel.push({
+            course: data.user.alumni.course,
+            quantity: 1,
+          });
+        }
+      });
+      setUnemployedLabel(unLabel);
+
+      let label = [];
+      reportsData?.data?.employed?.map((data) => {
+        let itemIndex = label.filter(
+          (elem) => elem.course === data.user.alumni.course
+        )[0];
+        if (itemIndex) {
+          itemIndex.quantity++;
+        } else {
+          label.push({
+            course: data.user.alumni.course,
+            quantity: 1,
+          });
+        }
+      });
+      setEmployedLabel(label);
+    }
+  }, [reportsStatus, reportsData]);
+
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
@@ -70,7 +122,15 @@ function AdminDashboardPage() {
           </Grid>
           <Grid item xs={12} sm={12} md={12}>
             <Box sx={{ height: 300 }}>
-              <AdminChart lineGraphData={[]} />
+              <AdminLineGraph
+                lineGraphData={employedLabel.map((a) => a.quantity)}
+                lineLabel={employedLabel.map((a) => a.course)}
+                label="Employed"
+                lineGraphData2={unEmployedLabel.map((a) => a.quantity)}
+                lineLabel2={unEmployedLabel.map((a) => a.course)}
+                label2="Unemployed"
+                dashboard={true}
+              />
             </Box>
           </Grid>
         </Grid>

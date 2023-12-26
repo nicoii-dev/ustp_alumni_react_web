@@ -16,7 +16,11 @@ import _ from "lodash";
 const AdminLineGraph = ({
   lineGraphData = [],
   lineLabel = [],
-  label="Employed",
+  label = "Employed",
+  lineGraphData2 = [],
+  lineLabel2 = [],
+  label2 = "Unemployed",
+  dashboard = false
 }) => {
   ChartJS.register(
     Title,
@@ -50,25 +54,58 @@ const AdminLineGraph = ({
   });
 
   useEffect(() => {
-    setData({
-      labels: lineLabel,
-      datasets: [
-        {
-          showLabel: true,
-          data: lineGraphData,
-          label: label,
-          borderColor: "#1282A2",
-          tension: 0.5,
-          fill: true,
-          display: true,
-          showLine: true,
-          // legend: {
-          //   display: false
-          // }
-        },
-      ],
-    });
-  }, [lineGraphData]);
+    console.log('1')
+    if(dashboard) {
+      setData({
+        labels: lineLabel,
+        datasets: [
+          {
+            showLabel: true,
+            data: lineGraphData,
+            label: label,
+            borderColor: "#1282A2",
+            tension: 0.5,
+            fill: true,
+            display: true,
+            showLine: true,
+            // legend: {
+            //   display: false
+            // }
+          },
+          {
+            showLabel: true,
+            data: lineGraphData2,
+            label: label2,
+            tension: 0.5,
+            borderColor: "red",
+            fill: true,
+            display: true,
+            showLine: true,
+          },
+        ],
+      });
+    } else {
+      setData({
+        labels: lineLabel,
+        datasets: [
+          {
+            showLabel: true,
+            data: lineGraphData,
+            label: label,
+            borderColor: "#1282A2",
+            tension: 0.5,
+            fill: true,
+            display: true,
+            showLine: true,
+            // legend: {
+            //   display: false
+            // }
+          },
+        ],
+      });
+    }
+
+  }, [label, lineGraphData, lineLabel]);
 
   return (
     data && (

@@ -119,7 +119,7 @@ const EmploymentStatus = ({ activeStep, setActiveStep, admin = true }) => {
     } else {
       employmentPayload = {
         status: currentlyEmployed,
-        type: type,
+        // type: type,
         state_of_reasons: `[${stateOfReasons}]`,
       };
     }
