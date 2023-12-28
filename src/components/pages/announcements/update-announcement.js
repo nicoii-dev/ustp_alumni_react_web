@@ -122,6 +122,7 @@ export default function UpdateAnnouncement({ announcementImages, handleClose }) 
         toast.success(e.data.message);
         dispatch(setAnnouncement(""));
         dispatch(setAnnouncementImages([]));
+        dispatch(setImagesToDelete([]));
         setUpdateIsLoading(false);
         handleClose();
       })

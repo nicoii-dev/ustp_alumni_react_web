@@ -33,6 +33,7 @@ const MyDropzone = ({
   );
 
   const onDelete = (fileWrapper) => {
+    console.log(fileWrapper)
     if (fileWrapper.fileId !== 0) {
       dispatch(setImagesToDelete([...imagesToDelete, fileWrapper.fileId]));
     }

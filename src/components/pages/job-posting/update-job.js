@@ -54,9 +54,9 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
   useEffect(() => {
     reset({
       title: title,
-      description: description
-    })
-  }, [title, description, reset])
+      description: description,
+    });
+  }, [title, description, reset]);
 
   const ImageUrlToBlob = React.useCallback(async () => {
     const mappedImages = [];
@@ -86,7 +86,8 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
         mappedImages.push({
           fileId: data.id,
           file,
-          imageUrl: `${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data?.url,
+          imageUrl:
+            `${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data?.url,
           //   imageUrl: URL.createObjectURL(file),
         });
       })
@@ -99,8 +100,8 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
   }, [ImageUrlToBlob]);
 
   const onUpdate = async (data) => {
-    if(_.isEmpty(images) && _.isEmpty(data.description)) {
-      toast.error('Please add description if you dont have images.');
+    if (_.isEmpty(images) && _.isEmpty(data.description)) {
+      toast.error("Please add description if you dont have images.");
       return;
     }
     setUpdateIsLoading(true);
@@ -132,6 +133,7 @@ export default function UpdateJobPost({ jobImages, handleClose }) {
         dispatch(setJobTitle(""));
         dispatch(setJobDescription(""));
         dispatch(setJobPostImages([]));
+        dispatch(setImagesToDelete([]));
         setUpdateIsLoading(false);
         handleClose();
       })

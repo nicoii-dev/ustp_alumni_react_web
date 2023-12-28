@@ -156,10 +156,16 @@ function ViewUserPage() {
                       >
                         {`${user?.first_name}  ${user?.middle_name} ${user?.last_name}`}
                       </Typography>
-                      <Typography variant="h6" gutterBottom>
+                      <Typography
+                        style={{ fontSize: 16, fontWeight: "bold" }}
+                        gutterBottom
+                      >
                         {user?.email}
                       </Typography>
-                      <Typography variant="h6" gutterBottom>
+                      <Typography
+                        style={{ fontSize: 16, fontWeight: "bold" }}
+                        gutterBottom
+                      >
                         {user?.education?.course}
                       </Typography>
                       <Stack
@@ -246,7 +252,10 @@ function ViewUserPage() {
                             Date of Birth:
                           </Typography>
                         </Stack>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography
+                          style={{ fontSize: 16, fontWeight: "bold" }}
+                          gutterBottom
+                        >
                           {user?.dob}
                         </Typography>
                       </Stack>
@@ -261,7 +270,10 @@ function ViewUserPage() {
                             Gender:
                           </Typography>
                         </Stack>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography
+                          style={{ fontSize: 16, fontWeight: "bold" }}
+                          gutterBottom
+                        >
                           {user?.gender}
                         </Typography>
                       </Stack>
@@ -277,7 +289,7 @@ function ViewUserPage() {
                           </Typography>
                         </Stack>
                         <Typography
-                          variant="h6"
+                          style={{ fontSize: 16, fontWeight: "bold" }}
                           gutterBottom
                           sx={{ textTransform: "capitalize" }}
                         >
@@ -295,7 +307,10 @@ function ViewUserPage() {
                             Phone Number:
                           </Typography>
                         </Stack>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography
+                          style={{ fontSize: 16, fontWeight: "bold" }}
+                          gutterBottom
+                        >
                           {user?.phone_number}
                         </Typography>
                       </Stack>
@@ -310,7 +325,10 @@ function ViewUserPage() {
                             Address:
                           </Typography>
                         </Stack>
-                        <Typography variant="h6" gutterBottom>
+                        <Typography
+                          style={{ fontSize: 16, fontWeight: "bold" }}
+                          gutterBottom
+                        >
                           {`${user?.address?.street}, ${user?.address?.barangay}, ${user?.address?.city}, ${user?.address?.province}, ${user?.address?.region}`}
                         </Typography>
                       </Stack>
@@ -390,12 +408,15 @@ function ViewUserPage() {
                           gap={2}
                         >
                           <Stack>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography
+                              style={{ fontSize: 16, fontWeight: "bold" }}
+                              gutterBottom
+                            >
                               College:
                             </Typography>
                           </Stack>
                           <Typography
-                            variant="h6"
+                            style={{ fontSize: 16 }}
                             gutterBottom
                             sx={{ textTransform: "capitalize" }}
                           >
@@ -409,12 +430,15 @@ function ViewUserPage() {
                           gap={2}
                         >
                           <Stack>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography
+                              style={{ fontSize: 16, fontWeight: "bold" }}
+                              gutterBottom
+                            >
                               Address:
                             </Typography>
                           </Stack>
                           <Typography
-                            variant="h6"
+                            style={{ fontSize: 16 }}
                             gutterBottom
                             sx={{ textTransform: "capitalize" }}
                           >
@@ -428,12 +452,15 @@ function ViewUserPage() {
                           gap={2}
                         >
                           <Stack>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography
+                              style={{ fontSize: 16, fontWeight: "bold" }}
+                              gutterBottom
+                            >
                               Course:
                             </Typography>
                           </Stack>
                           <Typography
-                            variant="h6"
+                            style={{ fontSize: 16 }}
                             gutterBottom
                             sx={{ textTransform: "capitalize" }}
                           >
@@ -448,12 +475,15 @@ function ViewUserPage() {
                         gap={2}
                       >
                         <Stack>
-                          <Typography variant="h6" gutterBottom>
+                          <Typography
+                            style={{ fontSize: 16, fontWeight: "bold" }}
+                            gutterBottom
+                          >
                             School Year:
                           </Typography>
                         </Stack>
                         <Typography
-                          variant="h6"
+                          style={{ fontSize: 16 }}
                           gutterBottom
                           sx={{ textTransform: "capitalize" }}
                         >
@@ -479,12 +509,15 @@ function ViewUserPage() {
                           gap={2}
                         >
                           <Stack>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography
+                              style={{ fontSize: 16, fontWeight: "bold" }}
+                              gutterBottom
+                            >
                               High School:
                             </Typography>
                           </Stack>
                           <Typography
-                            variant="h6"
+                            style={{ fontSize: 16 }}
                             gutterBottom
                             sx={{ textTransform: "capitalize" }}
                           >
@@ -498,12 +531,15 @@ function ViewUserPage() {
                           gap={2}
                         >
                           <Stack>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography
+                              style={{ fontSize: 16, fontWeight: "bold" }}
+                              gutterBottom
+                            >
                               High School Address:
                             </Typography>
                           </Stack>
                           <Typography
-                            variant="h6"
+                            style={{ fontSize: 16 }}
                             gutterBottom
                             sx={{ textTransform: "capitalize" }}
                           >
@@ -517,12 +553,15 @@ function ViewUserPage() {
                           gap={2}
                         >
                           <Stack>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography
+                              style={{ fontSize: 16, fontWeight: "bold" }}
+                              gutterBottom
+                            >
                               School Year:
                             </Typography>
                           </Stack>
                           <Typography
-                            variant="h6"
+                            style={{ fontSize: 16 }}
                             gutterBottom
                             sx={{ textTransform: "capitalize" }}
                           >
@@ -549,12 +588,15 @@ function ViewUserPage() {
                           gap={2}
                         >
                           <Stack>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography
+                              style={{ fontSize: 16, fontWeight: "bold" }}
+                              gutterBottom
+                            >
                               Elementary School:
                             </Typography>
                           </Stack>
                           <Typography
-                            variant="h6"
+                            style={{ fontSize: 16 }}
                             gutterBottom
                             sx={{ textTransform: "capitalize" }}
                           >
@@ -568,12 +610,15 @@ function ViewUserPage() {
                           gap={2}
                         >
                           <Stack>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography
+                              style={{ fontSize: 16, fontWeight: "bold" }}
+                              gutterBottom
+                            >
                               Elementary School Address:
                             </Typography>
                           </Stack>
                           <Typography
-                            variant="h6"
+                            style={{ fontSize: 16 }}
                             gutterBottom
                             sx={{ textTransform: "capitalize" }}
                           >
@@ -587,12 +632,15 @@ function ViewUserPage() {
                           gap={2}
                         >
                           <Stack>
-                            <Typography variant="h6" gutterBottom>
+                            <Typography
+                              style={{ fontSize: 16, fontWeight: "bold" }}
+                              gutterBottom
+                            >
                               School Year:
                             </Typography>
                           </Stack>
                           <Typography
-                            variant="h6"
+                            style={{ fontSize: 16 }}
                             gutterBottom
                             sx={{ textTransform: "capitalize" }}
                           >
