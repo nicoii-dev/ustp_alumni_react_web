@@ -157,7 +157,7 @@ function ViewUserPage() {
                         {`${user?.first_name}  ${user?.middle_name} ${user?.last_name}`}
                       </Typography>
                       <Typography
-                        style={{ fontSize: 16, fontWeight: "bold" }}
+                        style={{ fontSize: 16, fontStyle: 'italic' }}
                         gutterBottom
                       >
                         {user?.email}
@@ -253,7 +253,7 @@ function ViewUserPage() {
                           </Typography>
                         </Stack>
                         <Typography
-                          style={{ fontSize: 16, fontWeight: "bold" }}
+                          style={{ fontSize: 16 }}
                           gutterBottom
                         >
                           {user?.dob}
@@ -271,7 +271,7 @@ function ViewUserPage() {
                           </Typography>
                         </Stack>
                         <Typography
-                          style={{ fontSize: 16, fontWeight: "bold" }}
+                          style={{ fontSize: 16, textTransform: 'capitalize'}}
                           gutterBottom
                         >
                           {user?.gender}
@@ -289,7 +289,7 @@ function ViewUserPage() {
                           </Typography>
                         </Stack>
                         <Typography
-                          style={{ fontSize: 16, fontWeight: "bold" }}
+                          style={{ fontSize: 16}}
                           gutterBottom
                           sx={{ textTransform: "capitalize" }}
                         >
@@ -308,7 +308,7 @@ function ViewUserPage() {
                           </Typography>
                         </Stack>
                         <Typography
-                          style={{ fontSize: 16, fontWeight: "bold" }}
+                          style={{ fontSize: 16 }}
                           gutterBottom
                         >
                           {user?.phone_number}
@@ -326,7 +326,7 @@ function ViewUserPage() {
                           </Typography>
                         </Stack>
                         <Typography
-                          style={{ fontSize: 16, fontWeight: "bold" }}
+                          style={{ fontSize: 16 }}
                           gutterBottom
                         >
                           {`${user?.address?.street}, ${user?.address?.barangay}, ${user?.address?.city}, ${user?.address?.province}, ${user?.address?.region}`}
@@ -418,7 +418,10 @@ function ViewUserPage() {
                           <Typography
                             style={{ fontSize: 16 }}
                             gutterBottom
-                            sx={{ textTransform: "capitalize" }}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontStyle: "italic",
+                            }}
                           >
                             {user?.education.college}
                           </Typography>
@@ -440,7 +443,10 @@ function ViewUserPage() {
                           <Typography
                             style={{ fontSize: 16 }}
                             gutterBottom
-                            sx={{ textTransform: "capitalize" }}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontStyle: "italic",
+                            }}
                           >
                             {user?.education.college_address}
                           </Typography>
@@ -462,7 +468,10 @@ function ViewUserPage() {
                           <Typography
                             style={{ fontSize: 16 }}
                             gutterBottom
-                            sx={{ textTransform: "capitalize" }}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontStyle: "italic",
+                            }}
                           >
                             {user?.education.course}
                           </Typography>
@@ -485,7 +494,10 @@ function ViewUserPage() {
                         <Typography
                           style={{ fontSize: 16 }}
                           gutterBottom
-                          sx={{ textTransform: "capitalize" }}
+                          sx={{
+                            textTransform: "capitalize",
+                            fontStyle: "italic",
+                          }}
                         >
                           {user?.education?.college_sy
                             ? `${
@@ -519,7 +531,10 @@ function ViewUserPage() {
                           <Typography
                             style={{ fontSize: 16 }}
                             gutterBottom
-                            sx={{ textTransform: "capitalize" }}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontStyle: "italic",
+                            }}
                           >
                             {user?.education.high_school}
                           </Typography>
@@ -541,7 +556,10 @@ function ViewUserPage() {
                           <Typography
                             style={{ fontSize: 16 }}
                             gutterBottom
-                            sx={{ textTransform: "capitalize" }}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontStyle: "italic",
+                            }}
                           >
                             {user?.education?.high_address}
                           </Typography>
@@ -563,7 +581,10 @@ function ViewUserPage() {
                           <Typography
                             style={{ fontSize: 16 }}
                             gutterBottom
-                            sx={{ textTransform: "capitalize" }}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontStyle: "italic",
+                            }}
                           >
                             {user?.education?.high_sy
                               ? `${JSON.parse(user?.education?.high_sy)[0]} - ${
@@ -598,7 +619,10 @@ function ViewUserPage() {
                           <Typography
                             style={{ fontSize: 16 }}
                             gutterBottom
-                            sx={{ textTransform: "capitalize" }}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontStyle: "italic",
+                            }}
                           >
                             {user?.education.elem_school}
                           </Typography>
@@ -620,7 +644,10 @@ function ViewUserPage() {
                           <Typography
                             style={{ fontSize: 16 }}
                             gutterBottom
-                            sx={{ textTransform: "capitalize" }}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontStyle: "italic",
+                            }}
                           >
                             {user?.education?.elem_address}
                           </Typography>
@@ -642,7 +669,10 @@ function ViewUserPage() {
                           <Typography
                             style={{ fontSize: 16 }}
                             gutterBottom
-                            sx={{ textTransform: "capitalize" }}
+                            sx={{
+                              textTransform: "capitalize",
+                              fontStyle: "italic",
+                            }}
                           >
                             {user?.education?.elem_sy
                               ? `${JSON.parse(user?.education?.elem_sy)[0]} - ${

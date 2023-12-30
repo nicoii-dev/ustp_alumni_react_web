@@ -84,8 +84,8 @@ function ReportsPage() {
                       paddingLeft: 20,
                       marginTop: 0,
                       fontSize: 16,
-                      fontWeight: "bold",
                       textTransform: "capitalize",
+                      fontStyle: 'italic' 
                     }}
                   >
                     {`${index + 1}. ${data.user.first_name} ${
@@ -105,7 +105,7 @@ function ReportsPage() {
           <Grid item xs={12} sm={6} md={4}>
             <Card style={{ height: 350, overflow: "auto" }}>
               <Typography
-                style={{ padding: 20, fontSize: 20, fontWeight: "bold" }}
+                style={{ padding: 20, fontSize: 20, fontWeight: "bold"}}
               >
                 {`Unemployed: ${reportsList?.total_unemployed}`}
               </Typography>
@@ -116,8 +116,8 @@ function ReportsPage() {
                       paddingLeft: 20,
                       marginTop: 0,
                       fontSize: 16,
-                      fontWeight: "bold",
                       textTransform: "capitalize",
+                      fontStyle: 'italic'
                     }}
                   >
                     {`${index + 1}. ${data.user.first_name} ${
