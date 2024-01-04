@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useQuery} from "react-query";
+import { useQuery } from "react-query";
 // mui
-import {
-  Container,
-  Typography,
-  Box,
-  Grid,
-  Card,
-} from "@mui/material";
+import { Container, Typography, Box, Grid, Card } from "@mui/material";
 // components
 import Page from "../../components/Page";
 import reportsApi from "../../lib/services/reportsApi";
 import AdminLineGraph from "../../components/AdminLineGraph";
+import AppWidgetAdmin from "../../components/sections/@dashboard/app/AppWidgetAdmin";
+import ReportsWidget from "../../components/sections/@dashboard/app/ReportsWidget";
 
 function ReportsPage() {
   const { getReports } = reportsApi;
@@ -69,6 +65,23 @@ function ReportsPage() {
         <Box sx={{ backgroundColor: "#CCE5FF", padding: 2, borderRadius: 2 }}>
           <Typography variant="h4">Reports Page</Typography>
         </Box>
+        <Box
+          container
+          spacing={3}
+          sx={{ justifyItems: "center", marginTop: 1, display: 'flex', gap: 2, justifyContent: 'center' }}
+        >
+          {reportsList?.courses?.map((data, index) => {
+            if (data.course !== "")
+              return (
+                <ReportsWidget
+                  title={data.course}
+                  total={data?.count}
+                  icon={"fa6-solid:user-graduate"}
+                />
+              );
+          })}
+        </Box>
+
         <Grid container spacing={3} sx={{ marginTop: 1 }}>
           <Grid item xs={12} sm={6} md={4}>
             <Card style={{ height: 350, overflow: "auto" }}>
@@ -85,7 +98,7 @@ function ReportsPage() {
                       marginTop: 0,
                       fontSize: 16,
                       textTransform: "capitalize",
-                      fontStyle: 'italic' 
+                      fontStyle: "italic",
                     }}
                   >
                     {`${index + 1}. ${data.user.first_name} ${
@@ -99,13 +112,17 @@ function ReportsPage() {
 
           <Grid item xs={12} sm={6} md={8}>
             <Box sx={{ height: 350 }}>
-            <AdminLineGraph lineGraphData={employedLabel.map(a => a.quantity)} lineLabel={employedLabel.map(a => a.course)} label="Employed"/>
+              <AdminLineGraph
+                lineGraphData={employedLabel.map((a) => a.quantity)}
+                lineLabel={employedLabel.map((a) => a.course)}
+                label="Employed"
+              />
             </Box>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
             <Card style={{ height: 350, overflow: "auto" }}>
               <Typography
-                style={{ padding: 20, fontSize: 20, fontWeight: "bold"}}
+                style={{ padding: 20, fontSize: 20, fontWeight: "bold" }}
               >
                 {`Unemployed: ${reportsList?.total_unemployed}`}
               </Typography>
@@ -117,7 +134,7 @@ function ReportsPage() {
                       marginTop: 0,
                       fontSize: 16,
                       textTransform: "capitalize",
-                      fontStyle: 'italic'
+                      fontStyle: "italic",
                     }}
                   >
                     {`${index + 1}. ${data.user.first_name} ${
@@ -131,7 +148,11 @@ function ReportsPage() {
 
           <Grid item xs={12} sm={6} md={8}>
             <Box sx={{ height: 350 }}>
-              <AdminLineGraph lineGraphData={unEmployedLabel.map(a => a.quantity)} lineLabel={unEmployedLabel.map(a => a.course)} label="Unemployed"/>
+              <AdminLineGraph
+                lineGraphData={unEmployedLabel.map((a) => a.quantity)}
+                lineLabel={unEmployedLabel.map((a) => a.course)}
+                label="Unemployed"
+              />
             </Box>
           </Grid>
         </Grid>
