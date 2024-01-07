@@ -3,4 +3,5 @@ import apiService from "./axios";
 
 export default {
   getReports: () => apiService.get(`/reports`),
+  getTracer: () => apiService.get(`/reports/tracer`),
 };

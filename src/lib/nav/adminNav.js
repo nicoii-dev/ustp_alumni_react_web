@@ -36,6 +36,11 @@ const adminNav = [
     icon: getIcon('fa-solid:users'),
   },
   {
+    title: 'Tracer',
+    path: '/tracer',
+    icon: getIcon('fluent:list-bar-16-filled'),
+  },
+  {
     title: 'Reports',
     path: '/reports',
     icon: getIcon('mdi:report-bar'),

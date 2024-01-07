@@ -65,7 +65,7 @@ function ReportsPage() {
         <Box sx={{ backgroundColor: "#CCE5FF", padding: 2, borderRadius: 2 }}>
           <Typography variant="h4">Reports Page</Typography>
         </Box>
-        <Box
+        {/* <Box
           container
           spacing={3}
           sx={{ justifyItems: "center", marginTop: 1, display: 'flex', gap: 2, justifyContent: 'center' }}
@@ -80,7 +80,7 @@ function ReportsPage() {
                 />
               );
           })}
-        </Box>
+        </Box> */}
 
         <Grid container spacing={3} sx={{ marginTop: 1 }}>
           <Grid item xs={12} sm={6} md={4}>
