@@ -8,17 +8,23 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { capitalize } from "lodash";
 
-export default function Comment({data}) {
-  console.log(data)
+export default function Comment({ data }) {
+  console.log(data);
   return (
-    <List sx={{ width: "100%", maxWidth: '95%', bgcolor: "background.paper" }}>
+    <List sx={{ width: "100%", maxWidth: "95%", bgcolor: "background.paper" }}>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
           <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
         </ListItemAvatar>
         <ListItemText
-          primary={`${capitalize(data.comment_owner.first_name)} ${capitalize(data.comment_owner.middle_name)} ${capitalize(data.comment_owner.last_name)}`}
-          primaryTypographyProps={{fontWeight: 'medium'}}
+          primary={
+            data.comment_owner.first_name === "admin"
+              ? "Admin"
+              : `${capitalize(data.comment_owner.first_name)} ${capitalize(
+                  data.comment_owner.middle_name
+                )} ${capitalize(data.comment_owner.last_name)}`
+          }
+          primaryTypographyProps={{ fontWeight: "medium" }}
           secondary={
             <React.Fragment>
               {/* <Typography

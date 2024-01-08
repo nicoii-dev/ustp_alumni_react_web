@@ -1,12 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 // mui
-import { Container, Typography, Box, Grid, Card } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  Grid,
+  Card,
+  TextField,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 // components
+import Iconify from "../../components/Iconify";
 import Page from "../../components/Page";
 import reportsApi from "../../lib/services/reportsApi";
 import DialogModal, { useDialog } from "../../components/DialogModal";
 import TracerWidget from "../../components/sections/@dashboard/app/TracerWidget";
+import PDFreport from "../../components/pages/tracer/DownloadPdf";
 
 function TracerPages() {
   const { getTracer } = reportsApi;
@@ -15,6 +30,7 @@ function TracerPages() {
   const [courseData, setCourseData] = useState("");
   const [employedData, setEmployedData] = useState();
   const [unEmployedData, setUnEmployedData] = useState();
+  const [selectedYear, setSelectedYear] = useState("2018");
 
   const {
     data: reportsData,
@@ -35,22 +51,61 @@ function TracerPages() {
     setEmployedData(
       // eslint-disable-next-line array-callback-return
       reportsList.employed.filter((data) => {
-        if (data?.user?.alumni.course === course.course) {
-            return data?.user?.alumni;
+        if (
+          data?.user?.alumni.course === course.course &&
+          data?.user?.alumni.year_graduated === selectedYear
+        ) {
+          return data?.user?.alumni;
         }
       })
     );
 
     setUnEmployedData(
-        // eslint-disable-next-line array-callback-return
-        reportsList.unemployed.filter((data) => {
-          if (data?.user?.alumni.course === course.course) {
-              return data?.user?.alumni;
-          }
-        })
-      );
+      // eslint-disable-next-line array-callback-return
+      reportsList.unemployed.filter((data) => {
+        if (
+          data?.user?.alumni.course === course.course &&
+          data?.user?.alumni.year_graduated === selectedYear
+        ) {
+          return data?.user?.alumni;
+        }
+      })
+    );
   };
   console.log(employedData);
+
+  const onChangeYear = (e) => {
+    setSelectedYear(e);
+    console.log(e.$y);
+    setEmployedData(
+      // eslint-disable-next-line array-callback-return
+      reportsList.employed.filter((data) => {
+        if (
+          data?.user?.alumni.course === courseData &&
+          data?.user?.alumni.year_graduated === e.$y?.toString()
+        ) {
+          return data?.user?.alumni;
+        }
+      })
+    );
+
+    setUnEmployedData(
+      // eslint-disable-next-line array-callback-return
+      reportsList.unemployed.filter((data) => {
+        if (
+          data?.user?.alumni.course === courseData &&
+          data?.user?.alumni.year_graduated === e.$y?.toString()
+        ) {
+          return data?.user?.alumni;
+        }
+      })
+    );
+  };
+
+  const printPdf = async () => {
+    const newData = [...employedData, ...unEmployedData]
+    await PDFreport(newData, courseData, selectedYear)
+  }
   return (
     <Page title="Tracer">
       <Container maxWidth="xl">
@@ -100,7 +155,41 @@ function TracerPages() {
         }}
         width="md"
       >
-        {" "}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <div
+            style={{
+              alignSelf: "flex-start",
+              justifyItems: "flex-start",
+              display: "grid",
+            }}
+          >
+            <Typography>Select Year</Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DesktopDatePicker
+                views={["year"]}
+                value={dayjs(selectedYear)}
+                onChange={onChangeYear}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </div>
+          <Tooltip title="Download PDF">
+            <IconButton onClick={printPdf}>
+              <Iconify
+                icon="fa:file-pdf-o"
+                sx={{ color: "red" }}
+                width={30}
+                height={30}
+              />
+            </IconButton>
+          </Tooltip>
+        </Box>
+
         <Grid container spacing={3} sx={{ marginTop: 1 }}>
           <Grid item xs={12} sm={6} md={6}>
             <Card
@@ -125,7 +214,7 @@ function TracerPages() {
                       fontSize: 16,
                       textTransform: "capitalize",
                       fontStyle: "italic",
-                      textAlign: 'left'
+                      textAlign: "left",
                     }}
                   >
                     {`${index + 1}. ${data.user.first_name} ${
@@ -152,7 +241,7 @@ function TracerPages() {
                       fontSize: 16,
                       textTransform: "capitalize",
                       fontStyle: "italic",
-                      textAlign: 'left'
+                      textAlign: "left",
                     }}
                   >
                     {`${index + 1}. ${data.user.first_name} ${

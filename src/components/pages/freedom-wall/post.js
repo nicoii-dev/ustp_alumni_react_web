@@ -43,7 +43,6 @@ export default function PostComponent({ post, Like, openDialog, setAction }) {
     retry: 3, // Will retry failed requests 10 times before displaying an error
   });
 
-
   const { mutate: Unlike, isLoading: isUnlikeLoading } = useMutation(
     (id) => unlikePost(id, { post_id: post.id }),
     {
@@ -150,9 +149,13 @@ export default function PostComponent({ post, Like, openDialog, setAction }) {
             </Menu>
           </div>
         }
-        title={`${capitalize(post?.post_owner?.first_name)} ${capitalize(
-          post?.post_owner?.middle_name
-        )} ${capitalize(post?.post_owner?.first_name)}`}
+        title={
+          post?.post_owner?.first_name === "admin"
+            ? "Admin"
+            : `${capitalize(post?.post_owner?.first_name)} ${capitalize(
+                post?.post_owner?.middle_name
+              )} ${capitalize(post?.post_owner?.last_name)}`
+        }
         subheader={moment(post.created_at).format("LL")}
       />
 
@@ -180,8 +183,14 @@ export default function PostComponent({ post, Like, openDialog, setAction }) {
                   <CardMedia
                     component="img"
                     height="400vh"
-                    image={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data.url}
-                    alt={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data.url}
+                    image={
+                      `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
+                      data.url
+                    }
+                    alt={
+                      `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
+                      data.url
+                    }
                     sx={{
                       objectFit: "cover",
                     }}
@@ -194,8 +203,14 @@ export default function PostComponent({ post, Like, openDialog, setAction }) {
           <CardMedia
             component="img"
             height="700"
-            image={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + post.post_images[0]?.url}
-            alt={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + post.post_images[0]?.url}
+            image={
+              `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
+              post.post_images[0]?.url
+            }
+            alt={
+              `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
+              post.post_images[0]?.url
+            }
             sx={{
               objectFit: "contain",
               marginBottom: 1,

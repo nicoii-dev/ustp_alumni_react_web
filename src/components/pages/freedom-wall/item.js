@@ -95,7 +95,7 @@ export default function FreedomWallItem({ post, Like, openDialog, setAction }) {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+            {capitalize(post?.post_owner?.first_name.charAt(0))}
           </Avatar>
         }
         action={
@@ -164,9 +164,13 @@ export default function FreedomWallItem({ post, Like, openDialog, setAction }) {
             </Menu>
           </div>
         }
-        title={`${capitalize(post?.post_owner?.first_name)} ${capitalize(
-          post?.post_owner?.middle_name
-        )} ${capitalize(post?.post_owner?.first_name)}`}
+        title={
+          post?.post_owner?.first_name === "admin"
+            ? "Admin"
+            : `${capitalize(post?.post_owner?.first_name)} ${capitalize(
+                post?.post_owner?.middle_name
+              )} ${capitalize(post?.post_owner?.last_name)}`
+        }
         subheader={moment(post.created_at).format("LL")}
       />
 
@@ -194,8 +198,14 @@ export default function FreedomWallItem({ post, Like, openDialog, setAction }) {
                   <CardMedia
                     component="img"
                     height="400vh"
-                    image={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data.url}
-                    alt={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + data.url}
+                    image={
+                      `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
+                      data.url
+                    }
+                    alt={
+                      `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
+                      data.url
+                    }
                     sx={{
                       objectFit: "cover",
                     }}
@@ -208,8 +218,14 @@ export default function FreedomWallItem({ post, Like, openDialog, setAction }) {
           <CardMedia
             component="img"
             height="700"
-            image={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + post.post_images[0]?.url}
-            alt={`${process.env.REACT_APP_API_LOCAL_URL}/storage/` + post.post_images[0]?.url}
+            image={
+              `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
+              post.post_images[0]?.url
+            }
+            alt={
+              `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
+              post.post_images[0]?.url
+            }
             sx={{
               objectFit: "contain",
               marginBottom: 1,
@@ -312,11 +328,16 @@ export default function FreedomWallItem({ post, Like, openDialog, setAction }) {
         btnFunction={() => {
           createComment({
             post_id: post.id,
-            comment: commentData
+            comment: commentData,
           });
         }}
       >
-        <PostComponent post={post} Like={Like} openDialog={openDialog} setAction={setAction}/>
+        <PostComponent
+          post={post}
+          Like={Like}
+          openDialog={openDialog}
+          setAction={setAction}
+        />
       </DialogModal>
     </Card>
   );
