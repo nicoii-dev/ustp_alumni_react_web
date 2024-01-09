@@ -35,7 +35,7 @@ const PDFreport = (reportData, year, course) => {
 
   // pdf header
   const headers = [
-    ["Name", "Status", "Occupation", "Nature of Work", "State of Reasons"],
+    ["", "Name", "Status", "Occupation", "Nature of Work", "State of Reasons"],
   ];
 
   // converting string array to actual array
