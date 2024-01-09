@@ -104,7 +104,7 @@ function TracerPages() {
 
   const printPdf = async () => {
     const newData = [...employedData, ...unEmployedData];
-    await PDFreport(newData, selectedYear, courseData);
+    await PDFreport(newData, selectedYear.$y, courseData);
   };
   return (
     <Page title="Tracer">
