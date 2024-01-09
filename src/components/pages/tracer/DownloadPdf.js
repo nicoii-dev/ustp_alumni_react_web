@@ -43,7 +43,8 @@ const PDFreport = (reportData, year, course) => {
   //   .replace(/\[|\]/g, "")
   //   .split(",");
 
-  const data = reportData?.map((report) => [
+  const data = reportData?.map((report,index) => [
+    index,
     `${report.user?.alumni.first_name} ${report.user?.alumni.middle_name} ${report.user?.alumni.last_name}`,
     report.status === "yes" ? "Employed" : "Unemployed",
     report.status === "yes" ? report.present_occupation : "N/A",
@@ -69,11 +70,12 @@ const PDFreport = (reportData, year, course) => {
       fontSize: 8,
     },
     columnStyles: {
-      0: { cellWidth: 95, halign: "center", valign: "middle", fontSize: 8 },
-      1: { cellWidth: 95, halign: "center", valign: "middle", fontSize: 8 },
-      2: { cellWidth: 95, halign: "center", valign: "middle", fontSize: 8 },
-      3: { cellWidth: 95, halign: "center", valign: "middle", fontSize: 8 },
-      4: { cellWidth: 190, halign: "center", valign: "middle", fontSize: 8 },
+      0: { cellWidth: 20, halign: "center", valign: "middle", fontSize: 8 },
+      1: { cellWidth: 90, halign: "center", valign: "middle", fontSize: 8 },
+      2: { cellWidth: 90, halign: "center", valign: "middle", fontSize: 8 },
+      3: { cellWidth: 90, halign: "center", valign: "middle", fontSize: 8 },
+      4: { cellWidth: 90, halign: "center", valign: "middle", fontSize: 8 },
+      5: { cellWidth: 190, halign: "center", valign: "middle", fontSize: 8 },
     },
     didDrawPage: () => {
       // Footer
