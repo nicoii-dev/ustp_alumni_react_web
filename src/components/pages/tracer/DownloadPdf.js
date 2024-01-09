@@ -110,7 +110,7 @@ const PDFreport = (reportData, year, course) => {
   document.text(getCourseString(course), pageWidth / 2, 100, "center");
 
   document.setFontSize(14);
-  document.text(`Batch ${year}`, pageWidth / 2, 120, "center");
+  document.text(`Batch ${year || '2018'}`, pageWidth / 2, 120, "center");
 
   document.setFontSize(14);
   document.text(`Prepared by: Hasan P. HadjiMalic`, 30, pageHeight - 100);
