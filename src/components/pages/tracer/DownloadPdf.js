@@ -44,7 +44,7 @@ const PDFreport = (reportData, year, course) => {
   //   .split(",");
 
   const data = reportData?.map((report,index) => [
-    index,
+    index+1,
     `${report.user?.alumni.first_name} ${report.user?.alumni.middle_name} ${report.user?.alumni.last_name}`,
     report.status === "yes" ? "Employed" : "Unemployed",
     report.status === "yes" ? report.present_occupation : "N/A",
