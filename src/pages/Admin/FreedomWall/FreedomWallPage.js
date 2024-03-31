@@ -3,14 +3,22 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
 import { useSelector, useDispatch } from "react-redux";
 // mui
-import { Container, Typography, Box, Avatar, Button } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  Avatar,
+  Button,
+  capitalize,
+} from "@mui/material";
 import { toast } from "react-toastify";
+import { yellow } from "@mui/material/colors";
 // components
 import Page from "../../../components/Page";
 import FreedomWallItem from "../../../components/pages/freedom-wall/item";
 import DialogModal from "../../../components/DialogModal";
 import CreatePost from "../../../components/pages/freedom-wall/create-post";
-
+import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
 // api
 import postApi from "../../../lib/services/postApi";
 
@@ -26,6 +34,7 @@ function FreedomWallPage() {
   const [postList, setPostList] = useState([]);
   const { title, images } = useSelector((store) => store.post);
   const [action, setAction] = useState("");
+  const userData = getLocalStorageItem("userData");
 
   const openDialog = () => {
     setOpen(true);
@@ -92,13 +101,21 @@ function FreedomWallPage() {
               gap: 1,
             }}
           >
-            <Avatar
-              src={
-                "https://www.rd.com/wp-content/uploads/2021/09/GettyImages-1181334518-MLedit.jpg"
-              }
-              alt="photoURL"
-              sx={{ height: 50, width: 50 }}
-            />
+            {userData.image ? (
+              <Avatar
+                src={
+                  userData.image
+                    ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/${userData.image}`
+                    : "/static/ustp_logo.png"
+                }
+                alt="photoURL"
+                sx={{ objectFit: "contain" }}
+              />
+            ) : (
+              <Avatar sx={{ bgcolor: yellow[700] }} aria-label="recipe">
+                {capitalize(userData?.first_name.charAt(0))}
+              </Avatar>
+            )}
             <Box></Box>
             <Button
               variant="outlined"
@@ -112,7 +129,14 @@ function FreedomWallPage() {
             </Button>
           </Box>
           {postList?.map((post) => {
-            return <FreedomWallItem post={post} Like={Like} openDialog={openDialog} setAction={setAction} />;
+            return (
+              <FreedomWallItem
+                post={post}
+                Like={Like}
+                openDialog={openDialog}
+                setAction={setAction}
+              />
+            );
           })}
         </Box>
       </Container>

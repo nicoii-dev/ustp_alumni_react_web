@@ -25,7 +25,7 @@ const HeaderStyle = styled("header")(({ theme }) => ({
   zIndex: 9,
   lineHeight: 0,
   width: "100%",
-  display: "flex",
+  display: "grid",
   alignItems: "center",
   position: "absolute",
   padding: theme.spacing(3),
@@ -66,8 +66,14 @@ export default function Register() {
     <Page title="Register">
       <RootStyle>
         <HeaderStyle>
-          <Typography variant="h3" sx={{ color: "white" }}>
-            USTP Alumnus
+          <Typography variant="h4" sx={{ color: "white" }}>
+            USTP Jasaan Alumni Association
+          </Typography>
+          <Typography variant="h4" sx={{ color: "white" }}>
+            Management System with
+          </Typography>
+          <Typography variant="h4" sx={{ color: "white" }}>
+            Graduate Tracer
           </Typography>
         </HeaderStyle>
 
@@ -81,12 +87,13 @@ export default function Register() {
             </Typography>
             <img
               alt="register"
-              src="/static/ustp-logo.jpg"
+              src="/static/ustp_logo.png"
               style={{
                 height: 300,
                 width: 300,
                 alignSelf: "center",
                 borderRadius: 150,
+                objectFit: "contain",
               }}
             />
           </SectionStyle>
@@ -95,34 +102,47 @@ export default function Register() {
         <Container>
           <ContentStyle>
             <Card>
-            <CardContent>
-              <Typography variant="h4" gutterBottom>
-                Get started absolutely free.
-              </Typography>
-
-              <Typography sx={{ color: "text.secondary", mb: 5 }}></Typography>
-
-              {/* <AuthSocial /> */}
-
-              <RegisterForm />
-
-              {smUp && (
-                <Typography variant="body2" sx={{ mt: 3, alignSelf: "end" }}>
-                  Already have an account? {""}
-                  <Link variant="subtitle2" component={RouterLink} to="/login">
-                    Login
-                  </Link>
+              <CardContent>
+                <Typography variant="h4" gutterBottom>
+                  Get started absolutely free.
                 </Typography>
-              )}
 
-              {!smUp && (
-                <Typography variant="body2" sx={{ mt: 3, textAlign: "center" }}>
-                  Already have an account?{" "}
-                  <Link variant="subtitle2" to="/login" component={RouterLink}>
-                    Login
-                  </Link>
-                </Typography>
-              )}
+                <Typography
+                  sx={{ color: "text.secondary", mb: 5 }}
+                ></Typography>
+
+                {/* <AuthSocial /> */}
+
+                <RegisterForm />
+
+                {smUp && (
+                  <Typography variant="body2" sx={{ mt: 3, alignSelf: "end" }}>
+                    Already have an account? {""}
+                    <Link
+                      variant="subtitle2"
+                      component={RouterLink}
+                      to="/login"
+                    >
+                      Login
+                    </Link>
+                  </Typography>
+                )}
+
+                {!smUp && (
+                  <Typography
+                    variant="body2"
+                    sx={{ mt: 3, textAlign: "center" }}
+                  >
+                    Already have an account?{" "}
+                    <Link
+                      variant="subtitle2"
+                      to="/login"
+                      component={RouterLink}
+                    >
+                      Login
+                    </Link>
+                  </Typography>
+                )}
               </CardContent>
             </Card>
           </ContentStyle>

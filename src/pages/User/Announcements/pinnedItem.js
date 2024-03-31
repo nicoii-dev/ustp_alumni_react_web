@@ -16,19 +16,19 @@ import announcementApi from "../../../lib/services/announcementApi";
 import Iconify from "../../../components/Iconify";
 import { toast } from "react-toastify";
 
-export default function UserAnnouncementItem({ announcement }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const { pinAnnouncement } = announcementApi;
+export default function PinnedItem({ announcement }) {
+  const [anchorEl2, setAnchorEl2] = React.useState(null);
+  const open = Boolean(anchorEl2);
+  const { unpinAnnouncement } = announcementApi;
   const queryClient = useQueryClient();
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl2(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl2(null);
   };
-  const { mutate: PinnedAnnouncement, isLoading: pinIsLoading } = useMutation(
-    (id) => pinAnnouncement(id),
+  const { mutate: UnPinnedAnnouncement, isLoading: pinIsLoading } = useMutation(
+    (id) => unpinAnnouncement(id),
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries(["get-all-announcements"]);
@@ -55,7 +55,7 @@ export default function UserAnnouncementItem({ announcement }) {
           >{`${capitalize(announcement?.title)}`}</Typography>
         }
         action={
-          announcement.pinned === "0" ? (
+          announcement.pinned === "1" ? (
             <div>
               <IconButton
                 aria-label="settings"
@@ -67,8 +67,8 @@ export default function UserAnnouncementItem({ announcement }) {
                 <Iconify icon="tdesign:more" />
               </IconButton>
               <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
+                id="basic-menu2"
+                anchorEl={anchorEl2}
                 open={open}
                 onClose={handleClose}
                 MenuListProps={{
@@ -77,11 +77,10 @@ export default function UserAnnouncementItem({ announcement }) {
               >
                 <MenuItem
                   onClick={() => {
-                    handleClose()
-                    PinnedAnnouncement(announcement.id);
+                    UnPinnedAnnouncement(announcement.id);
                   }}
                 >
-                  Pin this Announcement
+                  Unpin this Announcement
                 </MenuItem>
               </Menu>
             </div>

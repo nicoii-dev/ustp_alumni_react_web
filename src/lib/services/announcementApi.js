@@ -3,6 +3,7 @@ import apiService from "./axios";
 
 export default {
   getAllAnnouncement: () => apiService.get(`/announcement`),
+  getAllPinned: () => apiService.get(`/announcement/pinned`),
   createAnnouncement: (token, payload) => {
     apiService.post(`announcement/create`, payload, {
       headers: {
@@ -21,4 +22,6 @@ export default {
     });
   },
   deleteAnnouncement: (id) => apiService.delete(`/announcement/delete/${id}`),
+  pinAnnouncement: (id) => apiService.post(`/announcement/pinned/${id}`),
+  unpinAnnouncement: (id) => apiService.post(`/announcement/unpinned/${id}`),
 };

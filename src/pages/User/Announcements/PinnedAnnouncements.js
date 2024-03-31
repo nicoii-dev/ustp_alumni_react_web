@@ -1,16 +1,15 @@
-import { Link as RouterLink } from "react-router-dom";
-// @mui
+import React from "react";
+import { useQuery } from "react-query";
+// mui
+import { Container, Typography, Box, Button } from "@mui/material";
+import Iconify from "../../../components/Iconify";
 import { styled } from "@mui/material/styles";
-import { Card, Link, Container, Typography, Box } from "@mui/material";
-// hooks
-import useResponsive from "../../lib/hooks/useResponsive";
 // components
-import Page from "../../components/Page";
-import Logo from "../../components/Logo";
-// sections
-import LoginForm from "../../components/sections/auth/login/LoginForm";
+import Page from "../../../components/Page";
 
-// ----------------------------------------------------------------------
+// api
+import announcementApi from "../../../lib/services/announcementApi";
+import PinnedItem from "./pinnedItem";
 
 const RootStyle = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("md")]: {
@@ -22,87 +21,70 @@ const RootStyle = styled("div")(({ theme }) => ({
   },
 }));
 
-const ContentStyle = styled("div")(({ theme }) => ({
-  maxWidth: 480,
-  margin: "auto",
-  minHeight: "80vh",
-  display: "flex",
-  justifyContent: "center",
-  flexDirection: "column",
-  padding: theme.spacing(8, 0),
-}));
-
-// ----------------------------------------------------------------------
-
-export default function Login() {
-  const smUp = useResponsive("up", "sm");
-
-  const mdUp = useResponsive("up", "md");
+function PinnedAnnouncements() {
+  const { getAllPinned } = announcementApi;
+  const {
+    data: announcementData,
+    status: announcementStatus,
+    isFetching: announcementIsFetching,
+  } = useQuery(["get-all-pinned-announcements"], () => getAllPinned(), {
+    retry: 3, // Will retry failed requests 10 times before displaying an error
+  });
 
   return (
-    <Page title="Login">
+    <Page title="Announcements">
       <RootStyle>
-        <Container maxWidth="sm">
-          <Card sx={{ marginTop: 5 }}>
-            <ContentStyle>
-              <img
-                alt="register"
-                src="/static/ustp_logo.png"
-                style={{
-                  height: 150,
-                  width: 150,
-                  marginBottom: 10,
+        <Container maxWidth="xl" sx={{ justifyContent: "center" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            {announcementData?.data?.length > 0 ? (
+              <Box sx={{ width: "70%" }}>
+                {announcementData?.data?.map((announcement) => {
+                  return <PinnedItem announcement={announcement} />;
+                })}
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  display: "grid",
                   justifySelf: "center",
-                  alignSelf: "center",
-                  borderRadius: 150,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  alignContent: "center",
+                  backgroundColor: "#DCDCDC",
+                  borderRadius: 1,
+                  width: "50%",
+                  paddingTop: 5,
+                  paddingBottom: 5,
+                  marginTop: 10,
                 }}
-              />
-
-              <Typography variant="h6" gutterBottom>
-                Welcome to
-              </Typography>
-              <Typography variant="h4" gutterBottom>
-                USTP Jasaan Alumni Association Management System with Graduate
-                Tracer
-              </Typography>
-
-              <Typography sx={{ color: "text.secondary", mb: 3, mt: 5 }}>
-                Enter your credentials below.
-              </Typography>
-
-              <LoginForm />
-
-              {smUp ? (
-                <Typography variant="body2" align="right" sx={{ mt: 3 }}>
-                  Don’t have an account?{" "}
-                  <Link
-                    variant="subtitle2"
-                    component={RouterLink}
-                    to="/register"
-                  >
-                    Get started
-                  </Link>
+              >
+                <Iconify
+                  icon={"iconoir:info-empty"}
+                  sx={{
+                    alignSelf: "center",
+                    justifySelf: "center",
+                    width: 100,
+                    height: 100,
+                  }}
+                />
+                <Typography sx={{ fontSize: 50, fontFamily: "cursive" }}>
+                  No Data
                 </Typography>
-              ) : (
-                <Typography
-                  variant="body2"
-                  align="right"
-                  sx={{ mt: 3, placeSelf: "center" }}
-                >
-                  Don’t have an account?{" "}
-                  <Link
-                    variant="subtitle2"
-                    component={RouterLink}
-                    to="/register"
-                  >
-                    Get started
-                  </Link>
+                <Typography sx={{ fontSize: 50, fontFamily: "cursive" }}>
+                  Available
                 </Typography>
-              )}
-            </ContentStyle>
-          </Card>
+              </Box>
+            )}
+          </Box>
         </Container>
       </RootStyle>
     </Page>
   );
 }
+
+export default PinnedAnnouncements;

@@ -7,7 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
+import { yellow } from "@mui/material/colors";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Iconify from "../../Iconify";
@@ -79,7 +79,7 @@ export default function PostComponent({ post, Like, openDialog, setAction }) {
     <Card sx={{ maxWidth: "90vh" }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar sx={{ bgcolor: yellow[700] }} aria-label="recipe">
             {capitalize(post?.post_owner?.first_name.charAt(0))}
           </Avatar>
         }

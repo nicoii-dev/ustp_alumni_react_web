@@ -12,7 +12,9 @@ import {
   MenuItem,
   Avatar,
   IconButton,
+  capitalize
 } from "@mui/material";
+import { yellow } from "@mui/material/colors";
 // components
 import MenuPopover from "../../MenuPopover";
 // mocks_
@@ -71,14 +73,21 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar
-          src={
-            profileImage
-              ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/${profileImage}`
-              : "/static/ustp-logo.jpg"
-          }
-          alt="photoURL"
-        />
+        {userData.image ? (
+          <Avatar
+            src={
+              userData.image
+                ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/${userData.image}`
+                : "/static/ustp_logo.png"
+            }
+            alt="photoURL"
+            sx={{ objectFit: "contain" }}
+          />
+        ) : (
+          <Avatar sx={{ bgcolor: yellow[700] }} aria-label="recipe">
+            {capitalize(userData?.first_name.charAt(0))}
+          </Avatar>
+        )}
       </IconButton>
 
       <MenuPopover

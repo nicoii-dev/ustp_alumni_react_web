@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
-import { red } from "@mui/material/colors";
+import { yellow } from "@mui/material/colors";
 import moment from "moment/moment";
 import { useQueryClient } from "react-query";
 import { TextField, capitalize, Box, Stack } from "@mui/material";
@@ -76,7 +76,7 @@ export default function CreateAnnouncement({ handleClose }) {
     <Box sx={{ maxWidth: "90vh" }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar sx={{ bgcolor: yellow[700] }} aria-label="recipe">
             {capitalize(userData.first_name[0])}
           </Avatar>
         }

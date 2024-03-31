@@ -66,7 +66,7 @@ export default function EmailVerification() {
             <ContentStyle>
               <img
                 alt="register"
-                src="/static/ustp-logo.jpg"
+                src="/static/ustp_logo.png"
                 style={{
                   height: 200,
                   width: 200,

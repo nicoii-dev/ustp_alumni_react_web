@@ -5,7 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
+import { yellow } from "@mui/material/colors";
 import { Grid, capitalize, Box } from "@mui/material";
 import moment from "moment";
 
@@ -15,7 +15,7 @@ export default function UserJobPostingItem({ jobPosting }) {
     <Card sx={{ maxWidth: "100%", marginTop: 2, backgroundColor: '#F5F5F5' }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar sx={{ bgcolor: yellow[700] }} aria-label="recipe">
             A
           </Avatar>
         }

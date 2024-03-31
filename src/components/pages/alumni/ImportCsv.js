@@ -8,7 +8,7 @@ import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
+import { yellow } from "@mui/material/colors";
 // import FavoriteIcon from '@mui/icons-material/Favorite';
 // import ShareIcon from '@mui/icons-material/Share';
 // import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -40,7 +40,7 @@ export default function ImportCsv() {
     <Card sx={{ maxWidth: "90vh",  }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+          <Avatar sx={{ bgcolor: yellow[700] }} aria-label="recipe">
             R
           </Avatar>
         }

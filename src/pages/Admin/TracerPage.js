@@ -72,7 +72,6 @@ function TracerPages() {
       })
     );
   };
-  console.log(employedData);
 
   const onChangeYear = (e) => {
     setSelectedYear(e);
@@ -219,7 +218,7 @@ function TracerPages() {
                   >
                     {`${index + 1}. ${data.user.first_name} ${
                       data.user.middle_name
-                    } ${data.user.last_name} (${data?.user.alumni.course})`}
+                    } ${data.user.last_name} ${data.user.phone_number} (${data?.user.alumni.course})`}
                   </Typography>
                 );
               })}

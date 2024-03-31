@@ -146,7 +146,7 @@ export default function SetupProfile(_props) {
           }
         });
       }}
-      title={"Welcome USTP Alumnus App"}
+      title={"Welcome to USTP Jasaan Alumni Association Management System with Graduate Tracer"}
       subtitle={
         "To continue using the app. Please provide the neccessary information."
       }
@@ -278,10 +278,10 @@ export default function SetupProfile(_props) {
                 top: "50%",
               }}
               onClick={() => {
-                if (trainings.length < 1) {
-                  toast.error("Please submit at least 1 training");
-                  return;
-                }
+                // if (trainings.length < 1) {
+                //   toast.error("Please submit at least 1 training");
+                //   return;
+                // }
                 setActiveStep(activeStep + 1);
               }}
             >
@@ -329,10 +329,10 @@ export default function SetupProfile(_props) {
                 top: "50%",
               }}
               onClick={() => {
-                if (trainings.length < 1) {
-                  toast.error("Please submit at least 1 training");
-                  return;
-                }
+                // if (trainings.length < 1) {
+                //   toast.error("Please submit at least 1 training");
+                //   return;
+                // }
                 setActiveStep(activeStep + 1);
               }}
             >

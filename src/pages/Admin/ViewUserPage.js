@@ -145,7 +145,7 @@ function ViewUserPage() {
                         src={
                           user?.image
                             ? `${process.env.REACT_APP_API_LOCAL_URL}/storage/${user?.image}`
-                            : "/static/ustp-logo.jpg"
+                            : "/static/ustp_logo.png"
                         }
                       />
                       <Typography
