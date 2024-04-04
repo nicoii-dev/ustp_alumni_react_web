@@ -15,12 +15,14 @@ import { useMutation, useQueryClient } from "react-query";
 import announcementApi from "../../../lib/services/announcementApi";
 import Iconify from "../../../components/Iconify";
 import { toast } from "react-toastify";
+import { getLocalStorageItem } from "../../../lib/util/getLocalStorage";
 
 export default function UserAnnouncementItem({ announcement }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const { pinAnnouncement } = announcementApi;
   const queryClient = useQueryClient();
+  const userData = getLocalStorageItem("userData")
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -40,7 +42,9 @@ export default function UserAnnouncementItem({ announcement }) {
       },
     }
   );
-
+    console.log(announcement)
+    console.log(userData.id)
+    console.log(announcement.user_id === userData.id.toString())
   return (
     <Card sx={{ maxWidth: "100%", marginTop: 2, backgroundColor: "#F5F5F5" }}>
       <CardHeader
@@ -55,7 +59,7 @@ export default function UserAnnouncementItem({ announcement }) {
           >{`${capitalize(announcement?.title)}`}</Typography>
         }
         action={
-          announcement.pinned === "0" ? (
+          announcement.user_id !== userData.id.toString() ? (
             <div>
               <IconButton
                 aria-label="settings"

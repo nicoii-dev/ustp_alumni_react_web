@@ -30,7 +30,7 @@ function PinnedAnnouncements() {
   } = useQuery(["get-all-pinned-announcements"], () => getAllPinned(), {
     retry: 3, // Will retry failed requests 10 times before displaying an error
   });
-
+  console.log(announcementData)
   return (
     <Page title="Announcements">
       <RootStyle>
@@ -44,7 +44,7 @@ function PinnedAnnouncements() {
             {announcementData?.data?.length > 0 ? (
               <Box sx={{ width: "70%" }}>
                 {announcementData?.data?.map((announcement) => {
-                  return <PinnedItem announcement={announcement} />;
+                  return <PinnedItem announcement={announcement.announcement} pinnedId={announcement.id} announcementImages={announcement.announcement_images} />;
                 })}
               </Box>
             ) : (

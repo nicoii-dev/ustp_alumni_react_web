@@ -16,7 +16,7 @@ import announcementApi from "../../../lib/services/announcementApi";
 import Iconify from "../../../components/Iconify";
 import { toast } from "react-toastify";
 
-export default function PinnedItem({ announcement }) {
+export default function PinnedItem({ announcement, pinnedId, announcementImages }) {
   const [anchorEl2, setAnchorEl2] = React.useState(null);
   const open = Boolean(anchorEl2);
   const { unpinAnnouncement } = announcementApi;
@@ -77,7 +77,7 @@ export default function PinnedItem({ announcement }) {
               >
                 <MenuItem
                   onClick={() => {
-                    UnPinnedAnnouncement(announcement.id);
+                    UnPinnedAnnouncement(pinnedId);
                   }}
                 >
                   Unpin this Announcement
@@ -94,14 +94,14 @@ export default function PinnedItem({ announcement }) {
           {announcement.announcement}
         </Typography>
       </CardContent>
-      {announcement.announcement_images.length > 1 ? (
+      {announcementImages.length > 1 ? (
         <Grid
           container
           spacing={{ xs: 2, md: 0 }}
           columns={{ xs: 4, sm: 8, md: 12 }}
           sx={{ paddingBottom: 1, gap: 1, justifyContent: "center" }}
         >
-          {announcement?.announcement_images.map((data, index) => {
+          {announcementImages.map((data, index) => {
             return (
               <Grid item xs={2} sm={4} md={4} key={index}>
                 <CardMedia
@@ -121,17 +121,17 @@ export default function PinnedItem({ announcement }) {
             );
           })}
         </Grid>
-      ) : announcement.announcement_images.length < 1 ? null : (
+      ) : announcementImages.length < 1 ? null : (
         <CardMedia
           component="img"
           height="700"
           image={
             `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
-            announcement?.announcement_images[0]?.url
+            announcementImages[0]?.url
           }
           alt={
             `${process.env.REACT_APP_API_LOCAL_URL}/storage/` +
-            announcement?.announcement_images[0]?.url
+            announcementImages[0]?.url
           }
           sx={{
             objectFit: "contain",

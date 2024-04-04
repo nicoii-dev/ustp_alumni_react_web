@@ -24,7 +24,7 @@ function UserAnnouncements() {
   } = useQuery(["get-all-announcements"], () => getAllAnnouncement(), {
     retry: 3, // Will retry failed requests 10 times before displaying an error
   });
-
+  console.log(announcementData)
   return (
     <>
       <Page title="Announcements">
