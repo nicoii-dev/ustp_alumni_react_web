@@ -247,8 +247,6 @@ export default function FreedomWallItem({ post, Like, openDialog, setAction }) {
           borderColor: "#E0E0E0",
         }}
       >
-        <Typography sx={{ color: "gray" }}>Like</Typography>
-        <Typography sx={{ color: "gray" }}>Comment</Typography>
       </Box>
       <Box
         display={"flex"}
