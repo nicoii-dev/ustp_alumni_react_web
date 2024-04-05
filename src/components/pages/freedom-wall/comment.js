@@ -17,6 +17,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { toast } from "react-toastify";
 import { Box, TextField } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { yellow } from "@mui/material/colors";
 import { setComment } from "../../../store/slice/CommentSlice";
 
 export default function Comment({ data }) {
@@ -36,7 +37,7 @@ export default function Comment({ data }) {
   };
 
   const { mutate: Update, isLoading: updateIsLoading } = useMutation(
-    (id) => updateComment(id, {post_id: data.post_id, comment: commentData}),
+    (id) => updateComment(id, { post_id: data.post_id, comment: commentData }),
     {
       onSuccess: (data) => {
         queryClient.invalidateQueries(["get-all-comments"]);
@@ -63,7 +64,9 @@ export default function Comment({ data }) {
     <List sx={{ width: "100%", maxWidth: "95%", bgcolor: "background.paper" }}>
       <ListItem alignItems="flex-start">
         <ListItemAvatar>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+          <Avatar sx={{ bgcolor: yellow[700] }} aria-label="recipe">
+            {capitalize(data.comment_owner?.first_name.charAt(0))}
+          </Avatar>
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -149,8 +152,8 @@ export default function Comment({ data }) {
               <MenuItem
                 onClick={async () => {
                   handleClose();
-                  setIsUpdate(true)
-                  await dispatch(setComment(data.comment))
+                  setIsUpdate(true);
+                  await dispatch(setComment(data.comment));
                 }}
               >
                 Update
