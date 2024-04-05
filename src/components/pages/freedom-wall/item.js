@@ -171,7 +171,7 @@ export default function FreedomWallItem({ post, Like, openDialog, setAction }) {
                 post?.post_owner?.middle_name
               )} ${capitalize(post?.post_owner?.last_name)}`
         }
-        subheader={moment(post.created_at).format("LL")}
+        subheader={moment(post.created_at).format("LLL")}
       />
 
       <CardContent>
