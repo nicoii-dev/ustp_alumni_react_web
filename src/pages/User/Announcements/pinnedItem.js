@@ -86,7 +86,7 @@ export default function PinnedItem({ announcement, pinnedId, announcementImages 
             </div>
           ) : null
         }
-        subheader={moment(announcement.created_at).format("LL")}
+        subheader={moment(announcement.created_at).format("LLL")}
       />
 
       <CardContent>

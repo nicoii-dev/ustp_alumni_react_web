@@ -91,7 +91,7 @@ export default function UserAnnouncementItem({ announcement }) {
             </div>
           ) : null
         }
-        subheader={moment(announcement.created_at).format("LL")}
+        subheader={moment(announcement.created_at).format("LLL")}
       />
 
       <CardContent>
