@@ -91,7 +91,7 @@ export default function FreedomWallItem({ post, Like, openDialog, setAction }) {
   );
 
   return (
-    <Card sx={{ maxWidth: "90vh" }}>
+    <Card sx={{ maxWidth: "90vh", justifyContent: 'center' }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: yellow[700] }} aria-label="recipe">

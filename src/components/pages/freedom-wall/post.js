@@ -76,7 +76,7 @@ export default function PostComponent({ post, Like, openDialog, setAction }) {
   );
 
   return (
-    <Card sx={{ maxWidth: "90vh" }}>
+    <Card sx={{ maxWidth: "90vh", justifyContent: 'center' }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: yellow[700] }} aria-label="recipe">
@@ -221,20 +221,6 @@ export default function PostComponent({ post, Like, openDialog, setAction }) {
           />
         )}
       </Grid>
-      <Box
-        display={"flex"}
-        justifyContent={"space-between"}
-        sx={{
-          padding: 1,
-          paddingLeft: 5,
-          paddingRight: 5,
-          borderTop: 1,
-          borderColor: "#E0E0E0",
-        }}
-      >
-        <Typography sx={{ color: "gray" }}>Like</Typography>
-        <Typography sx={{ color: "gray" }}>Comment</Typography>
-      </Box>
       <Box
         display={"flex"}
         justifyContent={"space-evenly"}
