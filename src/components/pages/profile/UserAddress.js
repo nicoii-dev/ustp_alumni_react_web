@@ -135,7 +135,11 @@ export default function UserAddress({ handleClose }) {
     const formData = new FormData();
     formData.append("civil_status", profileSetup.civil_status);
     formData.append("dob", moment(profileSetup.dob).format("YYYY-MM-DD"));
-    formData.append("image", image[0].file);
+    if(image.length > 0) {
+      formData.append("image", image[0]?.file);
+    } else {
+      formData.append("image", '');
+    }
     formData.append("street", userStreet);
     formData.append("barangay", userBarangay);
     formData.append("barangay_code", barangayCode);
